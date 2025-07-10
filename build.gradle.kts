@@ -64,7 +64,7 @@ modstitch {
     loom {
         // It's not recommended to store the Fabric Loader version in properties.
         // Make sure its up to date.
-        fabricLoaderVersion = "0.16.10"
+        fabricLoaderVersion = "0.16.13"
 
         // Configure loom like normal in this block.
         configureLoom {
@@ -102,7 +102,7 @@ modstitch {
 
         if (minecraft == "1.20.1") configs.register("tectonic_1.20.1")
         if (minecraft == "1.21.1") configs.register("tectonic_1.21.1")
-        if (minecraft == "1.21.5") configs.register("tectonic_1.21.5")
+        if (minecraft == "1.21.6") configs.register("tectonic_1.21.6")
 
         // Most of the time you wont ever need loader specific mixins.
         // If you do, simply make the mixin file and add it like so for the respective loader:
@@ -164,7 +164,7 @@ publishMods {
 
         if (minecraft == "1.20.1") minecraftVersions.add("1.20.1")
         if (minecraft == "1.21.1") minecraftVersions.add("1.21.1")
-        if (minecraft == "1.21.5") minecraftVersions.add("1.21.5")
+        if (minecraft == "1.21.6") minecraftVersions.add("1.21.6")
 
         if (isFabric) requires("fabric-api")
         requires("lithostitched")
@@ -178,7 +178,7 @@ publishMods {
 
         if (minecraft == "1.20.1") minecraftVersions.add("1.20.1")
         if (minecraft == "1.21.1") minecraftVersions.add("1.21.1")
-        if (minecraft == "1.21.5") minecraftVersions.add("1.21.5")
+        if (minecraft == "1.21.6") minecraftVersions.add("1.21.6")
 
         if (isFabric) requires("fabric-api")
         requires("lithostitched")
