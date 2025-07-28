@@ -4,11 +4,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### Minecraft ###
-run
-
 ### IntelliJ IDEA ###
-.idea
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
 *.iws
 *.iml
 *.ipr
@@ -43,3 +43,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Minecraft ###
+/run/

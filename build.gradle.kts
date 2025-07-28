@@ -1,188 +1,205 @@
-import org.apache.commons.lang3.StringUtils
-
 plugins {
-    id("dev.isxander.modstitch.base") version "0.5.15-unstable"
-    id("dev.isxander.modstitch.publishing") version "0.5.15-unstable"
+    kotlin("jvm") version "2.1.21"
+    id("earth.terrarium.cloche") version "0.11.19"
 }
 
-fun prop(name: String, consumer: (prop: String) -> Unit) {
-    (findProperty(name) as? String?)
-        ?.let(consumer)
+repositories {
+    cloche {
+        mavenNeoforgedMeta()
+        mavenNeoforged()
+        mavenForge()
+        mavenFabric()
+        mavenParchment()
+        librariesMinecraft()
+        main()
+    }
+    mavenCentral()
+    maven("https://api.modrinth.com/maven")
+    maven("https://maven.terraformersmc.com/")
 }
 
-val modVersion = "${property("mod_version")}"
+group = "dev.worldgen.tectonic"
+version = "3.0.4"
 
-val minecraft = property("deps.minecraft") as String;
-
-val isFabric = modstitch.isLoom
-val isNeoforge = modstitch.isModDevGradleRegular
-val isForge = modstitch.isModDevGradleLegacy
-val isForgeLike = modstitch.isModDevGradle
-
-val loader = when {
-    modstitch.isLoom -> "fabric"
-    modstitch.isModDevGradle -> "neoforge"
-    else -> error("Unknown loader")
-}
-
-modstitch {
-    minecraftVersion = minecraft
-
-    // Alternatively use stonecutter.eval if you have a lot of versions to target.
-    // https://stonecutter.kikugie.dev/stonecutter/guide/setup#checking-versions
-    javaTarget = when (minecraft) {
-        "1.20.1" -> 17
-        else -> 21
+cloche {
+    mappings {
+        official()
     }
 
-    // If parchment doesnt exist for a version yet you can safely
-    // omit the "deps.parchment" property from your versioned gradle.properties
-    parchment {
-        prop("deps.parchment") { mappingsVersion = it }
-    }
-
-    // This metadata is used to fill out the information inside
-    // the metadata files found in the templates folder.
     metadata {
         modId = "tectonic"
-        modName = "Tectonic"
-        modVersion = "${property("mod_version")}"
-        modGroup = "dev.worldgen"
+        name = "Tectonic"
+        description = "Terrain shaping brought to new heights, grander and more varied than ever before!"
+        license = "MIT"
+        icon = "pack.png"
 
-        fun <K, V> MapProperty<K, V>.populate(block: MapProperty<K, V>.() -> Unit) {
-            block()
-        }
+        url = "https://modrinth.com/project/tectonic"
+        issues = "https://github.com/Apollounknowndev/tectonic/issues"
+        sources = "https://github.com/Apollounknowndev/tectonic"
 
-        replacementProperties.populate {
-            // You can put any other replacement properties/metadata here that
-            // modstitch doesn't initially support. Some examples below.
-            put("mod_issue_tracker", "https://github.com/Apollounknowndev/tectonic/issues")
-        }
+        author("Apollo")
+        contributor("HB Stratos")
+        contributor("DawnKiro")
+        contributor("Uni")
     }
 
-    // Fabric Loom (Fabric)
-    loom {
-        // It's not recommended to store the Fabric Loader version in properties.
-        // Make sure its up to date.
-        fabricLoaderVersion = "0.16.13"
+    common {
+        mixins.from(file("src/common/main/tectonic.mixins.json"))
 
-        // Configure loom like normal in this block.
-        configureLoom {
-
-        }
-    }
-
-    // ModDevGradle (NeoForge, Forge, Forgelike)
-    moddevgradle {
-        enable {
-            prop("deps.forge") { forgeVersion = it }
-            prop("deps.neoform") { neoFormVersion = it }
-            prop("deps.neoforge") { neoForgeVersion = it }
-            prop("deps.mcp") { mcpVersion = it }
+        dependencies {
+            compileOnly("org.spongepowered:mixin:0.8.3")
         }
 
-        // Configures client and server runs for MDG, it is not done by default
-        defaultRuns()
-
-        // This block configures the `neoforge` extension that MDG exposes by default,
-        // you can configure MDG like normal from here
-        configureNeoforge {
-            runs.all {
-                disableIdeRun()
+        metadata {
+            dependencies {
+                dependency {
+                    modId = "lithostitched"
+                    required = true
+                    version("1.4.11")
+                }
             }
         }
     }
 
-    mixin {
-        // You do not need to specify mixins in any mods.json/toml file if this is set to
-        // true, it will automatically be generated.
-        addMixinsToModManifest = true
-
-        configs.register("tectonic")
-
-        if (minecraft == "1.20.1") configs.register("tectonic_1.20.1")
-        if (minecraft == "1.21.1") configs.register("tectonic_1.21.1")
-        if (minecraft == "1.21.6") configs.register("tectonic_1.21.6")
-
-        // Most of the time you wont ever need loader specific mixins.
-        // If you do, simply make the mixin file and add it like so for the respective loader:
-        // if (isLoom) configs.register("examplemod-fabric")
-        // if (isModDevGradleRegular) configs.register("examplemod-neoforge")
-        // if (isModDevGradleLegacy) configs.register("examplemod-forge")
+    val shared1201 = common("shared:1.20.1") {
+        mixins.from(file("src/shared/1.20.1/main/tectonic_1.20.1.mixins.json"))
     }
-}
-
-// Stonecutter constants for mod loaders.
-// See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
-var constraint: String = name.split("-")[1]
-stonecutter {
-    consts(
-        "fabric" to constraint.equals("fabric"),
-        "neoforge" to constraint.equals("neoforge"),
-        "forge" to constraint.equals("forge"),
-        "vanilla" to constraint.equals("vanilla")
-    )
-}
-
-// All dependencies should be specified through modstitch's proxy configuration.
-// Wondering where the "repositories" block is? Go to "stonecutter.gradle.kts"
-// If you want to create proxy configurations for more source sets, such as client source sets,
-// use the modstitch.createProxyConfigurations(sourceSets["client"]) function.
-dependencies {
-    modstitchModImplementation("maven.modrinth:lithostitched:${property("deps.lithostitched")}")
-    if (isFabric) {
-        modstitchModImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-        modstitchModImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
+    val shared1211 = common("shared:1.21.1") {
+        mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
+    }
+    val shared1218 = common("shared:1.21.8") {
+        mixins.from(file("src/shared/1.21.8/main/tectonic_1.21.8.mixins.json"))
     }
 
-    //modstitchModImplementation("maven.modrinth:terralith:${property("deps.terralith")}")
-    if (minecraft != "1.20.1") {
-        //modstitchModImplementation("maven.modrinth:clifftree:${property("deps.clifftree")}")
-    }
-}
+    fabric("fabric:1.20.1") {
+        dependsOn(shared1201)
 
-tasks {
-    modstitch.finalJarTask {
-        archiveVersion.set("$modVersion-$loader-$minecraft")
-    }
-}
+        loaderVersion = "0.16.13"
+        minecraftVersion = "1.20.1"
 
-publishMods {
-    changelog = """
-        A changelog for sure!
-    """.trimIndent()
-    type = BETA
-    modLoaders.add(loader)
-    file = modstitch.finalJarTask.flatMap { it.archiveFile }
-    displayName = "v%s ~ %s %s".format(property("mod_version"), StringUtils.capitalize(loader), property("deps.minecraft"))
+        dependencies {
+            fabricApi("0.92.6")
+            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.20")
+            modImplementation("com.terraformersmc:modmenu:7.2.2")
+        }
 
-    dryRun = false
+        includedClient()
+        runs {
+            client()
+            server()
+        }
 
-    modrinth {
-        accessToken.set(providers.environmentVariable("TOKEN_MR"))
-        projectId.set("lWDHr9jE")
-
-        if (minecraft == "1.20.1") minecraftVersions.add("1.20.1")
-        if (minecraft == "1.21.1") minecraftVersions.add("1.21.1")
-        if (minecraft == "1.21.6") minecraftVersions.add("1.21.6")
-
-        if (isFabric) requires("fabric-api")
-        requires("lithostitched")
-        optional("worldgen-patches")
-        incompatible("continents")
+        metadata {
+            entrypoint("main") {
+                value = "dev.worldgen.tectonic.TectonicFabric"
+            }
+            entrypoint("modmenu") {
+                value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
+            }
+        }
     }
 
-    curseforge {
-        accessToken.set(providers.environmentVariable("TOKEN_CF"))
-        projectId.set("686836")
+    fabric("fabric:1.21.1") {
+        dependsOn(shared1211)
 
-        if (minecraft == "1.20.1") minecraftVersions.add("1.20.1")
-        if (minecraft == "1.21.1") minecraftVersions.add("1.21.1")
-        if (minecraft == "1.21.6") minecraftVersions.add("1.21.6")
+        loaderVersion = "0.16.13"
+        minecraftVersion = "1.21.1"
 
-        if (isFabric) requires("fabric-api")
-        requires("lithostitched")
-        optional("worldgen-patches")
-        incompatible("continents")
+        dependencies {
+            fabricApi("0.116.1")
+            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.21")
+            modImplementation("com.terraformersmc:modmenu:11.0.3")
+        }
+
+        includedClient()
+        runs {
+            client()
+            server()
+        }
+
+        metadata {
+            entrypoint("main") {
+                value = "dev.worldgen.tectonic.TectonicFabric"
+            }
+            entrypoint("modmenu") {
+                value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
+            }
+        }
+    }
+
+    fabric("fabric:1.21.8") {
+        dependsOn(shared1218)
+
+        loaderVersion = "0.16.13"
+        minecraftVersion = "1.21.8"
+
+        dependencies {
+            fabricApi("0.129.0")
+            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.21.6")
+            modImplementation("com.terraformersmc:modmenu:15.0.0-beta.3")
+        }
+
+        includedClient()
+        runs {
+            client()
+            server()
+        }
+
+        metadata {
+            entrypoint("main") {
+                value = "dev.worldgen.tectonic.TectonicFabric"
+            }
+            entrypoint("modmenu") {
+                value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
+            }
+        }
+    }
+
+    forge("forge:1.20.1") {
+        dependsOn(shared1201)
+
+        loaderVersion = "47.4.0"
+        minecraftVersion = "1.20.1"
+
+        dependencies {
+            modImplementation("maven.modrinth:lithostitched:1.4.11-forge-1.20")
+        }
+
+        runs {
+            client()
+            server()
+        }
+    }
+
+    neoforge("neoforge:1.21.1") {
+        dependsOn(shared1211)
+
+        loaderVersion = "21.1.26"
+        minecraftVersion = "1.21.1"
+
+        dependencies {
+            modImplementation("maven.modrinth:lithostitched:1.4.11-neoforge-1.21")
+        }
+
+        runs {
+            client()
+            server()
+        }
+    }
+
+    neoforge("neoforge:1.21.8") {
+        dependsOn(shared1218)
+
+        loaderVersion = "21.8.4-beta"
+        minecraftVersion = "1.21.8"
+
+        dependencies {
+            modImplementation("maven.modrinth:lithostitched:1.4.11-neoforge-1.21.6")
+        }
+
+        runs {
+            client()
+            server()
+        }
     }
 }
