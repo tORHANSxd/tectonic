@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.11.19"
+    id("earth.terrarium.cloche") version "0.11.20"
 }
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.4"
+version = "3.0.5"
 
 cloche {
     mappings {

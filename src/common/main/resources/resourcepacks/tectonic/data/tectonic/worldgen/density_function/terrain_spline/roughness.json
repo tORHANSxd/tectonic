@@ -1,10 +1,6 @@
 {
   "type": "minecraft:mul",
-  "argument1": {
-    "type": "minecraft:mul",
-    "argument1": 0,
-    "argument2": "minecraft:overworld/base_3d_noise"
-  },
+  "argument1": "minecraft:overworld/base_3d_noise",
   "argument2": {
     "type": "minecraft:spline",
     "spline": {

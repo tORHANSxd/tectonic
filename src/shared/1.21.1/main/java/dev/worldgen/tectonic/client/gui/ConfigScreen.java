@@ -46,7 +46,7 @@ public class ConfigScreen extends Screen {
         list.addBoolean("ultrasmooth", bool -> state.globalTerrain.ultrasmooth = bool, state.globalTerrain.ultrasmooth, ULTRASMOOTH);
 
         list.addCategory("continents", font);
-        list.addDouble("ocean_offset", -1, 0, 0.01, value -> state.continents.oceanOffset = value, state.continents.oceanOffset, OCEAN_OFFSET);
+        list.addDouble("ocean_offset", -2, 0, 0.01, value -> state.continents.oceanOffset = value, state.continents.oceanOffset, OCEAN_OFFSET);
         list.addDouble("continents_scale", 0.01, 1, 0.01, value -> state.continents.continentsScale = value, state.continents.continentsScale, CONTINENTS_SCALE);
         list.addDouble("erosion_scale", 0.01, 1, 0.01, value -> state.continents.erosionScale = value, state.continents.erosionScale, EROSION_SCALE);
         list.addDouble("ridge_scale", 0.01, 2, 0.01, value -> state.continents.ridgeScale = value, state.continents.ridgeScale, RIDGE_SCALE);

@@ -5,23 +5,23 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.1.0"
+MOD_VERSION = "3.0.5"
 CHANGELOG = """
-If you're seeing this, I made a mistake while uploading. Don't download this!
+- Lowered the minimum Ocean Offset value to -2 instead of -1
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.20.1"),
-    ("forge", "1.20.1"),
+    #("forge", "1.20.1"),
     ("fabric", "1.21.1"),
     ("neoforge", "1.21.1"),
     ("fabric", "1.21.8"),
     ("neoforge", "1.21.8"),
 ]
 
-MODRINTH_ID = "XaDC71GB"
-CURSEFORGE_ID = "936015"
+MODRINTH_ID = "lWDHr9jE"
+CURSEFORGE_ID = "686836"
 
-RELEASE_TYPE = "beta"
+RELEASE_TYPE = "release"
 
 # Global: Should never need to be touched!
 
