@@ -43,7 +43,8 @@ public class TectonicLexforge {
             addPack("tectonic");
             addPack("tectonic/overlay.mod");
             if (terralith) addPack("tectonic/overlay.terratonic");
-            if (increasedHeight) addPack("tectonic/overlay." + (terralith ? "terratonic_" : "") + "increased_height");
+            if (increasedHeight) addPack("tectonic/overlay.increased_height");
+            if (increasedHeight && terralith) addPack("tectonic/overlay.terratonic_increased_height");
             if (ultrasmooth) addPack("tectonic/overlay.ultrasmooth");
         }
     }
