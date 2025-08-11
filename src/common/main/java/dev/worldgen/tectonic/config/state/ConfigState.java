@@ -5,7 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.Tectonic;
 
 public class ConfigState {
+    public static final int MINOR_VERSION = 1;
     public static final Codec<ConfigState> BASE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("minor_version").orElse(0).forGetter(state -> MINOR_VERSION),
         General.CODEC.fieldOf("general").forGetter(state -> state.general),
         GlobalTerrain.CODEC.fieldOf("global_terrain").orElse(GlobalTerrain.DEFAULT).forGetter(state -> state.globalTerrain),
         Continents.CODEC.fieldOf("continents").orElse(Continents.DEFAULT).forGetter(state -> state.continents),
@@ -22,13 +24,17 @@ public class ConfigState {
     public Oceans oceans;
     public Biomes biomes;
 
-    public ConfigState(General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes) {
+    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes) {
         this.general = general;
         this.globalTerrain = globalTerrain;
         this.continents = continents;
         this.islands = islands;
         this.oceans = oceans;
         this.biomes = biomes;
+
+        if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
+            this.globalTerrain.increasedHeight = true;
+        }
     }
 
     public double getValue(String option) {
@@ -37,9 +43,6 @@ public class ConfigState {
             case "lava_tunnels" -> this.globalTerrain.lavaTunnels ? 1 : 0;
 
             case "ocean_offset" -> this.continents.oceanOffset;
-            case "continents_scale" -> this.continents.continentsScale;
-            case "erosion_scale" -> this.continents.erosionScale;
-            case "ridge_scale" -> this.continents.ridgeScale;
             case "underground_rivers" -> this.continents.undergroundRivers ? -1 : 0;
             case "flat_terrain_skew" -> this.continents.flatTerrainSkew;
             case "rolling_hills" -> this.continents.rollingHills ? 1 : 0;
@@ -48,14 +51,30 @@ public class ConfigState {
             case "ocean_depth" -> this.oceans.oceanDepth;
             case "deep_ocean_depth" -> this.oceans.deepOceanDepth;
 
-            case "islands_scale" -> this.islands.noiseScale;
-
-            case "temperature_multiplier" -> this.biomes.temperatureMultiplier;
-            case "temperature_scale" -> this.biomes.temperatureScale;
-            case "vegetation_multiplier" -> this.biomes.vegetationMultiplier;
-            case "vegetation_scale" -> this.biomes.vegetationScale;
-
             default -> 0;
+        };
+    }
+
+    public NoiseState getNoiseState(String option) {
+        return switch (option) {
+            case "continents" -> new NoiseState(continents.continentsScale, 1, 0);
+            case "island" -> this.islands.noise;
+            case "erosion" -> new NoiseState(continents.erosionScale, 1, 0);
+            case "ridge" -> new NoiseState(continents.ridgeScale, 1, 0);
+            case "temperature" -> this.biomes.temperature;
+            case "vegetation" -> this.biomes.vegetation;
+            default -> throw new IllegalArgumentException("Unknown noise state option");
+        };
+    }
+
+    public boolean test(String key) {
+        return switch (key) {
+            case "disable_islands" -> !this.islands.enabled || this.continents.oceanOffset > -0.5;
+            case "increased_height" -> this.globalTerrain.increasedHeight;
+            case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
+            case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
+            case "river_lanterns" -> this.continents.riverLanterns;
+            default -> false;
         };
     }
 
@@ -155,20 +174,20 @@ public class ConfigState {
 
     public static class Islands {
         public static final boolean ENABLED = true;
-        public static final double NOISE_SCALE = 0.11;
+        public static final NoiseState NOISE = new NoiseState(0.11, 1, 0);
 
-        public static final Islands DEFAULT = new Islands(ENABLED, NOISE_SCALE);
+        public static final Islands DEFAULT = new Islands(ENABLED, NOISE);
         public static final Codec<Islands> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("enabled").orElse(ENABLED).forGetter(islands -> islands.enabled),
-            Codec.DOUBLE.fieldOf("noise_scale").orElse(NOISE_SCALE).forGetter(islands -> islands.noiseScale)
+            NoiseState.codec("noise").orElse(new NoiseState(0.11, 1, 0)).forGetter(islands -> islands.noise)
         ).apply(instance, Islands::new));
 
         public boolean enabled;
-        public double noiseScale;
+        public NoiseState noise;
 
-        public Islands(boolean enabled, double noiseScale) {
+        public Islands(boolean enabled, NoiseState noise) {
             this.enabled = enabled;
-            this.noiseScale = noiseScale;
+            this.noise = noise;
         }
     }
 
@@ -200,29 +219,18 @@ public class ConfigState {
     }
 
     public static class Biomes {
-        public static final double TEMPERATURE_MULTIPLIER = 1.0;
-        public static final double TEMPERATURE_SCALE = 0.25;
-        public static final double VEGETATION_MULTIPLIER = 1.0;
-        public static final double VEGETATION_SCALE = 0.25;
-
-        public static final Biomes DEFAULT = new Biomes(TEMPERATURE_MULTIPLIER, TEMPERATURE_SCALE, VEGETATION_MULTIPLIER, VEGETATION_SCALE);
+        public static final Biomes DEFAULT = new Biomes(NoiseState.DEFAULT, NoiseState.DEFAULT);
         public static final Codec<Biomes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.DOUBLE.fieldOf("temperature_multiplier").orElse(TEMPERATURE_MULTIPLIER).forGetter(biomes -> biomes.temperatureMultiplier),
-            Codec.DOUBLE.fieldOf("temperature_scale").orElse(TEMPERATURE_SCALE).forGetter(biomes -> biomes.temperatureScale),
-            Codec.DOUBLE.fieldOf("vegetation_multiplier").orElse(VEGETATION_MULTIPLIER).forGetter(biomes -> biomes.vegetationMultiplier),
-            Codec.DOUBLE.fieldOf("vegetation_scale").orElse(VEGETATION_SCALE).forGetter(biomes -> biomes.vegetationScale)
+            NoiseState.codec("temperature").orElse(NoiseState.DEFAULT).forGetter(biomes -> biomes.temperature),
+            NoiseState.codec("vegetation").orElse(NoiseState.DEFAULT).forGetter(biomes -> biomes.vegetation)
         ).apply(instance, Biomes::new));
 
-        public double temperatureMultiplier;
-        public double temperatureScale;
-        public double vegetationMultiplier;
-        public double vegetationScale;
+        public NoiseState temperature;
+        public NoiseState vegetation;
 
-        public Biomes(double temperatureMultiplier, double temperatureScale, double vegetationMultiplier, double vegetationScale) {
-            this.temperatureMultiplier = temperatureMultiplier;
-            this.temperatureScale = temperatureScale;
-            this.vegetationMultiplier = vegetationMultiplier;
-            this.vegetationScale = vegetationScale;
+        public Biomes(NoiseState temperature, NoiseState vegetation) {
+            this.temperature = temperature;
+            this.vegetation = vegetation;
         }
     }
 }

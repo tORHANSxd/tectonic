@@ -5,17 +5,24 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.6"
+MOD_VERSION = "3.0.7"
 CHANGELOG = """
-Fixed the Increased Height option not working with Terralith. Definitely a new, never-before-seen issue.
+Additions:
+
+- Introduced config presets. Currently the only presets are Default (base options) and Deserted (95% deserts), but more will come later.
+- Added several config options around the temperature, vegetation and island noises.
+
+Fixes:
+
+- Fixed an important issue where Ultrasmooth had Increased Height built in. If you had Ultrasmooth on in 3.0.6, Increased Height will be automatically enabled upon updating to prevent world corruption.
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.20.1"),
     ("forge", "1.20.1"),
-    #("fabric", "1.21.1"),
-    #("neoforge", "1.21.1"),
-    #("fabric", "1.21.8"),
-    #("neoforge", "1.21.8"),
+    ("fabric", "1.21.1"),
+    ("neoforge", "1.21.1"),
+    ("fabric", "1.21.8"),
+    ("neoforge", "1.21.8"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"

@@ -23,13 +23,6 @@ public record ConfigResourceCondition(String key) implements ResourceCondition {
 
     @Override
     public boolean test(RegistryOps.RegistryInfoLookup registries) {
-        return switch (this.key) {
-            case "disable_islands" -> !ConfigHandler.getState().islands.enabled;
-            case "increased_height" -> ConfigHandler.getState().globalTerrain.increasedHeight;
-            case "ultrasmooth" -> ConfigHandler.getState().globalTerrain.ultrasmooth;
-            case "remove_frozen_ocean_ice" -> ConfigHandler.getState().oceans.removeFrozenOceanIce;
-            case "river_lanterns" -> ConfigHandler.getState().continents.riverLanterns;
-            default -> false;
-        };
+        return ConfigHandler.getState().test(this.key);
     }
 }

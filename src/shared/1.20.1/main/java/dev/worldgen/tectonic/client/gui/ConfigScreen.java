@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
-import static dev.worldgen.tectonic.config.state.ConfigState.Biomes.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.Continents.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.General.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.GlobalTerrain.*;
@@ -16,7 +15,7 @@ import static dev.worldgen.tectonic.config.state.ConfigState.Islands.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.Oceans.*;
 
 public class ConfigScreen extends Screen {
-    private final Screen parent;
+    protected final Screen parent;
 
     private ConfigList list;
 
@@ -30,6 +29,7 @@ public class ConfigScreen extends Screen {
         ConfigState state = ConfigHandler.getState();
 
         list = new ConfigList(minecraft, this);
+        list.addEntry(Button.builder(ConfigScreen.text("view_presets"), button -> minecraft.setScreen(new PresetSelectorScreen(this))).build());
 
         list.addCategory("general", font);
         list.addBoolean("mod_enabled", bool -> state.general.modEnabled = bool, state.general.modEnabled, MOD_ENABLED);
@@ -54,7 +54,7 @@ public class ConfigScreen extends Screen {
 
         list.addCategory("islands", font);
         list.addBoolean("enabled", bool -> state.islands.enabled = bool,  state.islands.enabled, ENABLED);
-        list.addDouble("noise_scale", 0.01, 0.5, 0.01, value -> state.islands.noiseScale = value,  state.islands.noiseScale, NOISE_SCALE);
+        list.addNoise("noise", state.islands.noise);
 
         list.addCategory("oceans", font);
         list.addDouble("ocean_depth", -0.75, -0.05, 0.01, value -> state.oceans.oceanDepth = value, state.oceans.oceanDepth, OCEAN_DEPTH);
@@ -63,10 +63,8 @@ public class ConfigScreen extends Screen {
         list.addBoolean("remove_frozen_ocean_ice", bool -> state.oceans.removeFrozenOceanIce = bool, state.oceans.removeFrozenOceanIce, REMOVE_FROZEN_OCEAN_ICE);
 
         list.addCategory("biomes", font);
-        list.addDouble("temperature_multiplier", 0.1, 5, 0.1, value -> state.biomes.temperatureMultiplier = value, state.biomes.temperatureMultiplier, TEMPERATURE_MULTIPLIER);
-        list.addDouble("temperature_scale", 0.01, 1, 0.01, value -> state.biomes.temperatureScale = value, state.biomes.temperatureScale, TEMPERATURE_SCALE);
-        list.addDouble("vegetation_multiplier", 0.1, 5, 0.1, value -> state.biomes.vegetationMultiplier = value, state.biomes.vegetationMultiplier, VEGETATION_MULTIPLIER);
-        list.addDouble("vegetation_scale", 0.01, 1, 0.01, value -> state.biomes.vegetationScale = value, state.biomes.vegetationScale, VEGETATION_SCALE);
+        list.addNoise("temperature", state.biomes.temperature);
+        list.addNoise("vegetation", state.biomes.vegetation);
 
         this.addWidget(list);
 

@@ -2,6 +2,7 @@ package dev.worldgen.tectonic.client.gui;
 
 import dev.worldgen.tectonic.client.gui.widget.FixedStringWidget;
 import dev.worldgen.tectonic.client.gui.widget.SliderWidget;
+import dev.worldgen.tectonic.config.state.NoiseState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -46,6 +47,12 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
 
     public void addDouble(String name, double min, double max, double step, Consumer<Double> action, double value, double base) {
         this.addEntry(new SliderWidget(min, max, step, "option." + name, action, value, false, base));
+    }
+
+    public void addNoise(String name, NoiseState state) {
+        this.addDouble(name + "_scale", 0, 1, 0.01, value -> state.scale = value, state.scale, NoiseState.DEFAULT.scale);
+        this.addDouble(name + "_multiplier", 0, 5, 0.1, value -> state.multiplier = value, state.multiplier, NoiseState.DEFAULT.multiplier);
+        this.addDouble(name + "_offset", -1, 1, 0.01, value -> state.offset = value, state.offset, NoiseState.DEFAULT.offset);
     }
 
     public void addEntry(AbstractWidget widget) {

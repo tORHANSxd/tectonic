@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public class ConfigHandler {
     private static ConfigState LOADED_STATE = new ConfigState(
+        ConfigState.MINOR_VERSION,
         ConfigState.General.DEFAULT,
         ConfigState.GlobalTerrain.DEFAULT,
         ConfigState.Continents.DEFAULT,
@@ -30,6 +31,10 @@ public class ConfigHandler {
 
     public static ConfigState getState() {
         return LOADED_STATE;
+    }
+
+    public static void setState(ConfigState state) {
+        LOADED_STATE = state;
     }
 
     public static void load(Path path) {

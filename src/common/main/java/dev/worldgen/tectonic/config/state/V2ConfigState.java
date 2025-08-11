@@ -27,6 +27,7 @@ public class V2ConfigState {
 
     public ConfigState upgrade() {
         return new ConfigState(
+            ConfigState.MINOR_VERSION,
             new ConfigState.General(
                 this.enabled,
                 this.snowOffset
@@ -48,10 +49,7 @@ public class V2ConfigState {
                 true,
                 true
             ),
-            new ConfigState.Islands(
-                true,
-                0.11
-            ),
+            ConfigState.Islands.DEFAULT,
             new ConfigState.Oceans(
                 this.scales.ocean,
                 this.scales.deepOcean,
@@ -59,10 +57,8 @@ public class V2ConfigState {
                 false
             ),
             new ConfigState.Biomes(
-                1,
-                0.25,
-                1,
-                0.25
+                NoiseState.DEFAULT,
+                NoiseState.DEFAULT
             )
         );
     }
