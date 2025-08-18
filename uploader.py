@@ -5,11 +5,9 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.9"
+MOD_VERSION = "3.0.10"
 CHANGELOG = """
-- Added config options for controlling the closing of noise cave entrances near the surface.
-- Added several config options for toggling on/off cave types.
-- Fixed an issue where Meadows incorrectly generated in valley terrain.
+- Temporarily turned off the blending version bump from 3.0.9 due to issues with Terratonic.
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.20.1"),

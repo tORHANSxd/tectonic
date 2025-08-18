@@ -18,11 +18,11 @@ public class Tectonic {
     /**
      * Value saved in chunks used for blending between Tectonic versions.
      * <ol>
-     *     <li>3.0.0 - 3.0.8</li>
-     *     <li>3.0.9+</li>
+     *     <li>3.0.0 - 3.0.8, 3.0.10+</li>
+     *     <li>3.0.9</li>
      * </ol>
      */
-    public static int BLENDING_VERSION = 2;
+    public static int BLENDING_VERSION = 1;
     public static String BLENDING_KEY = "tectonic:blending_version";
 
     public static void init(Path folder) {
