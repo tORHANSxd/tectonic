@@ -1,5 +1,6 @@
 package dev.worldgen.tectonic.client.gui;
 
+import dev.worldgen.tectonic.client.ConfigListBuilder;
 import dev.worldgen.tectonic.client.gui.widget.FixedStringWidget;
 import dev.worldgen.tectonic.client.gui.widget.SliderWidget;
 import dev.worldgen.tectonic.config.state.NoiseState;
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
 
 import static dev.worldgen.tectonic.client.gui.ConfigScreen.option;
 
-public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
+public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> implements ConfigListBuilder {
     public ConfigList(Minecraft minecraft, ConfigScreen parent) {
         super(minecraft, parent.width, parent.height, 32, parent.height - 32, 25);
     }
@@ -49,10 +50,10 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         this.addEntry(new SliderWidget(min, max, step, "option." + name, action, value, false, base));
     }
 
-    public void addNoise(String name, NoiseState state) {
-        this.addDouble(name + "_scale", 0, 1, 0.01, value -> state.scale = value, state.scale, NoiseState.DEFAULT.scale);
-        this.addDouble(name + "_multiplier", 0, 5, 0.1, value -> state.multiplier = value, state.multiplier, NoiseState.DEFAULT.multiplier);
-        this.addDouble(name + "_offset", -1, 1, 0.01, value -> state.offset = value, state.offset, NoiseState.DEFAULT.offset);
+    public void addNoise(String name, NoiseState state, NoiseState baseState) {
+        this.addDouble(name + "_scale", 0, 1, 0.01, value -> state.scale = value, state.scale, baseState.scale);
+        this.addDouble(name + "_multiplier", 0, 5, 0.1, value -> state.multiplier = value, state.multiplier, baseState.multiplier);
+        this.addDouble(name + "_offset", -1, 1, 0.01, value -> state.offset = value, state.offset, baseState.offset);
     }
 
     public void addEntry(AbstractWidget widget) {

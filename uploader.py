@@ -5,16 +5,11 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.7"
+MOD_VERSION = "3.0.9"
 CHANGELOG = """
-Additions:
-
-- Introduced config presets. Currently the only presets are Default (base options) and Deserted (95% deserts), but more will come later.
-- Added several config options around the temperature, vegetation and island noises.
-
-Fixes:
-
-- Fixed an important issue where Ultrasmooth had Increased Height built in. If you had Ultrasmooth on in 3.0.6, Increased Height will be automatically enabled upon updating to prevent world corruption.
+- Added config options for controlling the closing of noise cave entrances near the surface.
+- Added several config options for toggling on/off cave types.
+- Fixed an issue where Meadows incorrectly generated in valley terrain.
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.20.1"),

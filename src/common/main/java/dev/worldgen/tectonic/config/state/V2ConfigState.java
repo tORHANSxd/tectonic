@@ -59,7 +59,8 @@ public class V2ConfigState {
             new ConfigState.Biomes(
                 NoiseState.DEFAULT,
                 NoiseState.DEFAULT
-            )
+            ),
+            ConfigState.Caves.DEFAULT
         );
     }
 

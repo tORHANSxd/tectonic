@@ -8,7 +8,8 @@ public interface ConfigPresets {
         ConfigState.Continents.DEFAULT,
         ConfigState.Islands.DEFAULT,
         ConfigState.Oceans.DEFAULT,
-        ConfigState.Biomes.DEFAULT
+        ConfigState.Biomes.DEFAULT,
+        ConfigState.Caves.DEFAULT
     );
 
     ConfigState DESERTED = new ConfigState(
@@ -21,6 +22,7 @@ public interface ConfigPresets {
         new ConfigState.Biomes(
             new NoiseState(0, 0, 1),
             NoiseState.DEFAULT
-        )
+        ),
+        ConfigState.Caves.DEFAULT
     );
 }

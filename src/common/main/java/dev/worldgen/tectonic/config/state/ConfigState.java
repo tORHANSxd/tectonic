@@ -13,7 +13,8 @@ public class ConfigState {
         Continents.CODEC.fieldOf("continents").orElse(Continents.DEFAULT).forGetter(state -> state.continents),
         Islands.CODEC.fieldOf("islands").orElse(Islands.DEFAULT).forGetter(state -> state.islands),
         Oceans.CODEC.fieldOf("oceans").orElse(Oceans.DEFAULT).forGetter(state -> state.oceans),
-        Biomes.CODEC.fieldOf("biomes").orElse(Biomes.DEFAULT).forGetter(state -> state.biomes)
+        Biomes.CODEC.fieldOf("biomes").orElse(Biomes.DEFAULT).forGetter(state -> state.biomes),
+        Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves)
     ).apply(instance, ConfigState::new));
     public static final Codec<ConfigState> CODEC = Tectonic.withAlternative(BASE_CODEC, V2ConfigState.CODEC, V2ConfigState::upgrade);
 
@@ -23,14 +24,16 @@ public class ConfigState {
     public Islands islands;
     public Oceans oceans;
     public Biomes biomes;
+    public Caves caves;
 
-    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes) {
+    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves) {
         this.general = general;
         this.globalTerrain = globalTerrain;
         this.continents = continents;
         this.islands = islands;
         this.oceans = oceans;
         this.biomes = biomes;
+        this.caves = caves;
 
         if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
             this.globalTerrain.increasedHeight = true;
@@ -50,6 +53,14 @@ public class ConfigState {
 
             case "ocean_depth" -> this.oceans.oceanDepth;
             case "deep_ocean_depth" -> this.oceans.deepOceanDepth;
+
+            case "depth_cutoff_start" -> this.caves.depthCutoffStart;
+            case "depth_cutoff_size" -> this.caves.depthCutoffSize;
+            case "cheese_enabled" -> this.caves.cheeseEnabled ? 1 : 0;
+            case "cheese_additive" -> this.caves.cheeseAdditive;
+
+            case "noodle_enabled" -> this.caves.noodleEnabled ? 1 : 0;
+            case "noodle_additive" -> this.caves.noodleAdditive;
 
             default -> 0;
         };
@@ -74,6 +85,7 @@ public class ConfigState {
             case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
+            case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
     }
@@ -231,6 +243,49 @@ public class ConfigState {
         public Biomes(NoiseState temperature, NoiseState vegetation) {
             this.temperature = temperature;
             this.vegetation = vegetation;
+        }
+    }
+
+    public static class Caves {
+        public static final double DEPTH_CUTOFF_START = 0.1;
+        public static final double DEPTH_CUTOFF_SIZE = 0.1;
+        public static final boolean CHEESE_ENABLED = true;
+        public static final double CHEESE_ADDITIVE = 0.27;
+        public static final boolean NOODLE_ENABLED = true;
+        public static final double NOODLE_ADDITIVE = -0.075;
+        public static final boolean SPAGHETTI_ENABLED = true;
+        public static final boolean CARVERS_ENABLED = true;
+
+        public static final Caves DEFAULT = new Caves(DEPTH_CUTOFF_START, DEPTH_CUTOFF_SIZE, CHEESE_ENABLED, CHEESE_ADDITIVE, NOODLE_ENABLED, NOODLE_ADDITIVE, SPAGHETTI_ENABLED, CARVERS_ENABLED);
+        public static final Codec<Caves> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.DOUBLE.fieldOf("depth_cutoff_start").orElse(DEPTH_CUTOFF_START).forGetter(caves -> caves.depthCutoffStart),
+            Codec.DOUBLE.fieldOf("depth_cutoff_size").orElse(DEPTH_CUTOFF_SIZE).forGetter(caves -> caves.depthCutoffSize),
+            Codec.BOOL.fieldOf("cheese_enabled").orElse(CHEESE_ENABLED).forGetter(caves -> caves.cheeseEnabled),
+            Codec.DOUBLE.fieldOf("cheese_additive").orElse(CHEESE_ADDITIVE).forGetter(caves -> caves.cheeseAdditive),
+            Codec.BOOL.fieldOf("noodle_enabled").orElse(NOODLE_ENABLED).forGetter(caves -> caves.noodleEnabled),
+            Codec.DOUBLE.fieldOf("noodle_additive").orElse(NOODLE_ADDITIVE).forGetter(caves -> caves.noodleAdditive),
+            Codec.BOOL.fieldOf("spaghetti_enabled").orElse(SPAGHETTI_ENABLED).forGetter(caves -> caves.spaghettiEnabled),
+            Codec.BOOL.fieldOf("carvers_enabled").orElse(CARVERS_ENABLED).forGetter(caves -> caves.carversEnabled)
+        ).apply(instance, Caves::new));
+
+        public double depthCutoffStart;
+        public double depthCutoffSize;
+        public boolean cheeseEnabled;
+        public double cheeseAdditive;
+        public boolean noodleEnabled;
+        public double noodleAdditive;
+        public boolean spaghettiEnabled;
+        public boolean carversEnabled;
+
+        public Caves(double depthCutoffStart, double depthCutoffSize, boolean cheeseEnabled, double cheeseAdditive, boolean noodleEnabled, double noodleAdditive, boolean spaghettiEnabled, boolean carversEnabled) {
+            this.depthCutoffStart = depthCutoffStart;
+            this.depthCutoffSize = depthCutoffSize;
+            this.cheeseEnabled = cheeseEnabled;
+            this.cheeseAdditive = cheeseAdditive;
+            this.noodleEnabled = noodleEnabled;
+            this.noodleAdditive = noodleAdditive;
+            this.spaghettiEnabled = spaghettiEnabled;
+            this.carversEnabled = carversEnabled;
         }
     }
 }

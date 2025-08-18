@@ -17,12 +17,12 @@ public class Tectonic {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     /**
      * Value saved in chunks used for blending between Tectonic versions.
-     * <p>
-     * 0: Vanilla, Tectonic Pre-3.0
-     * <p>
-     * 1: 3.0+
+     * <ol>
+     *     <li>3.0.0 - 3.0.8</li>
+     *     <li>3.0.9+</li>
+     * </ol>
      */
-    public static int BLENDING_VERSION = 1;
+    public static int BLENDING_VERSION = 2;
     public static String BLENDING_KEY = "tectonic:blending_version";
 
     public static void init(Path folder) {

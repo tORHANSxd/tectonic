@@ -1,6 +1,9 @@
 package dev.worldgen.tectonic;
 
+import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
@@ -19,10 +22,13 @@ public class TectonicFabric implements ModInitializer {
     public void onInitialize() {
         Tectonic.init(FabricLoader.getInstance().getConfigDir());
 
+        CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> TectonicCommand.register(dispatcher));
+
         ResourceConditions.register(ConfigResourceCondition.TYPE);
 
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
+        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("invert"), Invert.CODEC_HOLDER.codec());
 
         if (ConfigHandler.getState().general.modEnabled) {
             ResourceManagerHelper.registerBuiltinResourcePack(

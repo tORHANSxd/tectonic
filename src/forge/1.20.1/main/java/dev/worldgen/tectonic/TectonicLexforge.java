@@ -2,9 +2,11 @@ package dev.worldgen.tectonic;
 
 import dev.worldgen.lithostitched.registry.LithostitchedRegistryKeys;
 import dev.worldgen.tectonic.client.gui.ConfigScreen;
+import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
+import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
@@ -13,6 +15,8 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
@@ -32,20 +36,23 @@ public class TectonicLexforge {
     public TectonicLexforge() {
         Tectonic.init(FMLPaths.CONFIGDIR.get());
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::handleRegistries);
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::handleRegistries);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
         if (ConfigHandler.getState().general.modEnabled) {
             // Loads the pack overlays as separate packs
             boolean terralith = ModList.get().isLoaded("terralith");
             boolean increasedHeight = ConfigHandler.getState().globalTerrain.increasedHeight;
             boolean ultrasmooth = ConfigHandler.getState().globalTerrain.ultrasmooth;
+            boolean noCarvers = !ConfigHandler.getState().caves.carversEnabled;
             addPack("tectonic");
             addPack("tectonic/overlay.mod");
             if (terralith) addPack("tectonic/overlay.terratonic");
             if (increasedHeight) addPack("tectonic/overlay.increased_height");
             if (increasedHeight && terralith) addPack("tectonic/overlay.terratonic_increased_height");
             if (ultrasmooth) addPack("tectonic/overlay.ultrasmooth");
+            if (noCarvers) addPack("tectonic/overlay.no_carvers");
         }
     }
 
@@ -53,10 +60,15 @@ public class TectonicLexforge {
         event.register(Registries.DENSITY_FUNCTION_TYPE, helper -> {
             helper.register(id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
+            helper.register(id("invert"), Invert.CODEC_HOLDER.codec());
         });
         event.register(LithostitchedRegistryKeys.MODIFIER_PREDICATE_TYPE, helper -> {
             helper.register(id("config"), TectonicModifierPredicate.CODEC);
         });
+    }
+
+    private void registerCommands(RegisterCommandsEvent event) {
+        TectonicCommand.register(event.getDispatcher());
     }
 
     private void addPack(String packName) {

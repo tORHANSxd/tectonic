@@ -27,6 +27,16 @@
   "neoforge:overlays": {
     "entries": [
       {
+        "directory": "overlay.no_carvers",
+        "formats": [1, 99],
+        "neoforge:conditions": [
+          {
+            "type": "tectonic:config",
+            "key": "no_carvers"
+          }
+        ]
+      },
+      {
         "directory": "overlay.ultrasmooth",
         "formats": [1, 99],
         "neoforge:conditions": [
@@ -98,6 +108,13 @@
   },
   "fabric:overlays": {
     "entries": [
+      {
+        "directory": "overlay.no_carvers",
+        "condition": {
+          "condition": "tectonic:config",
+          "key": "no_carvers"
+        }
+      },
       {
         "directory": "overlay.ultrasmooth",
         "condition": {

@@ -36,12 +36,9 @@
                         "type": "minecraft:add",
                         "argument1": 1,
                         "argument2": {
-                          "type": "minecraft:range_choice",
-                          "input": "tectonic:depth",
-                          "min_inclusive": -1000000,
-                          "max_exclusive": 0.1,
-                          "when_in_range": "tectonic:sloped_cheese",
-                          "when_out_of_range": "tectonic:caves"
+                          "type": "minecraft:min",
+                          "argument1": "tectonic:base_terrain",
+                          "argument2": "tectonic:caves"
                         }
                       }
                     }
@@ -53,13 +50,13 @@
         }
       }
     },
-    "argument2": "minecraft:overworld/caves/noodle"
+    "argument2": "tectonic:cave/noodle"
   },
   "argument2": {
     "type": "minecraft:add",
     "argument1": {
       "type": "minecraft:min",
-      "argument1": 0.02,
+      "argument1": 0.0002,
       "argument2": "tectonic:underground_river/total"
     },
     "argument2": "tectonic:lava_tunnel/total"
