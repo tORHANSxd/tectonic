@@ -19,7 +19,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.10"
+version = "3.0.11"
 
 cloche {
     mappings {

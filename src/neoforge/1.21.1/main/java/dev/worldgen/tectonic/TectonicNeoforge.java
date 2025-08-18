@@ -18,6 +18,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -43,7 +44,7 @@ public class TectonicNeoforge {
 
         bus.addListener(this::registerDensityFunctionTypes);
         bus.addListener(this::registerEnabledPacks);
-        bus.addListener(this::registerCommands);
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
     }
 
     private void registerDensityFunctionTypes(final RegisterEvent event) {

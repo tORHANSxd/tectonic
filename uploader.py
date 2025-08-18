@@ -5,16 +5,16 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.10"
+MOD_VERSION = "3.0.11"
 CHANGELOG = """
-- Temporarily turned off the blending version bump from 3.0.9 due to issues with Terratonic.
+- Fixed Neoforge versions crashing on startup
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "1.20.1"),
-    ("forge", "1.20.1"),
-    ("fabric", "1.21.1"),
+    #("fabric", "1.20.1"),
+    #("forge", "1.20.1"),
+    #("fabric", "1.21.1"),
     ("neoforge", "1.21.1"),
-    ("fabric", "1.21.8"),
+    #("fabric", "1.21.8"),
     ("neoforge", "1.21.8"),
 ]
 
