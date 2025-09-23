@@ -19,7 +19,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.11"
+version = "3.0.12"
 
 cloche {
     mappings {
@@ -135,6 +135,8 @@ cloche {
 
         dependencies {
             fabricApi("0.129.0")
+            modImplementation("maven.modrinth:terralith:2.5.11")
+
             modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.21.6")
             modImplementation("com.terraformersmc:modmenu:15.0.0-beta.3")
         }

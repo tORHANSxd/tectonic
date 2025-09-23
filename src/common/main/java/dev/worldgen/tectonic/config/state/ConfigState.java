@@ -80,7 +80,7 @@ public class ConfigState {
 
     public boolean test(String key) {
         return switch (key) {
-            case "disable_islands" -> !this.islands.enabled || this.continents.oceanOffset > -0.5;
+            case "disable_islands" -> !this.islands.enabled && this.continents.oceanOffset < -0.49;
             case "increased_height" -> this.globalTerrain.increasedHeight;
             case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;

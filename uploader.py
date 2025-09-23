@@ -5,16 +5,17 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.11"
+MOD_VERSION = "3.0.12"
 CHANGELOG = """
-- Fixed Neoforge versions crashing on startup
+- Improved blending when Terralith is installed.
+- Fixed log spam when `Ocean Offset` option is > -0.5 and islands are enabled.
 """
 UPLOAD_VERSIONS = [
-    #("fabric", "1.20.1"),
-    #("forge", "1.20.1"),
-    #("fabric", "1.21.1"),
+    ("fabric", "1.20.1"),
+    ("forge", "1.20.1"),
+    ("fabric", "1.21.1"),
     ("neoforge", "1.21.1"),
-    #("fabric", "1.21.8"),
+    ("fabric", "1.21.8"),
     ("neoforge", "1.21.8"),
 ]
 
