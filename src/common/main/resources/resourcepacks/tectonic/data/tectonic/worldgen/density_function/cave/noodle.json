@@ -3,7 +3,11 @@
   "argument1": 0.2,
   "argument2": {
     "type": "minecraft:mul",
-    "argument1": "tectonic:__constants/cave/noodle_enabled",
+    "argument1": {
+      "type": "minecraft:mul",
+      "argument1": "tectonic:__constants/cave/noodle_enabled",
+      "argument2": "tectonic:__constants/cave/depth_cutoff"
+    },
     "argument2": {
       "type": "minecraft:add",
       "argument1": -0.2,

@@ -12,6 +12,8 @@
   "mixins": [
     "BiomeMixin",
     "BlendingDataMixin",
+    "ChunkAccessMixin",
+    "HeightmapMixin",
     "IOWorkerMixin",
     "NoisesMixin",
     "StructurePieceMixin",

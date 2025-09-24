@@ -95,6 +95,7 @@
   "preset.tectonic.title": "Presets",
 
   "preset.tectonic.default": "Default",
+  "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
 
   "pack_name.tectonic.tectonic/overlay.mod": "Tectonic mod-reliant data",

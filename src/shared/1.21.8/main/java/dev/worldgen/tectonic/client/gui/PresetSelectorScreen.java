@@ -33,8 +33,7 @@ public class PresetSelectorScreen extends Screen {
         layout.addTitleHeader(title, font);
 
         list = layout.addToContents(new PresetList(minecraft, width, this));
-        list.addEntry("default", ConfigPresets.DEFAULT, 0xffffff);
-        list.addEntry("deserted", ConfigPresets.DESERTED, 0xe2ca76);
+        ConfigPresets.acceptPresets(list::addEntry);
 
         LinearLayout footer = layout.addToFooter(LinearLayout.horizontal().spacing(8));
         footer.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> onClose()).build());

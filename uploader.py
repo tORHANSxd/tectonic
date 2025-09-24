@@ -5,10 +5,12 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.12"
+MOD_VERSION = "3.0.13"
 CHANGELOG = """
-- Improved blending when Terralith is installed.
-- Fixed log spam when `Ocean Offset` option is > -0.5 and islands are enabled.
+- Chunks no longer reset and spam the log file when the height limit is decreased. **You still shouldn't decrease the height limit**, this is just a partial safeguard.
+- Noodle caves are now cut off at the surface like all other noise caves.
+- Added a `Large Biomes` config preset.
+- Fixed a generation issue that could occur with terrain scale increased but increased height disabled.
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.20.1"),

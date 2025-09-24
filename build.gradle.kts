@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.11.20"
+    id("earth.terrarium.cloche") version "0.13.4"
 }
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.12"
+version = "3.0.13"
 
 cloche {
     mappings {
@@ -176,7 +176,7 @@ cloche {
     neoforge("neoforge:1.21.1") {
         dependsOn(shared1211)
 
-        loaderVersion = "21.1.26"
+        loaderVersion = "21.1.209"
         minecraftVersion = "1.21.1"
 
         dependencies {

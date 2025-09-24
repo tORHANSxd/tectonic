@@ -28,8 +28,7 @@ public class PresetSelectorScreen extends Screen {
     @Override
     public void init() {
         list = new PresetList(minecraft, width, this);
-        list.addEntry("default", ConfigPresets.DEFAULT, 0xffffff);
-        list.addEntry("deserted", ConfigPresets.DESERTED, 0xe2ca76);
+        ConfigPresets.acceptPresets(list::addEntry);
 
         this.addWidget(list);
 
