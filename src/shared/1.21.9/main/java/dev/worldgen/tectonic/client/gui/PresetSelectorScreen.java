@@ -90,8 +90,9 @@ public class PresetSelectorScreen extends Screen {
                 PresetSelectorScreen.this.onClose();
             }
 
-            public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-                this.widget.setY(top);
+            @Override
+            public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                this.widget.setY(this.getY());
                 this.widget.render(guiGraphics, mouseX, mouseY, partialTick);
             }
 

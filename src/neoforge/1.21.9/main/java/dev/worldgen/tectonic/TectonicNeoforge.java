@@ -8,10 +8,12 @@ import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.BuiltInPackSource;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.bus.api.IEventBus;
@@ -26,6 +28,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.resource.JarContentsPackResources;
+import net.neoforged.neoforgespi.language.IModInfo;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -56,26 +60,16 @@ public class TectonicNeoforge {
     }
 
     private void registerEnabledPacks(final AddPackFindersEvent event) {
-        if (event.getPackType() == PackType.SERVER_DATA && ConfigHandler.getState().general.modEnabled) {
-            Path resourcePath = ModList.get().getModFileById("tectonic").getFile().findResource("resourcepacks/tectonic");
-
-            Pack dataPack = Pack.readMetaAndCreate(
-                new PackLocationInfo(
-                    resourcePath.getFileName().toString(),
-                    Component.literal("Tectonic"),
-                    PackSource.BUILT_IN,
-                    Optional.empty()
-                ),
-                new PathPackResources.PathResourcesSupplier(resourcePath),
+        event.addPackFinders(
+                ResourceLocation.fromNamespaceAndPath(Tectonic.MOD_ID, "resourcepacks/tectonic"),
                 PackType.SERVER_DATA,
-                new PackSelectionConfig(
-                    true,
-                    Pack.Position.TOP,
-                    false
-                )
-            );
+                Component.literal("Tectonic"),
+                PackSource.BUILT_IN,
+                true,
+                Pack.Position.TOP
+        );
+        if (ConfigHandler.getState().general.modEnabled) {
 
-            event.addRepositorySource((packConsumer) -> packConsumer.accept(dataPack));
         }
     }
 

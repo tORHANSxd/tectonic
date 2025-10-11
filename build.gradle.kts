@@ -13,6 +13,7 @@ repositories {
         librariesMinecraft()
         main()
     }
+    mavenLocal()
     mavenCentral()
     maven("https://api.modrinth.com/maven")
     maven("https://maven.terraformersmc.com/")
@@ -67,8 +68,8 @@ cloche {
     val shared1211 = common("shared:1.21.1") {
         mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
     }
-    val shared1218 = common("shared:1.21.8") {
-        mixins.from(file("src/shared/1.21.8/main/tectonic_1.21.8.mixins.json"))
+    val shared1219 = common("shared:1.21.9") {
+        mixins.from(file("src/shared/1.21.9/main/tectonic_1.21.9.mixins.json"))
     }
 
     fabric("fabric:1.20.1") {
@@ -127,19 +128,17 @@ cloche {
         }
     }
 
-    fabric("fabric:1.21.8") {
-        dependsOn(shared1218)
+    fabric("fabric:1.21.9") {
+        dependsOn(shared1219)
 
-        loaderVersion = "0.16.13"
-        minecraftVersion = "1.21.8"
+        loaderVersion = "0.17.2"
+        minecraftVersion = "1.21.9"
 
         dependencies {
-            fabricApi("0.129.0")
-            modImplementation("maven.modrinth:terralith:2.5.11")
-
-            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.21.6")
-            modImplementation("com.terraformersmc:modmenu:15.0.0-beta.3")
-        }
+            fabricApi("0.133.14", "1.21.9")
+            modImplementation("maven.modrinth:lithostitched:1.5.0-beta6-fabric-1.21.9")
+            modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1")
+        } //accessWidenFabric1218CommonMinecraft
 
         includedClient()
         runs {
@@ -189,14 +188,14 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.8") {
-        dependsOn(shared1218)
+    neoforge("neoforge:1.21.9") {
+        dependsOn(shared1219)
 
-        loaderVersion = "21.8.4-beta"
-        minecraftVersion = "1.21.8"
+        loaderVersion = "21.9.1-beta"
+        minecraftVersion = "1.21.9"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.4.11-neoforge-1.21.6")
+            modImplementation("maven.modrinth:lithostitched:1.5.0-beta6-neoforge-1.21.9")
         }
 
         runs {

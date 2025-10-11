@@ -7,7 +7,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.navigation.CommonInputs;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
@@ -90,8 +91,8 @@ public class SliderWidget extends AbstractWidget {
         this.renderScrollingString(guiGraphics, minecraft.font, 2, k | Mth.ceil(this.alpha * 255.0F) << 24);
     }
 
-    public void onClick(double mouseX, double mouseY) {
-        this.setValueFromMouse(mouseX);
+    public void onClick(MouseButtonEvent event, boolean bl) {
+        this.setValueFromMouse(event.x());
     }
 
     public void setFocused(boolean focused) {
@@ -107,14 +108,14 @@ public class SliderWidget extends AbstractWidget {
 
     }
 
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (CommonInputs.selected(keyCode)) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.isSelection()) {
             this.canChangeValue = !this.canChangeValue;
             return true;
         } else {
             if (this.canChangeValue) {
-                boolean flag = keyCode == 263;
-                if (flag || keyCode == 262) {
+                boolean flag = event.key() == 263;
+                if (flag || event.key() == 262) {
                     float f = flag ? -1.0F : 1.0F;
                     this.setValue(this.delta + (double)(f / (float)(this.width - 8)));
                     return true;
@@ -150,15 +151,15 @@ public class SliderWidget extends AbstractWidget {
         return (this.value - this.min) / (this.max - this.min);
     }
 
-    protected void onDrag(double mouseX, double mouseY, double dragX, double dragY) {
-        this.setValueFromMouse(mouseX);
-        super.onDrag(mouseX, mouseY, dragX, dragY);
+    protected void onDrag(MouseButtonEvent event, double dragX, double dragY) {
+        this.setValueFromMouse(event.x());
+        super.onDrag(event, dragX, dragY);
     }
 
     public void playDownSound(SoundManager handler) {
     }
 
-    public void onRelease(double mouseX, double mouseY) {
+    public void onRelease(MouseButtonEvent event) {
         super.playDownSound(Minecraft.getInstance().getSoundManager());
     }
 

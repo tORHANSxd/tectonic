@@ -7,18 +7,15 @@ import json
 MOD_ID = "tectonic"
 MOD_VERSION = "3.0.13"
 CHANGELOG = """
-- Chunks no longer reset and spam the log file when the height limit is decreased. **You still shouldn't decrease the height limit**, this is just a partial safeguard.
-- Noodle caves are now cut off at the surface like all other noise caves.
-- Added a `Large Biomes` config preset.
-- Fixed a generation issue that could occur with terrain scale increased but increased height disabled.
+Port to Fabric 1.21.9.
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "1.20.1"),
-    ("forge", "1.20.1"),
-    ("fabric", "1.21.1"),
-    ("neoforge", "1.21.1"),
-    ("fabric", "1.21.8"),
-    ("neoforge", "1.21.8"),
+    #("fabric", "1.20.1"),
+    #("forge", "1.20.1"),
+    #("fabric", "1.21.1"),
+    #("neoforge", "1.21.1"),
+    ("fabric", "1.21.9"),
+    #("neoforge", "1.21.8"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"
@@ -42,7 +39,7 @@ CURSEFORGE_URL = f"https://minecraft.curseforge.com/api/v1/projects/{CURSEFORGE_
 CURSEFORGE_GAME_VERSIONS = {
     "1.20.1": [9990],
     "1.21.1": [11779],
-    "1.21.8": [13422, 13506],
+    "1.21.9": [13927],
 }
 CURSEFORGE_LOADERS = {
     "fabric": 7499,

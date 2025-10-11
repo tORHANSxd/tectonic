@@ -26,6 +26,7 @@
     "fluid_level_floodedness": "minecraft:overworld/noise_router/fluid_level_floodedness",
     "fluid_level_spread": "minecraft:overworld/noise_router/fluid_level_spread",
     "initial_density_without_jaggedness": "minecraft:overworld/noise_router/initial_density_without_jaggedness",
+    "preliminary_surface_level": "minecraft:overworld/noise_router/preliminary_surface_level",
     "lava": "minecraft:overworld/noise_router/lava",
     "ridges": "minecraft:overworld/noise_router/ridges",
     "temperature": "minecraft:overworld/noise_router/temperature",

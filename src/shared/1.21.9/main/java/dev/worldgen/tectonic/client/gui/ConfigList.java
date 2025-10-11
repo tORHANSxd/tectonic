@@ -80,17 +80,18 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> i
             this.widget = widget;
         }
 
-        public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-            this.widget.setY(top);
-            this.widget.render(guiGraphics, mouseX, mouseY, partialTick);
-        }
-
         public List<? extends GuiEventListener> children() {
             return List.of(this.widget);
         }
 
         public List<? extends NarratableEntry> narratables() {
             return List.of(this.widget);
+        }
+
+        @Override
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            this.widget.setY(this.getY());
+            this.widget.render(guiGraphics, mouseX, mouseY, partialTick);
         }
     }
 }

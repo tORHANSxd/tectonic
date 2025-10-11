@@ -1,4 +1,3 @@
-//? if >1.21.1 {
 package dev.worldgen.tectonic.mixin;
 
 import dev.worldgen.tectonic.Tectonic;
@@ -10,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.storage.SerializableChunkData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ public abstract class SerializableChunkDataMixin {
     );
 
     @Inject(method = "parse", at = @At("HEAD"))
-    private static void tectonic$parse(LevelHeightAccessor heightAccessor, RegistryAccess registryAccess, CompoundTag nbt, CallbackInfoReturnable<SerializableChunkData> cir) {
+    private static void tectonic$parse(LevelHeightAccessor heightAccessor, PalettedContainerFactory factory, CompoundTag nbt, CallbackInfoReturnable<SerializableChunkData> cir) {
         // Safe cast unless some mod does weird bs
         if (!((ServerLevel)heightAccessor).dimension().equals(Level.OVERWORLD)) return;
 
@@ -61,4 +61,3 @@ public abstract class SerializableChunkDataMixin {
         cir.setReturnValue(data);
     }
 }
-//?}
