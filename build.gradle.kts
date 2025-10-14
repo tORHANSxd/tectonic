@@ -20,7 +20,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.13"
+version = "3.0.15"
 
 cloche {
     mappings {
@@ -68,8 +68,8 @@ cloche {
     val shared1211 = common("shared:1.21.1") {
         mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
     }
-    val shared1219 = common("shared:1.21.9") {
-        mixins.from(file("src/shared/1.21.9/main/tectonic_1.21.9.mixins.json"))
+    val shared12110 = common("shared:1.21.10") {
+        mixins.from(file("src/shared/1.21.10/main/tectonic_1.21.10.mixins.json"))
     }
 
     fabric("fabric:1.20.1") {
@@ -103,12 +103,12 @@ cloche {
     fabric("fabric:1.21.1") {
         dependsOn(shared1211)
 
-        loaderVersion = "0.16.13"
+        loaderVersion = "0.17.3"
         minecraftVersion = "1.21.1"
 
         dependencies {
             fabricApi("0.116.1")
-            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.21")
+            modImplementation("maven.modrinth:lithostitched:1.5.0-fabric-1.21.1")
             modImplementation("com.terraformersmc:modmenu:11.0.3")
         }
 
@@ -128,15 +128,15 @@ cloche {
         }
     }
 
-    fabric("fabric:1.21.9") {
-        dependsOn(shared1219)
+    fabric("fabric:1.21.10") {
+        dependsOn(shared12110)
 
-        loaderVersion = "0.17.2"
-        minecraftVersion = "1.21.9"
+        loaderVersion = "0.17.3"
+        minecraftVersion = "1.21.10"
 
         dependencies {
-            fabricApi("0.133.14", "1.21.9")
-            modImplementation("maven.modrinth:lithostitched:1.5.0-beta6-fabric-1.21.9")
+            fabricApi("0.135.0", "1.21.10")
+            modImplementation("maven.modrinth:lithostitched:1.5.1-fabric-1.21.9")
             modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1")
         } //accessWidenFabric1218CommonMinecraft
 
@@ -179,7 +179,7 @@ cloche {
         minecraftVersion = "1.21.1"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.4.11-neoforge-1.21")
+            modImplementation("maven.modrinth:lithostitched:1.5.0-neoforge-1.21.1")
         }
 
         runs {
@@ -188,14 +188,14 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.9") {
-        dependsOn(shared1219)
+    neoforge("neoforge:1.21.10") {
+        dependsOn(shared12110)
 
-        loaderVersion = "21.9.1-beta"
-        minecraftVersion = "1.21.9"
+        loaderVersion = "21.10.12-beta"
+        minecraftVersion = "1.21.10"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.0-beta6-neoforge-1.21.9")
+            modImplementation("maven.modrinth:lithostitched:1.5.1-neoforge-1.21.9")
         }
 
         runs {

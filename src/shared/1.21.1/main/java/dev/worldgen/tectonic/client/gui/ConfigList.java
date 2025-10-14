@@ -2,7 +2,7 @@ package dev.worldgen.tectonic.client.gui;
 
 import dev.worldgen.tectonic.client.ConfigListBuilder;
 import dev.worldgen.tectonic.client.gui.widget.SliderWidget;
-import dev.worldgen.tectonic.config.state.NoiseState;
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,8 +42,8 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> i
         this.addEntry(button.create(option(name), (__, bool) -> setter.accept(bool)));
     }
 
-    public void addInteger(String name, double min, double max, Consumer<Integer> action, double value, double base) {
-        this.addEntry(new SliderWidget(min, max, 1, "option." + name, newValue -> action.accept(newValue.intValue()), value, true, base));
+    public void addInteger(String name, double min, double max, double step, Consumer<Integer> action, double value, double base) {
+        this.addEntry(new SliderWidget(min, max, step, "option." + name, newValue -> action.accept(newValue.intValue()), value, true, base));
     }
 
     public void addDouble(String name, double min, double max, double step, Consumer<Double> action, double value, double base) {

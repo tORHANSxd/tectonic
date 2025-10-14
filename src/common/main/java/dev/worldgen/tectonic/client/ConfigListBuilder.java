@@ -2,7 +2,7 @@ package dev.worldgen.tectonic.client;
 
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.config.state.ConfigState;
-import dev.worldgen.tectonic.config.state.NoiseState;
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 import net.minecraft.client.gui.Font;
 
 import java.util.function.Consumer;
@@ -17,7 +17,7 @@ import static dev.worldgen.tectonic.config.state.ConfigState.Oceans.*;
 public interface ConfigListBuilder {
     void addCategory(String name, Font font);
     void addBoolean(String name, Consumer<Boolean> setter, boolean getter, boolean defaultValue);
-    void addInteger(String name, double min, double max, Consumer<Integer> setter, double getter, double defaultValue);
+    void addInteger(String name, double min, double max, double step, Consumer<Integer> setter, double getter, double defaultValue);
     void addDouble(String name, double min, double max, double step, Consumer<Double> setter, double getter, double defaultValue);
     void addNoise(String name, NoiseState state, NoiseState defaultState);
 
@@ -26,11 +26,12 @@ public interface ConfigListBuilder {
 
         this.addCategory("general", font);
         this.addBoolean("mod_enabled", bool -> state.general.modEnabled = bool, state.general.modEnabled, MOD_ENABLED);
-        this.addInteger("snow_start_offset", 0, 256, value -> state.general.snowStartOffset = value, state.general.snowStartOffset, SNOW_START_OFFSET);
+        this.addInteger("snow_start_offset", 0, 256, 1, value -> state.general.snowStartOffset = value, state.general.snowStartOffset, SNOW_START_OFFSET);
 
         this.addCategory("global_terrain", font);
-        this.addDouble("vertical_scale", 0.75, 4, 0.005, value -> state.globalTerrain.verticalScale = value, state.globalTerrain.verticalScale, VERTICAL_SCALE);
-        this.addBoolean("increased_height", bool -> state.globalTerrain.increasedHeight = bool, state.globalTerrain.increasedHeight, INCREASED_HEIGHT);
+        this.addDouble("vertical_scale", 0.75, 15, 0.005, value -> state.globalTerrain.verticalScale = value, state.globalTerrain.verticalScale, VERTICAL_SCALE);
+        this.addInteger("min_y", -2032, -64, 16, value -> state.globalTerrain.heightLimits.minY = value, state.globalTerrain.heightLimits.minY, HEIGHT_LIMITS.minY);
+        this.addInteger("max_y", 256, 2032, 16, value -> state.globalTerrain.heightLimits.maxY = value, state.globalTerrain.heightLimits.maxY, HEIGHT_LIMITS.maxY);
         this.addBoolean("ultrasmooth", bool -> state.globalTerrain.ultrasmooth = bool, state.globalTerrain.ultrasmooth, ULTRASMOOTH);
 
         this.addCategory("continents", font);
@@ -49,9 +50,9 @@ public interface ConfigListBuilder {
         this.addNoise("noise", state.islands.noise, NOISE);
 
         this.addCategory("oceans", font);
-        this.addDouble("ocean_depth", -0.75, -0.05, 0.01, value -> state.oceans.oceanDepth = value, state.oceans.oceanDepth, OCEAN_DEPTH);
-        this.addDouble("deep_ocean_depth", -0.75, -0.05, 0.01, value -> state.oceans.deepOceanDepth = value, state.oceans.deepOceanDepth, DEEP_OCEAN_DEPTH);
-        this.addInteger("monument_offset", -60, 0, value -> state.oceans.monumentOffset = value, state.oceans.monumentOffset, MONUMENT_OFFSET);
+        this.addDouble("ocean_depth", -10, -0.05, 0.01, value -> state.oceans.oceanDepth = value, state.oceans.oceanDepth, OCEAN_DEPTH);
+        this.addDouble("deep_ocean_depth", -10, -0.05, 0.01, value -> state.oceans.deepOceanDepth = value, state.oceans.deepOceanDepth, DEEP_OCEAN_DEPTH);
+        this.addInteger("monument_offset", -60, 0, 1, value -> state.oceans.monumentOffset = value, state.oceans.monumentOffset, MONUMENT_OFFSET);
         this.addBoolean("remove_frozen_ocean_ice", bool -> state.oceans.removeFrozenOceanIce = bool, state.oceans.removeFrozenOceanIce, REMOVE_FROZEN_OCEAN_ICE);
 
         this.addCategory("biomes", font);

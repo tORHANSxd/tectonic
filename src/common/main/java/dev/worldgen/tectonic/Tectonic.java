@@ -41,4 +41,8 @@ public class Tectonic {
     public static <T, U> Codec<T> withAlternative(final Codec<T> primary, final Codec<U> alternative, final Function<U, T> converter) {
         return Codec.either(primary, alternative).xmap(either -> either.map(v -> v, converter), Either::left);
     }
+
+    public static boolean isEnabled() {
+        return ConfigHandler.getState().general.modEnabled;
+    }
 }

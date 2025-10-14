@@ -1,8 +1,10 @@
 package dev.worldgen.tectonic;
 
 import com.mojang.serialization.MapCodec;
+import dev.worldgen.lithostitched.registry.LithostitchedRegistryKeys;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
@@ -52,6 +54,9 @@ public class TectonicNeoforge {
             helper.register(id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
             helper.register(id("invert"), Invert.CODEC_HOLDER.codec());
+        });
+        event.register(LithostitchedRegistryKeys.MODIFIER_TYPE, helper -> {
+            helper.register(id("set_height_limits"), SetHeightLimitsModifier.CODEC);
         });
     }
 

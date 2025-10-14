@@ -2,19 +2,24 @@ package dev.worldgen.tectonic.worldgen.densityfunction;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
 import java.util.Arrays;
 
-public record ConfigConstant(double value) implements DensityFunction {
-    public static MapCodec<ConfigConstant> DATA_CODEC = Codec.STRING.fieldOf("key").xmap(ConfigConstant::new, df -> "");
+public record ConfigConstant(double value, double min, double max) implements DensityFunction {
+    public static MapCodec<ConfigConstant> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codec.STRING.fieldOf("key").forGetter(df -> ""),
+        Codec.BOOL.fieldOf("min_max_hack").orElse(false).forGetter(df -> df.min == Double.NEGATIVE_INFINITY)
+    ).apply(instance, ConfigConstant::create));
 
     public static KeyDispatchDataCodec<ConfigConstant> CODEC_HOLDER = KeyDispatchDataCodec.of(DATA_CODEC);
 
-    public ConfigConstant(String key) {
-        this(ConfigHandler.getState().getValue(key));
+    public static ConfigConstant create(String key, boolean minMaxHack) {
+        double value = ConfigHandler.getState().getValue(key);
+        return new ConfigConstant(value, minMaxHack ? Double.NEGATIVE_INFINITY : value, minMaxHack ? Double.POSITIVE_INFINITY : value);
     }
 
     @Override
@@ -34,12 +39,12 @@ public record ConfigConstant(double value) implements DensityFunction {
 
     @Override
     public double minValue() {
-        return value;
+        return min;
     }
 
     @Override
     public double maxValue() {
-        return value;
+        return max;
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.NoiseState;
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 

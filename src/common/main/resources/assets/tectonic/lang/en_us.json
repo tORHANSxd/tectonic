@@ -13,8 +13,10 @@
   "config.tectonic.category.global_terrain": "Global Terrain",
   "config.tectonic.option.vertical_scale": "Vertical Scale: %s",
   "config.tectonic.option.vertical_scale.tooltip": "Vertically stretches terrain above sea level. Doubling this value will double the surface's height at a given point from sea level.\n§cGame restart required on 1.20!",
-  "config.tectonic.option.increased_height": "Increased Height",
-  "config.tectonic.option.increased_height.tooltip": "Increases the max build and generation height to y640.",
+  "config.tectonic.option.min_y": "Min Y: %s",
+  "config.tectonic.option.min_y.tooltip": "The minimum build and generation height.\n§cCurrently, the lava level at -54 does not move with this setting.",
+  "config.tectonic.option.max_y": "Max Y: %s",
+  "config.tectonic.option.max_y.tooltip": "The maximum build and generation height. The old Increased Height setting set this to 640.",
   "config.tectonic.option.ultrasmooth": "Ultrasmooth",
   "config.tectonic.option.ultrasmooth.tooltip": "Greatly smoothens out the terrain like Tectonic v2, removing staircasing artifacts at the cost of strange/broken generation in deep oceans and windswept biomes.\n§cGame restart required on 1.20!",
 

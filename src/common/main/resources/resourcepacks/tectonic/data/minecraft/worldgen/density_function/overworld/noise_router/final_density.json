@@ -16,13 +16,7 @@
               "argument1": 0.1,
               "argument2": {
                 "type": "minecraft:mul",
-                "argument1": {
-                  "type": "minecraft:y_clamped_gradient",
-                  "from_value": 0.0,
-                  "from_y": -64,
-                  "to_value": 1.0,
-                  "to_y": -40
-                },
+                "argument1": "tectonic:__constants/slope_lower",
                 "argument2": {
                   "type": "minecraft:add",
                   "argument1": -0.1,
@@ -31,7 +25,7 @@
                     "argument1": -1,
                     "argument2": {
                       "type": "minecraft:mul",
-                      "argument1": "tectonic:upper_slope",
+                      "argument1": "tectonic:__constants/slope_upper",
                       "argument2": {
                         "type": "minecraft:add",
                         "argument1": 1,

@@ -1,5 +1,6 @@
 package dev.worldgen.tectonic.config.state;
 
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 import org.apache.logging.log4j.util.TriConsumer;
 
 public interface ConfigPresets {

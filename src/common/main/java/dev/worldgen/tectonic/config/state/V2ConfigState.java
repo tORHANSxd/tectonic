@@ -3,6 +3,8 @@ package dev.worldgen.tectonic.config.state;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.Tectonic;
+import dev.worldgen.tectonic.config.state.object.HeightLimits;
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 
 public class V2ConfigState {
     public static final Codec<V2ConfigState> BASE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -34,7 +36,7 @@ public class V2ConfigState {
             ),
             new ConfigState.GlobalTerrain(
                 this.scales.finalMultiplier,
-                this.toggles.increasedHeight,
+                HeightLimits.defaultLimits(this.toggles.increasedHeight),
                 this.toggles.lavaRivers,
                 false
             ),

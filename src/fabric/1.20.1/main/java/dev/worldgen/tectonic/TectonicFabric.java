@@ -3,6 +3,7 @@ package dev.worldgen.tectonic;
 import dev.worldgen.lithostitched.registry.LithostitchedBuiltInRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
@@ -34,6 +35,8 @@ public class TectonicFabric implements ModInitializer {
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("invert"), Invert.CODEC_HOLDER.codec());
 
+        Registry.register(LithostitchedBuiltInRegistries.MODIFIER_TYPE, id("set_height_limits"), SetHeightLimitsModifier.CODEC);
+
         Registry.register(LithostitchedBuiltInRegistries.MODIFIER_PREDICATE_TYPE, id("config"), TectonicModifierPredicate.CODEC);
         if (ConfigHandler.getState().general.modEnabled) {
             ResourceManagerHelper.registerBuiltinResourcePack(
@@ -46,13 +49,10 @@ public class TectonicFabric implements ModInitializer {
             // Loads the pack overlays as separate packs
 
             boolean terralith = FabricLoader.getInstance().isModLoaded("terralith");
-            boolean increasedHeight = ConfigHandler.getState().globalTerrain.increasedHeight;
             boolean ultrasmooth = ConfigHandler.getState().globalTerrain.ultrasmooth;
             boolean noCarvers = !ConfigHandler.getState().caves.carversEnabled;
             addPack("tectonic/overlay.mod");
             if (terralith) addPack("tectonic/overlay.terratonic");
-            if (increasedHeight) addPack("tectonic/overlay.increased_height");
-            if (increasedHeight && terralith) addPack("tectonic/overlay.terratonic_increased_height");
             if (ultrasmooth) addPack("tectonic/overlay.ultrasmooth");
             if (noCarvers) addPack("tectonic/overlay.no_carvers");
         }

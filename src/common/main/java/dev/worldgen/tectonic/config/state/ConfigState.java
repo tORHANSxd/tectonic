@@ -3,6 +3,8 @@ package dev.worldgen.tectonic.config.state;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.Tectonic;
+import dev.worldgen.tectonic.config.state.object.HeightLimits;
+import dev.worldgen.tectonic.config.state.object.NoiseState;
 
 public class ConfigState {
     public static final int MINOR_VERSION = 1;
@@ -36,13 +38,15 @@ public class ConfigState {
         this.caves = caves;
 
         if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
-            this.globalTerrain.increasedHeight = true;
+            this.globalTerrain.heightLimits = HeightLimits.INCREASED_HEIGHT;
         }
     }
 
     public double getValue(String option) {
         return switch (option) {
             case "vertical_scale" -> this.globalTerrain.verticalScale;
+            case "min_y" -> this.globalTerrain.heightLimits.minY;
+            case "max_y" -> this.globalTerrain.heightLimits.maxY;
             case "lava_tunnels" -> this.globalTerrain.lavaTunnels ? 1 : 0;
 
             case "ocean_offset" -> this.continents.oceanOffset;
@@ -81,7 +85,7 @@ public class ConfigState {
     public boolean test(String key) {
         return switch (key) {
             case "disable_islands" -> !this.islands.enabled && this.continents.oceanOffset < -0.49;
-            case "increased_height" -> this.globalTerrain.increasedHeight;
+            case "increased_height" -> this.globalTerrain.heightLimits.maxY > 320;
             case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
@@ -112,26 +116,26 @@ public class ConfigState {
 
     public static class GlobalTerrain {
         public static final double VERTICAL_SCALE = 1.125;
-        public static final boolean INCREASED_HEIGHT = false;
+        public static final HeightLimits HEIGHT_LIMITS = HeightLimits.DEFAULT;
         public static final boolean LAVA_TUNNELS = true;
         public static final boolean ULTRASMOOTH = false;
 
-        public static final GlobalTerrain DEFAULT = new GlobalTerrain(VERTICAL_SCALE, INCREASED_HEIGHT, LAVA_TUNNELS, ULTRASMOOTH);
+        public static final GlobalTerrain DEFAULT = new GlobalTerrain(VERTICAL_SCALE, HEIGHT_LIMITS, LAVA_TUNNELS, ULTRASMOOTH);
         public static final Codec<GlobalTerrain> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("vertical_scale").orElse(VERTICAL_SCALE).forGetter(globalTerrain -> globalTerrain.verticalScale),
-            Codec.BOOL.fieldOf("increased_height").orElse(INCREASED_HEIGHT).forGetter(globalTerrain -> globalTerrain.increasedHeight),
+            HeightLimits.FULL_CODEC.orElse(HEIGHT_LIMITS).forGetter(globalTerrain -> globalTerrain.heightLimits),
             Codec.BOOL.fieldOf("lava_tunnels").orElse(LAVA_TUNNELS).forGetter(globalTerrain -> globalTerrain.lavaTunnels),
             Codec.BOOL.fieldOf("ultrasmooth").orElse(ULTRASMOOTH).forGetter(globalTerrain -> globalTerrain.ultrasmooth)
         ).apply(instance, GlobalTerrain::new));
 
         public double verticalScale;
-        public boolean increasedHeight;
+        public HeightLimits heightLimits;
         public boolean lavaTunnels;
         public boolean ultrasmooth;
 
-        public GlobalTerrain(double verticalScale, boolean increasedHeight, boolean lavaTunnels, boolean ultrasmooth) {
+        public GlobalTerrain(double verticalScale, HeightLimits heightLimits, boolean lavaTunnels, boolean ultrasmooth) {
             this.verticalScale = verticalScale;
-            this.increasedHeight = increasedHeight;
+            this.heightLimits = heightLimits;
             this.lavaTunnels = lavaTunnels;
             this.ultrasmooth = ultrasmooth;
         }
