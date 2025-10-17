@@ -7,6 +7,7 @@ import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 
 public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunction shiftZ, double scale, double multiplier, double offset) implements DensityFunction {
     public static MapCodec<ConfigNoise> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -37,7 +38,13 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
 
     @Override
     public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(new ConfigNoise(visitor.visitNoise(noise), shiftX.mapAll(visitor), shiftZ.mapAll(visitor), scale, multiplier, offset));
+        return DensityFunctions.add(
+                DensityFunctions.mul(
+                        DensityFunctions.shiftedNoise2d(this.shiftX, this.shiftZ, this.scale, this.noise.noiseData()),
+                        DensityFunctions.constant(this.multiplier)
+                ),
+                DensityFunctions.constant(this.offset)
+        ).mapAll(visitor);
     }
 
     @Override

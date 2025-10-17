@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 
 import java.util.Arrays;
 
@@ -34,7 +35,7 @@ public record ConfigConstant(double value, double min, double max) implements De
 
     @Override
     public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(this);
+        return visitor.apply(DensityFunctions.constant(this.value));
     }
 
     @Override
