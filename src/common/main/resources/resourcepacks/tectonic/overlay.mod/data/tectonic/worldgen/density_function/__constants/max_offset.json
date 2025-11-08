@@ -7,11 +7,10 @@
       "argument1": 0.0078,
       "argument2": {
         "type": "minecraft:add",
-        "argument1": -70,
+        "argument1": -80,
         "argument2": {
           "type": "tectonic:config_constant",
-          "key": "max_y",
-          "min_max_hack": true
+          "key": "max_y"
         }
       }
     }

@@ -25,7 +25,7 @@ public record ConfigClamp(DensityFunction input, DensityFunction min, DensityFun
 
     @Override
     public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(new ConfigClamp(input.mapAll(visitor), min.mapAll(visitor), max.mapAll(visitor)));
+        return input.clamp(min.maxValue(), max.minValue()).mapAll(visitor);
     }
 
     @Override

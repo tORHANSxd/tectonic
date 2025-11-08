@@ -10,8 +10,7 @@
         "argument1": -25,
         "argument2": {
           "type": "tectonic:config_constant",
-          "key": "min_y",
-          "min_max_hack": true
+          "key": "min_y"
         }
       }
     }

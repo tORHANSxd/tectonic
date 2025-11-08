@@ -10,17 +10,15 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 
 import java.util.Arrays;
 
-public record ConfigConstant(double value, double min, double max) implements DensityFunction {
+public record ConfigConstant(double value) implements DensityFunction {
     public static MapCodec<ConfigConstant> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.STRING.fieldOf("key").forGetter(df -> ""),
-        Codec.BOOL.fieldOf("min_max_hack").orElse(false).forGetter(df -> df.min == Double.NEGATIVE_INFINITY)
+        Codec.STRING.fieldOf("key").forGetter(df -> "")
     ).apply(instance, ConfigConstant::create));
 
     public static KeyDispatchDataCodec<ConfigConstant> CODEC_HOLDER = KeyDispatchDataCodec.of(DATA_CODEC);
 
-    public static ConfigConstant create(String key, boolean minMaxHack) {
-        double value = ConfigHandler.getState().getValue(key);
-        return new ConfigConstant(value, minMaxHack ? Double.NEGATIVE_INFINITY : value, minMaxHack ? Double.POSITIVE_INFINITY : value);
+    public static ConfigConstant create(String key) {
+        return new ConfigConstant(ConfigHandler.getState().getValue(key));
     }
 
     @Override
@@ -35,17 +33,17 @@ public record ConfigConstant(double value, double min, double max) implements De
 
     @Override
     public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(DensityFunctions.constant(this.value));
+        return visitor.apply(DensityFunctions.constant(value));
     }
 
     @Override
     public double minValue() {
-        return min;
+        return value;
     }
 
     @Override
     public double maxValue() {
-        return max;
+        return value;
     }
 
     @Override
