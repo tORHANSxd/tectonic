@@ -7,14 +7,15 @@ import json
 MOD_ID = "tectonic"
 MOD_VERSION = "3.0.16"
 CHANGELOG = """
-- Finally brought Tectonic to Neoforge 1.21.10.
+- Added the **Elevation Boost** setting, a scale on top of Vertical Scale that only effects more mountainous terrain.
+- Fixed a compatibility issue with an experimental C2ME build.
 """
 UPLOAD_VERSIONS = [
-    #("fabric", "1.20.1"),
-    #("forge", "1.20.1"),
-    #("fabric", "1.21.1"),
-    #("neoforge", "1.21.1"),
-    #("fabric", "1.21.10"),
+    ("fabric", "1.20.1"),
+    ("forge", "1.20.1"),
+    ("fabric", "1.21.1"),
+    ("neoforge", "1.21.1"),
+    ("fabric", "1.21.10"),
     ("neoforge", "1.21.10"),
 ]
 

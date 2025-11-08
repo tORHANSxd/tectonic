@@ -39,11 +39,11 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
     @Override
     public DensityFunction mapAll(Visitor visitor) {
         return DensityFunctions.add(
-                DensityFunctions.mul(
-                        DensityFunctions.shiftedNoise2d(this.shiftX, this.shiftZ, this.scale, this.noise.noiseData()),
-                        DensityFunctions.constant(this.multiplier)
-                ),
-                DensityFunctions.constant(this.offset)
+            DensityFunctions.mul(
+                DensityFunctions.shiftedNoise2d(this.shiftX, this.shiftZ, this.scale, this.noise.noiseData()),
+                DensityFunctions.constant(this.multiplier)
+            ),
+            DensityFunctions.constant(this.offset)
         ).mapAll(visitor);
     }
 
