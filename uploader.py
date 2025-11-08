@@ -5,7 +5,7 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.16"
+MOD_VERSION = "3.0.17"
 CHANGELOG = """
 - Added the **Elevation Boost** setting, a scale on top of Vertical Scale that only effects more mountainous terrain.
 - Fixed a compatibility issue with an experimental C2ME build.
