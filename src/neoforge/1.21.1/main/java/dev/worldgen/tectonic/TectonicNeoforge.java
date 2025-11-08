@@ -5,6 +5,7 @@ import dev.worldgen.lithostitched.registry.LithostitchedRegistryKeys;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
+import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
@@ -51,6 +52,7 @@ public class TectonicNeoforge {
 
     private void registerDensityFunctionTypes(final RegisterEvent event) {
         event.register(Registries.DENSITY_FUNCTION_TYPE, helper -> {
+            helper.register(id("config_clamp"), ConfigClamp.CODEC_HOLDER.codec());
             helper.register(id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
             helper.register(id("invert"), Invert.CODEC_HOLDER.codec());

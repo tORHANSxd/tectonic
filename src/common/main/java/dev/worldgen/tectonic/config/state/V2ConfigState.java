@@ -36,6 +36,7 @@ public class V2ConfigState {
             ),
             new ConfigState.GlobalTerrain(
                 this.scales.finalMultiplier,
+                0,
                 HeightLimits.defaultLimits(this.toggles.increasedHeight),
                 this.toggles.lavaRivers,
                 false

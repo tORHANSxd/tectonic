@@ -5,19 +5,17 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.15"
+MOD_VERSION = "3.0.16"
 CHANGELOG = """
-- Fixed log spam when increasing the height limit.
-- Set the highest possible min y to -64. This means you can't set the minimum to -48, -32, 0, etc. You can still decrease it down to -2032.
-- Allowed setting the ocean depth to a min value of -10 instead of -0.75. This allows - in theory - ~1300 block deep oceans.
+- Finally brought Tectonic to Neoforge 1.21.10.
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "1.20.1"),
-    ("forge", "1.20.1"),
-    ("fabric", "1.21.1"),
-    ("neoforge", "1.21.1"),
-    ("fabric", "1.21.10"),
-    #("neoforge", "1.21.10"),
+    #("fabric", "1.20.1"),
+    #("forge", "1.20.1"),
+    #("fabric", "1.21.1"),
+    #("neoforge", "1.21.1"),
+    #("fabric", "1.21.10"),
+    ("neoforge", "1.21.10"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"

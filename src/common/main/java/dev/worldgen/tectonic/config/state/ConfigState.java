@@ -45,6 +45,7 @@ public class ConfigState {
     public double getValue(String option) {
         return switch (option) {
             case "vertical_scale" -> this.globalTerrain.verticalScale;
+            case "elevation_boost" -> this.globalTerrain.elevationBoost;
             case "min_y" -> this.globalTerrain.heightLimits.minY;
             case "max_y" -> this.globalTerrain.heightLimits.maxY;
             case "lava_tunnels" -> this.globalTerrain.lavaTunnels ? 1 : 0;
@@ -116,25 +117,29 @@ public class ConfigState {
 
     public static class GlobalTerrain {
         public static final double VERTICAL_SCALE = 1.125;
+        public static final double ELEVATION_BOOST = 0;
         public static final HeightLimits HEIGHT_LIMITS = HeightLimits.DEFAULT;
         public static final boolean LAVA_TUNNELS = true;
         public static final boolean ULTRASMOOTH = false;
 
-        public static final GlobalTerrain DEFAULT = new GlobalTerrain(VERTICAL_SCALE, HEIGHT_LIMITS, LAVA_TUNNELS, ULTRASMOOTH);
+        public static final GlobalTerrain DEFAULT = new GlobalTerrain(VERTICAL_SCALE, ELEVATION_BOOST, HEIGHT_LIMITS, LAVA_TUNNELS, ULTRASMOOTH);
         public static final Codec<GlobalTerrain> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("vertical_scale").orElse(VERTICAL_SCALE).forGetter(globalTerrain -> globalTerrain.verticalScale),
+            Codec.DOUBLE.fieldOf("elevation_boost").orElse(ELEVATION_BOOST).forGetter(globalTerrain -> globalTerrain.elevationBoost),
             HeightLimits.FULL_CODEC.orElse(HEIGHT_LIMITS).forGetter(globalTerrain -> globalTerrain.heightLimits),
             Codec.BOOL.fieldOf("lava_tunnels").orElse(LAVA_TUNNELS).forGetter(globalTerrain -> globalTerrain.lavaTunnels),
             Codec.BOOL.fieldOf("ultrasmooth").orElse(ULTRASMOOTH).forGetter(globalTerrain -> globalTerrain.ultrasmooth)
         ).apply(instance, GlobalTerrain::new));
 
         public double verticalScale;
+        public double elevationBoost;
         public HeightLimits heightLimits;
         public boolean lavaTunnels;
         public boolean ultrasmooth;
 
-        public GlobalTerrain(double verticalScale, HeightLimits heightLimits, boolean lavaTunnels, boolean ultrasmooth) {
+        public GlobalTerrain(double verticalScale, double elevationBoost, HeightLimits heightLimits, boolean lavaTunnels, boolean ultrasmooth) {
             this.verticalScale = verticalScale;
+            this.elevationBoost = elevationBoost;
             this.heightLimits = heightLimits;
             this.lavaTunnels = lavaTunnels;
             this.ultrasmooth = ultrasmooth;

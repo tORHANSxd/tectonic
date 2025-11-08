@@ -4,6 +4,7 @@ import dev.worldgen.lithostitched.registry.LithostitchedBuiltInRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
+import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
@@ -28,6 +29,7 @@ public class TectonicFabric implements ModInitializer {
 
         ResourceConditions.register(ConfigResourceCondition.TYPE);
 
+        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_clamp"), ConfigClamp.CODEC_HOLDER.codec());
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
         Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("invert"), Invert.CODEC_HOLDER.codec());
