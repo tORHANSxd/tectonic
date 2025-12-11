@@ -47,7 +47,7 @@ public class TectonicCommand {
         addTarget(locate, "cherry_valley", LocateTargets.CHERRY_VALLEY, () -> true);
 
         dispatcher.register(
-            literal("tectonic").requires(stack -> stack.hasPermission(2))
+            literal("tectonic").requires(Tectonic::canRunCommand)
             .then(literal("debug").executes(TectonicCommand::debugOutput))
             .then(locate)
         );

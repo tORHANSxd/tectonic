@@ -1,9 +1,11 @@
 package dev.worldgen.tectonic;
 
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.msrandom.multiplatform.annotations.Actual;
+import net.msrandom.multiplatform.annotations.Expect;
 
 public class TectonicActual {
     @Actual
@@ -18,11 +20,11 @@ public class TectonicActual {
 
     @Actual
     public static int getBlendingVersion(CompoundTag tag) {
-        return tag.getInt(Tectonic.BLENDING_KEY);
+        return tag.getIntOr(Tectonic.BLENDING_KEY, 0);
     }
 
     @Actual
     public static boolean canRunCommand(CommandSourceStack stack) {
-        return stack.hasPermission(2);
+        return Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(stack);
     }
 }

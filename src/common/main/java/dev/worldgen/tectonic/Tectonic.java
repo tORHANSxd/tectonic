@@ -3,8 +3,9 @@ package dev.worldgen.tectonic;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.msrandom.multiplatform.annotations.Expect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +31,16 @@ public class Tectonic {
     }
 
     @Expect
-    public static ResourceLocation idVanilla(String name);
+    public static Identifier idVanilla(String name);
 
     @Expect
-    public static ResourceLocation id(String name);
+    public static Identifier id(String name);
 
     @Expect
     public static int getBlendingVersion(CompoundTag tag);
+
+    @Expect
+    public static boolean canRunCommand(CommandSourceStack stack);
 
     public static <T, U> Codec<T> withAlternative(final Codec<T> primary, final Codec<U> alternative, final Function<U, T> converter) {
         return Codec.either(primary, alternative).xmap(either -> either.map(v -> v, converter), Either::left);
@@ -45,4 +49,5 @@ public class Tectonic {
     public static boolean isEnabled() {
         return ConfigHandler.getState().general.modEnabled;
     }
+
 }

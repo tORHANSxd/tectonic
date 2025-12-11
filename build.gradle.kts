@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.13.6"
+    id("earth.terrarium.cloche") version "0.16.20"
 }
 
 repositories {
@@ -23,8 +23,13 @@ group = "dev.worldgen.tectonic"
 version = "3.0.17"
 
 cloche {
-    mappings {
-        official()
+    targets.all {
+        mappings {
+            official()
+            custom(minecraftVersion.map {
+                project.dependencies.create(files("mappings/$it.tiny"))
+            })
+        }
     }
 
     metadata {
@@ -55,49 +60,17 @@ cloche {
             dependencies {
                 dependency {
                     modId = "lithostitched"
-                    required = true
                     version("1.4.11")
                 }
             }
         }
     }
 
-    val shared1201 = common("shared:1.20.1") {
-        mixins.from(file("src/shared/1.20.1/main/tectonic_1.20.1.mixins.json"))
-    }
     val shared1211 = common("shared:1.21.1") {
         mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
     }
-    val shared12110 = common("shared:1.21.10") {
-        mixins.from(file("src/shared/1.21.10/main/tectonic_1.21.10.mixins.json"))
-    }
-
-    fabric("fabric:1.20.1") {
-        dependsOn(shared1201)
-
-        loaderVersion = "0.16.13"
-        minecraftVersion = "1.20.1"
-
-        dependencies {
-            fabricApi("0.92.6")
-            modImplementation("maven.modrinth:lithostitched:1.4.11-fabric-1.20")
-            modImplementation("com.terraformersmc:modmenu:7.2.2")
-        }
-
-        includedClient()
-        runs {
-            client()
-            server()
-        }
-
-        metadata {
-            entrypoint("main") {
-                value = "dev.worldgen.tectonic.TectonicFabric"
-            }
-            entrypoint("modmenu") {
-                value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
-            }
-        }
+    val shared12111 = common("shared:1.21.11") {
+        mixins.from(file("src/shared/1.21.11/main/tectonic_1.21.11.mixins.json"))
     }
 
     fabric("fabric:1.21.1") {
@@ -128,16 +101,16 @@ cloche {
         }
     }
 
-    fabric("fabric:1.21.10") {
-        dependsOn(shared12110)
+    fabric("fabric:1.21.11") {
+        dependsOn(shared12111)
 
-        loaderVersion = "0.17.3"
-        minecraftVersion = "1.21.10"
+        loaderVersion = "0.18.2"
+        minecraftVersion = "1.21.11"
 
         dependencies {
-            fabricApi("0.135.0", "1.21.10")
-            modImplementation("maven.modrinth:lithostitched:1.5.1-fabric-1.21.9")
-            modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1")
+            fabricApi("0.139.4")
+            modImplementation("maven.modrinth:lithostitched:1.5.2+beta2-fabric-1.21.11")
+            modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
         } //accessWidenFabric1218CommonMinecraft
 
         includedClient()
@@ -153,22 +126,6 @@ cloche {
             entrypoint("modmenu") {
                 value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
             }
-        }
-    }
-
-    forge("forge:1.20.1") {
-        dependsOn(shared1201)
-
-        loaderVersion = "47.4.0"
-        minecraftVersion = "1.20.1"
-
-        dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.4.11-forge-1.20")
-        }
-
-        runs {
-            client()
-            server()
         }
     }
 
@@ -188,7 +145,7 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.10") {
+    /*neoforge("neoforge:1.21.10") {
         dependsOn(shared12110)
 
         loaderVersion = "21.10.12-beta"
@@ -202,5 +159,5 @@ cloche {
             client()
             server()
         }
-    }
+    }*/
 }
