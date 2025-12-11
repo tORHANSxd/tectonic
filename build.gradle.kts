@@ -20,7 +20,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.17"
+version = "3.0.18"
 
 cloche {
     targets.all {
@@ -81,7 +81,7 @@ cloche {
 
         dependencies {
             fabricApi("0.116.1")
-            modImplementation("maven.modrinth:lithostitched:1.5.0-fabric-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:1.5.2-fabric-1.21.1")
             modImplementation("com.terraformersmc:modmenu:11.0.3")
         }
 
@@ -136,7 +136,7 @@ cloche {
         minecraftVersion = "1.21.1"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.0-neoforge-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:1.5.2-neoforge-1.21.1")
         }
 
         runs {

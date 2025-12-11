@@ -5,18 +5,16 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.17"
+MOD_VERSION = "3.0.18"
 CHANGELOG = """
-- Added the **Elevation Boost** setting, a scale on top of Vertical Scale that only effects more mountainous terrain.
-- Fixed a compatibility issue with an experimental C2ME build.
+- Updated to 1.21.11.
+- Updated surface rules for Clifftree.
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "1.20.1"),
-    ("forge", "1.20.1"),
     ("fabric", "1.21.1"),
-    ("neoforge", "1.21.1"),
-    ("fabric", "1.21.10"),
-    ("neoforge", "1.21.10"),
+    #("neoforge", "1.21.1"),
+    ("fabric", "1.21.11"),
+    #("neoforge", "1.21.11"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"
@@ -40,7 +38,7 @@ CURSEFORGE_URL = f"https://minecraft.curseforge.com/api/v1/projects/{CURSEFORGE_
 CURSEFORGE_GAME_VERSIONS = {
     "1.20.1": [9990],
     "1.21.1": [11779],
-    "1.21.10": [13927, 13964],
+    "1.21.11": [14406],
 }
 CURSEFORGE_LOADERS = {
     "fabric": 7499,

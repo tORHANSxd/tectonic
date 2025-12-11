@@ -120,9 +120,10 @@
       {
         "directory": "overlay.clifftree",
         "condition": {
-          "condition": "fabric:all_mods_loaded",
+          "condition": "fabric:any_mods_loaded",
           "values": [
-            "mr_clifftree"
+            "mr_clifftree",
+            "clifftree"
           ]
         }
       }
