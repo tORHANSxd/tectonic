@@ -1,5 +1,5 @@
 {
-  "feature": "tectonic:river_lanterns",
+  "feature": "tectonic:underground_river/lanterns",
   "placement": [
     {
       "type": "lithostitched:noise_slope",

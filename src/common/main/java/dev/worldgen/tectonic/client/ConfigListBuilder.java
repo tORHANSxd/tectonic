@@ -42,6 +42,7 @@ public interface ConfigListBuilder {
         this.addDouble("ridge_scale", 0.01, 2, 0.01, value -> state.continents.ridgeScale = value, state.continents.ridgeScale, RIDGE_SCALE);
         this.addBoolean("underground_rivers", bool -> state.continents.undergroundRivers = bool, state.continents.undergroundRivers, UNDERGROUND_RIVERS);
         this.addBoolean("river_lanterns", bool -> state.continents.riverLanterns = bool, state.continents.riverLanterns, RIVER_LANTERNS);
+        this.addBoolean("river_ice", bool -> state.continents.riverIce = bool, state.continents.riverIce, RIVER_ICE);
         this.addDouble("flat_terrain_skew", -1, 1, 0.01, value -> state.continents.flatTerrainSkew = value, state.continents.flatTerrainSkew, FLAT_TERRAIN_SKEW);
         this.addBoolean("rolling_hills", bool -> state.continents.rollingHills = bool, state.continents.rollingHills, ROLLING_HILLS);
         this.addBoolean("jungle_pillars", bool -> state.continents.junglePillars = bool, state.continents.junglePillars, JUNGLE_PILLARS);

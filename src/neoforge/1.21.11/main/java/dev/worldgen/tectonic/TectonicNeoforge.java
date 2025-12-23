@@ -13,12 +13,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.*;
-import net.minecraft.server.packs.repository.BuiltInPackSource;
 import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.jarcontents.JarContents;
@@ -35,12 +33,10 @@ import net.neoforged.neoforge.resource.JarContentsPackResources;
 import net.neoforged.neoforgespi.language.IModInfo;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static dev.worldgen.tectonic.Tectonic.id;
 

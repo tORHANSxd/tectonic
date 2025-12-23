@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.16.20"
+    id("earth.terrarium.cloche") version "0.17.1"
 }
 
 repositories {
@@ -20,7 +20,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.18"
+version = "3.0.19"
 
 cloche {
     targets.all {
@@ -66,15 +66,15 @@ cloche {
         }
     }
 
-    val shared1211 = common("shared:1.21.1") {
+    val sharedOld = common("shared:1.21.1") {
         mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
     }
-    val shared12111 = common("shared:1.21.11") {
+    val sharedNew = common("shared:1.21.11") {
         mixins.from(file("src/shared/1.21.11/main/tectonic_1.21.11.mixins.json"))
     }
 
     fabric("fabric:1.21.1") {
-        dependsOn(shared1211)
+        dependsOn(sharedOld)
 
         loaderVersion = "0.17.3"
         minecraftVersion = "1.21.1"
@@ -102,7 +102,7 @@ cloche {
     }
 
     fabric("fabric:1.21.11") {
-        dependsOn(shared12111)
+        dependsOn(sharedNew)
 
         loaderVersion = "0.18.2"
         minecraftVersion = "1.21.11"
@@ -130,7 +130,7 @@ cloche {
     }
 
     neoforge("neoforge:1.21.1") {
-        dependsOn(shared1211)
+        dependsOn(sharedOld)
 
         loaderVersion = "21.1.209"
         minecraftVersion = "1.21.1"
@@ -145,19 +145,19 @@ cloche {
         }
     }
 
-    /*neoforge("neoforge:1.21.10") {
-        dependsOn(shared12110)
+    neoforge("neoforge:1.21.11") {
+        dependsOn(sharedNew)
 
-        loaderVersion = "21.10.12-beta"
-        minecraftVersion = "1.21.10"
+        loaderVersion = "21.11.12-beta"
+        minecraftVersion = "1.21.11"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.1-neoforge-1.21.9")
+            modImplementation("maven.modrinth:lithostitched:1.5.5-neoforge-1.21.11")
         }
 
         runs {
             client()
             server()
         }
-    }*/
+    }
 }

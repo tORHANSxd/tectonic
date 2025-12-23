@@ -48,6 +48,7 @@ public class V2ConfigState {
                 0.25,
                 this.toggles.undergroundRivers,
                 true,
+                false,
                 0.1,
                 true,
                 true

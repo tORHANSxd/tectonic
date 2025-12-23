@@ -4,20 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48f4f9b4-7511-42c2-b4d3-4c5e8263f048" name="Changes" comment="Drop 1.20, switch out 1.21.10 for 1.21.11">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="48f4f9b4-7511-42c2-b4d3-4c5e8263f048" name="Changes" comment="3.0.18">
+      <change afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/configured_feature/underground_river/ice.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/underground_river/ice.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/lanterns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.clifftree/data/minecraft/worldgen/noise_settings/overworld.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.clifftree/data/minecraft/worldgen/noise_settings/overworld.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/pack.mcmeta" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/pack.mcmeta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploader.py" beforeDir="false" afterPath="$PROJECT_DIR$/uploader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/client/ConfigListBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/client/ConfigListBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/ConfigPresets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/ConfigPresets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/ConfigState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/ConfigState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/V2ConfigState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/V2ConfigState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/object/HeightLimits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/java/dev/worldgen/tectonic/config/state/object/HeightLimits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/assets/tectonic/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/assets/tectonic/lang/en_us.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/configured_feature/river_lanterns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/configured_feature/underground_river/lanterns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/density_function/noise/raw_continents.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/density_function/noise/raw_continents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/noise/river_lanterns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/noise/river_lanterns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/river_lanterns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/underground_river/lanterns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/river_lichen.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/underground_river/lichen.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.1_21_9/data/tectonic/worldgen/configured_feature/river_lanterns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.1_21_9/data/tectonic/worldgen/configured_feature/underground_river/lanterns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/river_lanterns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/ice.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/river_lichen.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/main/resources/resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/lichen.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/neoforge/1.21.11/main/java/dev/worldgen/tectonic/TectonicNeoforge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/neoforge/1.21.11/main/java/dev/worldgen/tectonic/TectonicNeoforge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/1.21.11/main/java/dev/worldgen/tectonic/lithostitched/SetHeightLimitsModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/1.21.11/main/java/dev/worldgen/tectonic/lithostitched/SetHeightLimitsModifier.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,55 +105,57 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Run :fabric:1.21.1:client.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Run :neoforge:1.21.8:client.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build cloche.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [:cpw.mods.bootstraplauncher.BootstrapLauncher.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [:net.fabricmc.loader.impl.launch.knot.KnotClient.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [:net.neoforged.fml.startup.Client.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [assemble].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [generateFabric1211MappingsArtifact].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric1201ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric12110ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric12111ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric1211ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric1218ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareFabric1219ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareForge1201ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareNeoforge12110ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareNeoforge1211ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareNeoforge1218ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.cloche [prepareNeoforge1219ClientRun].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;rewrite-squared&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ldglo/Documents/Github/tectonic/cloche/mappings&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Run :fabric:1.21.11:client.executor": "Run",
+    "Application.Run :fabric:1.21.1:client.executor": "Run",
+    "Application.Run :neoforge:1.21.8:client.executor": "Run",
+    "Gradle.Build cloche.executor": "Run",
+    "Gradle.cloche [:cpw.mods.bootstraplauncher.BootstrapLauncher.main()].executor": "Run",
+    "Gradle.cloche [:net.fabricmc.loader.impl.launch.knot.KnotClient.main()].executor": "Run",
+    "Gradle.cloche [:net.neoforged.fml.startup.Client.main()].executor": "Run",
+    "Gradle.cloche [assemble].executor": "Run",
+    "Gradle.cloche [build].executor": "Run",
+    "Gradle.cloche [clean].executor": "Run",
+    "Gradle.cloche [generateFabric1211MappingsArtifact].executor": "Run",
+    "Gradle.cloche [prepareFabric1201ClientRun].executor": "Run",
+    "Gradle.cloche [prepareFabric12110ClientRun].executor": "Run",
+    "Gradle.cloche [prepareFabric12111ClientRun].executor": "Run",
+    "Gradle.cloche [prepareFabric1211ClientRun].executor": "Run",
+    "Gradle.cloche [prepareFabric1218ClientRun].executor": "Run",
+    "Gradle.cloche [prepareFabric1219ClientRun].executor": "Run",
+    "Gradle.cloche [prepareForge1201ClientRun].executor": "Run",
+    "Gradle.cloche [prepareNeoforge12110ClientRun].executor": "Run",
+    "Gradle.cloche [prepareNeoforge12111ClientRun].executor": "Run",
+    "Gradle.cloche [prepareNeoforge1211ClientRun].executor": "Run",
+    "Gradle.cloche [prepareNeoforge1218ClientRun].executor": "Run",
+    "Gradle.cloche [prepareNeoforge1219ClientRun].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "rewrite-squared",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ldglo/Documents/Github/tectonic/cloche/src/common/main/resources/resourcepacks/tectonic/data/tectonic/worldgen/placed_feature/underground_river",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\data\tectonic\worldgen\placed_feature\underground_river" />
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.1_21_9\data\tectonic\worldgen\configured_feature" />
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.mod\data\tectonic\lithostitched\worldgen_modifier\underground_rivers" />
       <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\mappings" />
       <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.datapack\data\tectonic\worldgen\density_function" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\shared\1.20.1\main\java\dev\worldgen\tectonic" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\shared\1.21.1\main\java\dev\worldgen\tectonic" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\data\tectonic\worldgen\configured_feature\underground_river" />
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\data\tectonic\worldgen\placed_feature\underground_river" />
+      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.mod\data\tectonic\lithostitched\worldgen_modifier\feature" />
       <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.datapack\data\tectonic\worldgen\density_function\__constants" />
       <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.1_21_9\data\tectonic\worldgen" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\data\tectonic\worldgen" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.1_21_9\data\minecraft\worldgen\density_function\overworld" />
-      <recent name="C:\Users\ldglo\Documents\Github\tectonic\cloche\src\common\main\resources\resourcepacks\tectonic\overlay.datapack\data\tectonic\worldgen\density_function\__constants\cave" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="dev.worldgen.tectonic.worldgen.densityfunction" />
@@ -155,7 +165,7 @@
       <recent name="dev.worldgen.tectonic" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.cloche [build]">
+  <component name="RunManager" selected="Application.Run :fabric:1.21.11:client">
     <configuration name="Run :fabric:1.21.11:client" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.fabricmc.loader.impl.launch.knot.KnotClient" />
       <module name="tectonic.fabric12111" />
@@ -198,6 +208,34 @@
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="Gradle.BeforeRunTask" enabled="true" tasks="prepareFabric1211ServerRun" externalProjectPath="$PROJECT_DIR$" />
+      </method>
+    </configuration>
+    <configuration name="Run :neoforge:1.21.11:client" type="Application" factoryName="Application">
+      <envs>
+        <env name="MOD_CLASSES" value="tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\classes\java\neoforge12111;tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\classes\kotlin\neoforge12111;tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\resources\neoforge12111" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="net.neoforged.fml.startup.Client" />
+      <module name="tectonic.neoforge12111" />
+      <option name="PROGRAM_PARAMETERS" value="--version 21.11.12-beta --assetIndex 29 --assetsDir C:\Users\ldglo\.gradle\caches\minecraft-codev\assets --fml.mcVersion 1.21.11 --fml.neoForgeVersion 21.11.12-beta --fml.neoFormVersion 20251209.172050" />
+      <option name="VM_PARAMETERS" value="--add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-exports jdk.naming.dns/com.sun.jndi.dns=java.naming -Djava.net.preferIPv6Addresses=system -Dneoforge.enableGameTest=true" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="Gradle.BeforeRunTask" enabled="true" tasks="prepareNeoforge12111ClientRun" externalProjectPath="$PROJECT_DIR$" />
+      </method>
+    </configuration>
+    <configuration name="Run :neoforge:1.21.11:server" type="Application" factoryName="Application">
+      <envs>
+        <env name="MOD_CLASSES" value="tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\classes\java\neoforge12111;tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\classes\kotlin\neoforge12111;tectonic%%C:\Users\ldglo\Documents\Github\tectonic\cloche\build\resources\neoforge12111" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="net.neoforged.fml.startup.Server" />
+      <module name="tectonic.neoforge12111" />
+      <option name="PROGRAM_PARAMETERS" value="--fml.mcVersion 1.21.11 --fml.neoForgeVersion 21.11.12-beta --fml.neoFormVersion 20251209.172050" />
+      <option name="VM_PARAMETERS" value="--add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-exports jdk.naming.dns/com.sun.jndi.dns=java.naming -Djava.net.preferIPv6Addresses=system" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="Gradle.BeforeRunTask" enabled="true" tasks="prepareNeoforge12111ServerRun" externalProjectPath="$PROJECT_DIR$" />
       </method>
     </configuration>
     <configuration name="Run :neoforge:1.21.1:client" type="Application" factoryName="Application">
@@ -317,6 +355,8 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.Run :neoforge:1.21.11:client" />
+      <item itemvalue="Application.Run :neoforge:1.21.11:server" />
       <item itemvalue="Application.Run :fabric:1.21.11:client" />
       <item itemvalue="Application.Run :fabric:1.21.11:server" />
       <item itemvalue="Application.Run :fabric:1.21.1:client" />
@@ -474,7 +514,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765450957230</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="3.0.18">
+      <option name="closed" value="true" />
+      <created>1765475109789</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1765475109789</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -491,6 +539,7 @@
     <MESSAGE value="3.0.16 basically done??" />
     <MESSAGE value="I can't count" />
     <MESSAGE value="Drop 1.20, switch out 1.21.10 for 1.21.11" />
-    <option name="LAST_COMMIT_MESSAGE" value="Drop 1.20, switch out 1.21.10 for 1.21.11" />
+    <MESSAGE value="3.0.18" />
+    <option name="LAST_COMMIT_MESSAGE" value="3.0.18" />
   </component>
 </project>

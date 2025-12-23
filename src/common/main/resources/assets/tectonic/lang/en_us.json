@@ -35,6 +35,8 @@
   "config.tectonic.option.underground_rivers.tooltip": "Rivers that reach mountain ranges continue underground, allowing smoother boat exploration.",
   "config.tectonic.option.river_lanterns": "River Lanterns",
   "config.tectonic.option.river_lanterns.tooltip": "Underground rivers will rarely generate with hanging lanterns.",
+  "config.tectonic.option.river_ice": "River Ice",
+  "config.tectonic.option.river_ice.tooltip": "Underground rivers under snowy biomes will generate with ice.",
   "config.tectonic.option.flat_terrain_skew": "Flat Terrain Skew: %s",
   "config.tectonic.option.flat_terrain_skew.tooltip": "The threshold where plateau terrain becomes flatter terrain. Positive numbers favor flat terrain and negative numbers favor plateau terrain.",
   "config.tectonic.option.rolling_hills": "Rolling Hills",
@@ -101,6 +103,7 @@
   "preset.tectonic.default": "Default",
   "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
+  "preset.tectonic.frozen_wasteland": "Frozen Wasteland",
 
   "pack_name.tectonic.tectonic/overlay.mod": "Tectonic mod-reliant data",
   "pack_name.tectonic.tectonic/overlay.terratonic": "Terralith-Tectonic compat data",

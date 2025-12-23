@@ -33,6 +33,10 @@ public final class HeightLimits {
         this.maxY = maxY;
     }
 
+    public boolean isVanilla() {
+        return this.minY == -64 && this.maxY == 320;
+    }
+
     public static HeightLimits defaultLimits(boolean increasedHeight) {
         return increasedHeight ? INCREASED_HEIGHT : DEFAULT;
     }

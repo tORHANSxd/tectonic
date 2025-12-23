@@ -33,6 +33,7 @@ public record SetHeightLimitsModifier(int priority, Holder<DimensionType> dimens
         if (!Tectonic.isEnabled()) return;
 
         HeightLimits limits = ConfigHandler.getState().globalTerrain.heightLimits;
+        if (limits.isVanilla()) return;
 
         // Set heights on dimension type
         DimensionTypeAccessor typeAccessor = (DimensionTypeAccessor) (Object) this.dimensionType.value();
@@ -59,7 +60,7 @@ public record SetHeightLimitsModifier(int priority, Holder<DimensionType> dimens
 
     @Override
     public int priority() {
-        return 0;
+        return this.priority;
     }
 
     @Override
