@@ -8,6 +8,7 @@ import com.mojang.datafixers.util.Pair;
 import dev.worldgen.lithostitched.mixin.common.RandomStateAccessor;
 import dev.worldgen.lithostitched.worldgen.NoiseWiringHelper;
 import dev.worldgen.tectonic.Tectonic;
+import dev.worldgen.tectonic.TectonicRegistries;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -61,7 +62,7 @@ public class TectonicCommand {
         CommandSourceStack source = context.getSource();
         ServerLevel level = source.getLevel();
         BlockPos origin = BlockPos.containing(source.getPosition());
-        HolderLookup.RegistryLookup<DensityFunction> registry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
+        var dfRegistry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
 
         NoiseWiringHelper helper = getNoiseHelper(source);
         if (helper == null) return 0;
@@ -69,15 +70,20 @@ public class TectonicCommand {
         message(source, Component.literal("Tectonic debug info:"));
 
         message(source, getRegion(
-            get(registry.getOrThrow(key("noise/continent/erosion")), helper, origin),
-            get(registry.getOrThrow(key("noise/region_selector")), helper, origin)
+            get(dfRegistry.getOrThrow(key("noise/continent/erosion")), helper, origin),
+            get(dfRegistry.getOrThrow(key("noise/region_selector")), helper, origin)
         ));
 
         message(source, Component.translatableWithFallback(
             "command.tectonic.depth_cutoff",
             "Depth cutoff: %s",
-            get(registry.getOrThrow(key("__constants/cave/depth_cutoff")), helper, origin)
+            get(dfRegistry.getOrThrow(key("__constants/cave/depth_cutoff")), helper, origin)
         ));
+
+        var fnlRegistry = level.registryAccess().lookupOrThrow(TectonicRegistries.FAST_NOISE_CONFIG);
+        fnlRegistry.listElements().forEach(ref -> {
+            message(source, Component.literal("Key: " + ref.key().identifier() + ", Value: " + (int) (ref.value().sample(origin.getX() * 0.2, 0, origin.getZ() * 0.2) * 1000)));
+        });
 
         return 1;
     }

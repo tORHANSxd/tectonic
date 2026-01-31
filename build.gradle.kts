@@ -20,7 +20,7 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.19"
+version = "3.0.20"
 
 cloche {
     targets.all {

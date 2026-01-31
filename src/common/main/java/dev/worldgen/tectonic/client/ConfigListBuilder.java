@@ -48,7 +48,7 @@ public interface ConfigListBuilder {
         this.addBoolean("jungle_pillars", bool -> state.continents.junglePillars = bool, state.continents.junglePillars, JUNGLE_PILLARS);
 
         this.addCategory("islands", font);
-        this.addBoolean("enabled", bool -> state.islands.enabled = bool,  state.islands.enabled, ENABLED);
+        this.addBoolean("islands_enabled", bool -> state.islands.enabled = bool,  state.islands.enabled, ENABLED);
         this.addNoise("noise", state.islands.noise, NOISE);
 
         this.addCategory("oceans", font);
@@ -72,5 +72,7 @@ public interface ConfigListBuilder {
         this.addBoolean("carvers_enabled", bool -> state.caves.carversEnabled = bool, state.caves.carversEnabled, CARVERS_ENABLED);
         this.addBoolean("lava_tunnels", bool -> state.globalTerrain.lavaTunnels = bool, state.globalTerrain.lavaTunnels, LAVA_TUNNELS);
 
+        this.addCategory("experimental", font);
+        this.addBoolean("experimental_enabled", bool -> state.experimental.enabled = bool,  state.experimental.enabled, ConfigState.Experimental.ENABLED);
     }
 }

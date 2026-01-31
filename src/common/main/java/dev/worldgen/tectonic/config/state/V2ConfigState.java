@@ -2,7 +2,6 @@ package dev.worldgen.tectonic.config.state;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.Tectonic;
 import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 
@@ -13,7 +12,7 @@ public class V2ConfigState {
         Scales.CODEC.fieldOf("terrain_scales").orElse(Scales.DEFAULT).forGetter(config -> config.scales),
         Codec.INT.fieldOf("snow_start_offset").orElse(128).forGetter(config -> config.snowOffset)
     ).apply(instance, V2ConfigState::new));
-    public static final Codec<V2ConfigState> CODEC = Tectonic.withAlternative(BASE_CODEC, V1ConfigState.CODEC, V1ConfigState::upgrade);
+    public static final Codec<V2ConfigState> CODEC = Codec.withAlternative(BASE_CODEC, V1ConfigState.CODEC, V1ConfigState::upgrade);
 
     public boolean enabled;
     public Toggles toggles;
@@ -64,7 +63,8 @@ public class V2ConfigState {
                 NoiseState.DEFAULT,
                 NoiseState.DEFAULT
             ),
-            ConfigState.Caves.DEFAULT
+            ConfigState.Caves.DEFAULT,
+            ConfigState.Experimental.DEFAULT
         );
     }
 

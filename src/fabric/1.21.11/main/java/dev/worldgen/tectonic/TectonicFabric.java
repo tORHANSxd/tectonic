@@ -4,12 +4,12 @@ import dev.worldgen.lithostitched.registry.LithostitchedBuiltInRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
-import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
-import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
-import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
-import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
+import dev.worldgen.tectonic.worldgen.densityfunction.fnl.FastNoiseConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
@@ -29,12 +29,13 @@ public class TectonicFabric implements ModInitializer {
 
         ResourceConditions.register(ConfigResourceCondition.TYPE);
 
-        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_clamp"), ConfigClamp.CODEC_HOLDER.codec());
-        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
-        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
-        Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id("invert"), Invert.CODEC_HOLDER.codec());
-
+        DynamicRegistries.register(TectonicRegistries.FAST_NOISE_CONFIG, FastNoiseConfig.CODEC);
+        var registry = FabricRegistryBuilder.createSimple(TectonicRegistries.FAST_NOISE_CONFIG_TYPE).buildAndRegister();
+        Tectonic.registerDensityFunctionTypes((name, codec) -> Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id(name), codec));
+        Tectonic.registerFastNoiseConfigTypes((name, codec) -> Registry.register(registry, id(name), codec));
         Registry.register(LithostitchedBuiltInRegistries.MODIFIER_TYPE, id("set_height_limits"), SetHeightLimitsModifier.CODEC);
+
+        ServerLifecycleEvents.SERVER_STARTED.register(Tectonic::onServerStarting);
 
         if (ConfigHandler.getState().general.modEnabled) {
             ResourceManagerHelper.registerBuiltinResourcePack(

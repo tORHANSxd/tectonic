@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:add",
+  "argument1": {
+    "type": "minecraft:mul",
+    "argument1": 0.85,
+    "argument2": {
+      "type": "tectonic:fast_noise",
+      "config": "tectonic:ridges/a",
+      "xz_scale": 1,
+      "y_scale": 0
+    }
+  },
+  "argument2": {
+    "type": "minecraft:add",
+    "argument1": {
+      "type": "minecraft:mul",
+      "argument1": 0.1,
+      "argument2": {
+        "type": "tectonic:fast_noise",
+        "config": "tectonic:ridges/b",
+        "xz_scale": 1,
+        "y_scale": 0
+      }
+    },
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": 0.05,
+      "argument2": {
+        "type": "tectonic:fast_noise",
+        "config": "tectonic:ridges/c",
+        "xz_scale": 1,
+        "y_scale": 0
+      }
+    }
+  }
+}

@@ -5,16 +5,25 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.18"
+MOD_VERSION = "3.0.19"
 CHANGELOG = """
-- Updated to 1.21.11.
-- Updated surface rules for Clifftree.
+Silly update for the holiday season. Happy exploring!
+
+**Additions**
+- Added the *Frozen Wasteland* preset. All snowy biomes, higher mountains that go up to y420, very desolate.
+- Added the *River Ice* config option, which puts ice in underground rivers under snowy biomes. Off by default, on in the Frozen Wasteland preset.
+
+**Changes**
+- Reintroduced Neoforge 1.21.11 support.
+- Made underground river lanterns a bit more common.
+- Fixed the world being flooded with the Mushroom Fields biome when Ocean Offset is set to numbers below -1.
+- Datapacks that change the build limit won't also change the generation limit if Tectonic's height limit settings are kept at their default values.
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.21.1"),
-    #("neoforge", "1.21.1"),
+    ("neoforge", "1.21.1"),
     ("fabric", "1.21.11"),
-    #("neoforge", "1.21.11"),
+    ("neoforge", "1.21.11"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"
@@ -147,3 +156,4 @@ for modloader, game_version in UPLOAD_VERSIONS:
 
     upload_modrinth(modloader, game_version, mod_path)
     upload_curseforge(modloader, game_version, mod_path)
+input("Press any button to close.")

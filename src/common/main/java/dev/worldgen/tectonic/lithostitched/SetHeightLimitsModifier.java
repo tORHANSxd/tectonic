@@ -2,6 +2,7 @@ package dev.worldgen.tectonic.lithostitched;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.worldgen.lithostitched.Lithostitched;
 import dev.worldgen.lithostitched.mixin.common.MappedRegistryAccessor;
 import dev.worldgen.lithostitched.worldgen.modifier.Modifier;
 import dev.worldgen.tectonic.Tectonic;
@@ -32,19 +33,22 @@ public record SetHeightLimitsModifier(int priority, Holder<DimensionType> dimens
         if (!Tectonic.isEnabled()) return;
 
         HeightLimits limits = ConfigHandler.getState().globalTerrain.heightLimits;
+        if (limits.isVanilla()) return;
 
+        // Set heights on dimension type
         DimensionTypeAccessor typeAccessor = (DimensionTypeAccessor) (Object) this.dimensionType.value();
         typeAccessor.setMinY(limits.minY);
         typeAccessor.setHeight(limits.getHeight());
         typeAccessor.setLogicalHeight(limits.getHeight());
 
+        // Set heights on noise settings
         NoiseSettingsAccessor settingsAccessor = (NoiseSettingsAccessor) (Object) this.noiseSettings.value().noiseSettings();
         settingsAccessor.setMinY(limits.minY);
         settingsAccessor.setHeight(limits.getHeight());
 
         // Ensure dimension type is synced
         if (this.dimensionType.unwrapKey().isPresent()) {
-            Registry<DimensionType> registry = registries.registryOrThrow(Registries.DIMENSION_TYPE);
+            Registry<DimensionType> registry = Lithostitched.registry(registries, Registries.DIMENSION_TYPE);
             ResourceKey<DimensionType> key = this.dimensionType.unwrapKey().get();
             Optional<RegistrationInfo> knownPackInfo = registry.registrationInfo(key);
             knownPackInfo.ifPresent(registrationInfo -> ((MappedRegistryAccessor<DimensionType>)registry).lithostitched$getRegistrationInfos().put(key, new RegistrationInfo(Optional.empty(), registrationInfo.lifecycle())));
@@ -52,13 +56,11 @@ public record SetHeightLimitsModifier(int priority, Holder<DimensionType> dimens
     }
 
     @Override
-    public void applyModifier() {
-
-    }
+    public void applyModifier() {}
 
     @Override
     public int priority() {
-        return 0;
+        return this.priority;
     }
 
     @Override
