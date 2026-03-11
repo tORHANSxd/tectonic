@@ -3,12 +3,10 @@ package dev.worldgen.tectonic.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.util.Pair;
+import dev.worldgen.lithostitched.api.worldgen.densityfunction.SimpleContext;
+import dev.worldgen.lithostitched.api.worldgen.util.DensityFunctionWrapper;
 import dev.worldgen.lithostitched.mixin.common.RandomStateAccessor;
-import dev.worldgen.lithostitched.worldgen.NoiseWiringHelper;
 import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.TectonicRegistries;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -19,7 +17,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.commands.LocateCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.InclusiveRange;
 import net.minecraft.util.Mth;
@@ -29,12 +26,12 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.msrandom.multiplatform.annotations.Expect;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import static net.minecraft.commands.Commands.*;
 
+@SuppressWarnings("NoMatchingActual")
 public class TectonicCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> locate = literal("locate");
@@ -63,8 +60,8 @@ public class TectonicCommand {
         ServerLevel level = source.getLevel();
         BlockPos origin = BlockPos.containing(source.getPosition());
         var dfRegistry = level.registryAccess().lookupOrThrow(Registries.DENSITY_FUNCTION);
-
-        NoiseWiringHelper helper = getNoiseHelper(source);
+        
+        DensityFunctionWrapper helper = getDensityFunctionWrapper(source);
         if (helper == null) return 0;
 
         message(source, Component.literal("Tectonic debug info:"));
@@ -80,11 +77,6 @@ public class TectonicCommand {
             get(dfRegistry.getOrThrow(key("__constants/cave/depth_cutoff")), helper, origin)
         ));
 
-        var fnlRegistry = level.registryAccess().lookupOrThrow(TectonicRegistries.FAST_NOISE_CONFIG);
-        fnlRegistry.listElements().forEach(ref -> {
-            message(source, Component.literal("Key: " + ref.key().identifier() + ", Value: " + (int) (ref.value().sample(origin.getX() * 0.2, 0, origin.getZ() * 0.2) * 1000)));
-        });
-
         return 1;
     }
 
@@ -98,8 +90,8 @@ public class TectonicCommand {
             failure(source, "Tectonic terrain feature " + name + " is not enabled.");
             return 0;
         }
-        NoiseWiringHelper helper = getNoiseHelper(source);
-        if (helper == null) return 0;
+        DensityFunctionWrapper wrapper = getDensityFunctionWrapper(source);
+        if (wrapper == null) return 0;
 
         for (BlockPos.MutableBlockPos offset : BlockPos.spiralAround(BlockPos.ZERO, 400, Direction.EAST, Direction.SOUTH)) {
             int x = origin.getX() + offset.getX() * 64;
@@ -108,7 +100,7 @@ public class TectonicCommand {
 
             boolean allMatch = true;
             for (var target : targets.entrySet()) {
-                if (!target.getValue().isValueInRange(get(registry.getOrThrow(key(target.getKey())), helper, pos))) {
+                if (!target.getValue().isValueInRange(get(registry.getOrThrow(key(target.getKey())), wrapper, pos))) {
                     allMatch = false;
                 }
             }
@@ -144,7 +136,7 @@ public class TectonicCommand {
     @Expect private static ClickEvent getClickEvent(BlockPos pos);
     @Expect private static HoverEvent getHoverEvent();
 
-    private static NoiseWiringHelper getNoiseHelper(CommandSourceStack source) {
+    private static DensityFunctionWrapper getDensityFunctionWrapper(CommandSourceStack source) {
         ServerLevel level = source.getLevel();
 
         if (!ConfigHandler.getState().general.modEnabled) {
@@ -157,7 +149,7 @@ public class TectonicCommand {
         }
         NoiseGeneratorSettings settings = generator.generatorSettings().value();
         RandomState randomState = RandomState.create(settings, level.registryAccess().lookupOrThrow(Registries.NOISE), level.getSeed());
-        return new NoiseWiringHelper(
+        return new DensityFunctionWrapper(
             level.getSeed(),
             settings.useLegacyRandomSource(),
             randomState,
@@ -173,8 +165,8 @@ public class TectonicCommand {
         source.sendFailure(Component.literal(message).withStyle(ChatFormatting.RED));
     }
 
-    private static double get(Holder<DensityFunction> holder, NoiseWiringHelper helper, BlockPos pos) {
-        double d = holder.value().mapAll(helper).compute(new DensityFunction.SinglePointContext(pos.getX(), pos.getY(), pos.getZ()));
+    private static double get(Holder<DensityFunction> holder, DensityFunctionWrapper wrapper, BlockPos pos) {
+        double d = holder.value().mapAll(wrapper).compute(SimpleContext.of(pos));
         return (double) Math.round(d * 1000) / 1000;
     }
 
