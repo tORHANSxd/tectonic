@@ -1,7 +1,7 @@
 package dev.worldgen.tectonic;
 
 import com.mojang.serialization.MapCodec;
-import dev.worldgen.lithostitched.registry.LithostitchedRegistryKeys;
+import dev.worldgen.lithostitched.api.registry.LithostitchedRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
@@ -41,7 +41,7 @@ public class TectonicNeoforge {
     public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<ConfigResourceCondition>> TECTONIC = CONDITION_TYPES.register("config", () -> ConfigResourceCondition.CODEC);
 
     public TectonicNeoforge(IEventBus bus) {
-        Tectonic.init(FMLPaths.CONFIGDIR.get());
+        Tectonic.init(FMLPaths.GAMEDIR.get());
 
         CONDITION_TYPES.register(bus);
 
@@ -57,7 +57,7 @@ public class TectonicNeoforge {
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
             helper.register(id("invert"), Invert.CODEC_HOLDER.codec());
         });
-        event.register(LithostitchedRegistryKeys.MODIFIER_TYPE, helper -> {
+        event.register(LithostitchedRegistries.MODIFIER_TYPE, helper -> {
             helper.register(id("set_height_limits"), SetHeightLimitsModifier.CODEC);
         });
     }

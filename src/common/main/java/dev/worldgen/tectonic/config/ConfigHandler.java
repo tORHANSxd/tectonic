@@ -26,8 +26,7 @@ public class ConfigHandler {
         ConfigState.Islands.DEFAULT,
         ConfigState.Oceans.DEFAULT,
         ConfigState.Biomes.DEFAULT,
-        ConfigState.Caves.DEFAULT,
-        ConfigState.Experimental.DEFAULT
+        ConfigState.Caves.DEFAULT
     );
     private static Path PATH;
 

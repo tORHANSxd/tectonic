@@ -21,6 +21,7 @@ repositories {
 
 group = "dev.worldgen.tectonic"
 version = "3.0.20"
+val lithostitchedVersion = "1.6.1"
 
 cloche {
     targets.all {
@@ -60,7 +61,7 @@ cloche {
             dependencies {
                 dependency {
                     modId = "lithostitched"
-                    version("1.4.11")
+                    version(lithostitchedVersion)
                 }
             }
         }
@@ -81,7 +82,7 @@ cloche {
 
         dependencies {
             fabricApi("0.116.1")
-            modImplementation("maven.modrinth:lithostitched:1.5.2-fabric-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-1.21.1")
             modImplementation("com.terraformersmc:modmenu:11.0.3")
         }
 
@@ -109,7 +110,7 @@ cloche {
 
         dependencies {
             fabricApi("0.139.4")
-            modImplementation("maven.modrinth:lithostitched:1.5.2+beta2-fabric-1.21.11")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-1.21.11")
             modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
         } //accessWidenFabric1218CommonMinecraft
 
@@ -136,7 +137,7 @@ cloche {
         minecraftVersion = "1.21.1"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.2-neoforge-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-1.21.1")
         }
 
         runs {
@@ -152,7 +153,7 @@ cloche {
         minecraftVersion = "1.21.11"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.5-neoforge-1.21.11")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-1.21.11")
         }
 
         runs {

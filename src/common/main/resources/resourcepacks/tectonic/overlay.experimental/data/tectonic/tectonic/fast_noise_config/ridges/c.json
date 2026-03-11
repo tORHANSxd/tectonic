@@ -1,9 +1,0 @@
-{
-  "type": "tectonic:simplex",
-  "salt": 1003,
-  "frequency": 0.03,
-  "fractal_type": "fbm",
-  "octaves": 2,
-  "lacunarity": 8,
-  "gain": 0.1
-}

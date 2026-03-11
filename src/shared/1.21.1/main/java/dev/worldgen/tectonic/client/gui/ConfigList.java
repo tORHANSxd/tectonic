@@ -24,11 +24,11 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> i
         super(minecraft, width, parent.layout.getContentHeight(), parent.layout.getHeaderHeight(), 25);
     }
 
-    public void addCategory(String name, Font font) {
+    public void addCategory(DisplayMode displayMode, String name, Font font) {
         this.addEntry(new StringWidget(ConfigScreen.text("category."+name), font));
     }
 
-    public void addBoolean(String name, Consumer<Boolean> setter, boolean value, boolean base) {
+    public void addBoolean(DisplayMode displayMode, String name, Consumer<Boolean> setter, boolean value, boolean base) {
         CycleButton.Builder<Boolean> button = CycleButton.onOffBuilder(value);
 
         MutableComponent text = Component.empty();
@@ -42,18 +42,12 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> i
         this.addEntry(button.create(option(name), (__, bool) -> setter.accept(bool)));
     }
 
-    public void addInteger(String name, double min, double max, double step, Consumer<Integer> action, double value, double base) {
+    public void addInteger(DisplayMode displayMode, String name, double min, double max, double step, Consumer<Integer> action, double value, double base) {
         this.addEntry(new SliderWidget(min, max, step, "option." + name, newValue -> action.accept(newValue.intValue()), value, true, base));
     }
 
-    public void addDouble(String name, double min, double max, double step, Consumer<Double> action, double value, double base) {
+    public void addDouble(DisplayMode displayMode, String name, double min, double max, double step, Consumer<Double> action, double value, double base) {
         this.addEntry(new SliderWidget(min, max, step, "option." + name, action, value, false, base));
-    }
-
-    public void addNoise(String name, NoiseState state, NoiseState baseState) {
-        this.addDouble(name + "_scale", 0, 1, 0.01, value -> state.scale = value, state.scale, baseState.scale);
-        this.addDouble(name + "_multiplier", 0, 5, 0.1, value -> state.multiplier = value, state.multiplier, baseState.multiplier);
-        this.addDouble(name + "_offset", -1, 1, 0.01, value -> state.offset = value, state.offset, baseState.offset);
     }
 
     public void addEntry(AbstractWidget widget) {

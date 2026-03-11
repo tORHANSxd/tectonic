@@ -43,18 +43,6 @@
   "neoforge:overlays": {
     "entries": [
       {
-        "directory": "overlay.experimental",
-        "formats": [1, 99],
-        "min_format": 1,
-        "max_format": 99,
-        "neoforge:conditions": [
-          {
-            "type": "tectonic:config",
-            "key": "experimental"
-          }
-        ]
-      },
-      {
         "directory": "overlay.no_carvers",
         "formats": [1, 99],
         "min_format": 1,
@@ -106,13 +94,6 @@
   },
   "fabric:overlays": {
     "entries": [
-      {
-        "directory": "overlay.experimental",
-        "condition": {
-          "condition": "tectonic:config",
-          "key": "experimental"
-        }
-      },
       {
         "directory": "overlay.no_carvers",
         "condition": {

@@ -13,8 +13,7 @@ public interface ConfigPresets {
         ConfigState.Islands.DEFAULT,
         ConfigState.Oceans.DEFAULT,
         ConfigState.Biomes.DEFAULT,
-        ConfigState.Caves.DEFAULT,
-        ConfigState.Experimental.DEFAULT
+        ConfigState.Caves.DEFAULT
     );
 
     ConfigState LARGE_BIOMES = new ConfigState(
@@ -28,8 +27,7 @@ public interface ConfigPresets {
             new NoiseState(0.06, 1.1, 0),
             new NoiseState(0.06, 1.1, 0)
         ),
-        ConfigState.Caves.DEFAULT,
-        ConfigState.Experimental.DEFAULT
+        ConfigState.Caves.DEFAULT
     );
 
     ConfigState DESERTED = new ConfigState(
@@ -43,8 +41,7 @@ public interface ConfigPresets {
             new NoiseState(0, 0, 1),
             NoiseState.DEFAULT
         ),
-        ConfigState.Caves.DEFAULT,
-        ConfigState.Experimental.DEFAULT
+        ConfigState.Caves.DEFAULT
     );
 
     ConfigState FROZEN_WASTELAND = new ConfigState(
@@ -75,8 +72,7 @@ public interface ConfigPresets {
             new NoiseState(0, 0, -0.69),
             new NoiseState(0.15, 0.1, -0.1)
         ),
-        ConfigState.Caves.DEFAULT,
-        ConfigState.Experimental.DEFAULT
+        ConfigState.Caves.DEFAULT
     );
 
     static void acceptPresets(TriConsumer<String, ConfigState, Integer> consumer) {

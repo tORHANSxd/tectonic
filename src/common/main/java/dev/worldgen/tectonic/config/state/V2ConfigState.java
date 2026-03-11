@@ -63,8 +63,7 @@ public class V2ConfigState {
                 NoiseState.DEFAULT,
                 NoiseState.DEFAULT
             ),
-            ConfigState.Caves.DEFAULT,
-            ConfigState.Experimental.DEFAULT
+            ConfigState.Caves.DEFAULT
         );
     }
 

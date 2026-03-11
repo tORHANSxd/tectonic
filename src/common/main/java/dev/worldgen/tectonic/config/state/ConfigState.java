@@ -2,7 +2,6 @@ package dev.worldgen.tectonic.config.state;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.Tectonic;
 import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 
@@ -16,8 +15,7 @@ public class ConfigState {
         Islands.CODEC.fieldOf("islands").orElse(Islands.DEFAULT).forGetter(state -> state.islands),
         Oceans.CODEC.fieldOf("oceans").orElse(Oceans.DEFAULT).forGetter(state -> state.oceans),
         Biomes.CODEC.fieldOf("biomes").orElse(Biomes.DEFAULT).forGetter(state -> state.biomes),
-        Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves),
-        Experimental.CODEC.fieldOf("experimental").orElse(Experimental.DEFAULT).forGetter(state -> state.experimental)
+        Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves)
     ).apply(instance, ConfigState::new));
     public static final Codec<ConfigState> CODEC = Codec.withAlternative(BASE_CODEC, V2ConfigState.CODEC, V2ConfigState::upgrade);
 
@@ -28,9 +26,8 @@ public class ConfigState {
     public Oceans oceans;
     public Biomes biomes;
     public Caves caves;
-    public Experimental experimental;
 
-    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves, Experimental experimental) {
+    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves) {
         this.general = general;
         this.globalTerrain = globalTerrain;
         this.continents = continents;
@@ -38,7 +35,6 @@ public class ConfigState {
         this.oceans = oceans;
         this.biomes = biomes;
         this.caves = caves;
-        this.experimental = experimental;
 
         if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
             this.globalTerrain.heightLimits = HeightLimits.INCREASED_HEIGHT;
@@ -95,7 +91,6 @@ public class ConfigState {
             case "river_lanterns" -> this.continents.riverLanterns;
             case "river_ice" -> this.continents.riverIce;
             case "no_carvers" -> !this.caves.carversEnabled;
-            case "experimental" -> this.experimental.enabled;
             default -> false;
         };
     }
@@ -304,21 +299,6 @@ public class ConfigState {
             this.noodleAdditive = noodleAdditive;
             this.spaghettiEnabled = spaghettiEnabled;
             this.carversEnabled = carversEnabled;
-        }
-    }
-
-    public static class Experimental {
-        public static final boolean ENABLED = false;
-
-        public static final Experimental DEFAULT = new Experimental(ENABLED);
-        public static final Codec<Experimental> CODEC = RecordCodecBuilder.create(i -> i.group(
-            Codec.BOOL.optionalFieldOf("enabled", ENABLED).forGetter(e -> e.enabled)
-        ).apply(i, Experimental::new));
-
-        public boolean enabled;
-
-        public Experimental(boolean enabled) {
-            this.enabled = enabled;
         }
     }
 }
