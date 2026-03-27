@@ -84,6 +84,7 @@ public interface ConfigListBuilder {
         
         this.addCategory(DisplayMode.MOD_ONLY, "experimental", font);
         this.addBoolean(DisplayMode.MOD_ONLY, "alternate_erosion_scaling", bool -> state.experimental.alternateErosionScaling = bool, state.experimental.alternateErosionScaling, ALTERNATE_EROSION_SCALING);
+        this.addBoolean(DisplayMode.MOD_ONLY, "alternate_continents_scaling", bool -> state.experimental.alternateContinentsScaling = bool, state.experimental.alternateContinentsScaling, ALTERNATE_CONTINENTS_SCALING);
     }
     
     static Component text(String name) {

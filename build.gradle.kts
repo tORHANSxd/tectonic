@@ -55,14 +55,14 @@ cloche {
         }
     }
 
-    val sharedOld = common("shared:1.21.1") {
-        mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
+    val sharedOld = common("shared:21.1") {
+        mixins.from(file("src/shared/21.1/main/tectonic.21.1.mixins.json"))
     }
-    val sharedNew = common("shared:1.21.11") {
-        mixins.from(file("src/shared/1.21.11/main/tectonic_1.21.11.mixins.json"))
+    val sharedNew = common("shared:26.1") {
+        mixins.from(file("src/shared/26.1/main/tectonic.26.1.mixins.json"))
     }
 
-    fabric("fabric:1.21.1") {
+    fabric("fabric:21.1") {
         dependsOn(sharedOld)
 
         loaderVersion = "0.18.5"
@@ -97,7 +97,7 @@ cloche {
         }
     }
 
-    fabric("fabric:1.21.11") {
+    fabric("fabric:26.1") {
         dependsOn(sharedNew)
 
         loaderVersion = "0.18.5"
@@ -106,7 +106,7 @@ cloche {
         dependencies {
             fabricApi("0.144.3")
             modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-26.1")
-            modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
+            modImplementation("com.terraformersmc:modmenu:18.0.0-alpha.8")
         }
 
         includedClient()
@@ -125,7 +125,7 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.1") {
+    neoforge("neoforge:21.1") {
         dependsOn(sharedOld)
 
         loaderVersion = "21.1.222"
@@ -148,11 +148,11 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.11") {
+    neoforge("neoforge:26.1") {
         dependsOn(sharedNew)
 
-        loaderVersion = "21.11.12-beta"
-        minecraftVersion = "1.21.11"
+        loaderVersion = "26.1.0.7-beta"
+        minecraftVersion = "26.1"
 
         dependencies {
             modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-26.1")

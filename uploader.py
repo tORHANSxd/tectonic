@@ -5,25 +5,19 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.19"
+MOD_VERSION = "3.0.20"
 CHANGELOG = """
-Silly update for the holiday season. Happy exploring!
-
-**Additions**
-- Added the *Frozen Wasteland* preset. All snowy biomes, higher mountains that go up to y420, very desolate.
-- Added the *River Ice* config option, which puts ice in underground rivers under snowy biomes. Off by default, on in the Frozen Wasteland preset.
-
-**Changes**
-- Reintroduced Neoforge 1.21.11 support.
-- Made underground river lanterns a bit more common.
-- Fixed the world being flooded with the Mushroom Fields biome when Ocean Offset is set to numbers below -1.
-- Datapacks that change the build limit won't also change the generation limit if Tectonic's height limit settings are kept at their default values.
+- Updated the mod to support Minecraft 26.1.
+- Added a new config preset for extremely high mountains and flat terrain otherwise, perfect for screenshots.
+  - It's normally called `Overkill`, but with Voxy installed will be named `i use voxy btw` instead.
+- Added a new Experimental category of config options.
+  - This currently includes two options for alternate noise scaling. These make terrain look better with low noise scale values (especially on mountain slopes and oceansides), but aren't compatible with C2ME's worldgen hardware acceleration.
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "1.21.1"),
-    ("neoforge", "1.21.1"),
-    ("fabric", "1.21.11"),
-    ("neoforge", "1.21.11"),
+    ("fabric", "21.1"),
+    ("neoforge", "21.1"),
+    ("fabric", "26.1"),
+    ("neoforge", "26.1"),
 ]
 
 MODRINTH_ID = "lWDHr9jE"
@@ -39,15 +33,18 @@ BASE_FOLDER = os.path.dirname(os.path.abspath(__file__))
 MODRINTH_TOKEN = os.getenv('TOKEN_MR')
 if not MODRINTH_TOKEN:
     raise EnvironmentError("MODRINTH_TOKEN is unset!")
+MODRINTH_GAME_VERSIONS = {
+    "21.1": ["1.21.1"],
+    "26.1": ["26.1"],
+}
 
 CURSEFORGE_TOKEN = os.getenv('TOKEN_CF')
 if not CURSEFORGE_TOKEN:
     raise EnvironmentError("CURSEFORGE_TOKEN is unset!")
 CURSEFORGE_URL = f"https://minecraft.curseforge.com/api/v1/projects/{CURSEFORGE_ID}/upload-file"
 CURSEFORGE_GAME_VERSIONS = {
-    "1.20.1": [9990],
-    "1.21.1": [11779],
-    "1.21.11": [14406],
+    "21.1": [11779],
+    "26.1": [15933],
 }
 CURSEFORGE_LOADERS = {
     "fabric": 7499,
@@ -59,11 +56,15 @@ CURSEFORGE_LOADERS = {
 # Code
 
 def upload_modrinth(loader: str, version: str, file_path: str):
+
+    game_versions = MODRINTH_GAME_VERSIONS.get(version)
+
+
     metadata = {
         "name": f"v{MOD_VERSION} ~ {loader.title()} {version}",
         "version_number": MOD_VERSION,
         "project_id": MODRINTH_ID,
-        "game_versions": [version],
+        "game_versions": game_versions,
         "loaders": [loader],
         "featured": True,
         "changelog": CHANGELOG,

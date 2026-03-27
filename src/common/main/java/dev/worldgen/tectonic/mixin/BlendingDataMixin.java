@@ -22,7 +22,7 @@ public class BlendingDataMixin {
         cancellable = true
     )
     private void checkTerralithSurfaceBlocks(ChunkAccess access, int x, int z, CallbackInfoReturnable<Integer> cir, int k, int l, BlockPos.MutableBlockPos pos) {
-        if (access.getBlockState(pos).is(TectonicTags.TERRALITH_SURFACE)) {
+        if (access.getBlockState(pos).is(TectonicTags.TERRALITH_SURFACE, b -> true)) {
             cir.setReturnValue(pos.getY());
         }
     }

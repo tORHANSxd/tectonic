@@ -88,7 +88,7 @@ public interface ConfigPresets {
         new ConfigState.GlobalTerrain(
             2.5,
             1.6,
-            new HeightLimits(-64, 1536),
+            new HeightLimits(-64, 768),
             false,
             true
         ),
@@ -108,10 +108,10 @@ public interface ConfigPresets {
         ConfigState.Oceans.DEFAULT,
         new ConfigState.Biomes(
             new NoiseState(0.1, 1.1, 0),
-            new NoiseState(0.1, 1.1, 0)
+            new NoiseState(0.1, 1.1, -0.2)
         ),
         ConfigState.Caves.DEFAULT,
-        new ConfigState.Experimental(true)
+        new ConfigState.Experimental(true, true)
     );
 
     static void acceptPresets(TriConsumer<String, ConfigState, Integer> consumer) {

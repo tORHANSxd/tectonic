@@ -26,8 +26,15 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
 
     @Override
     public double compute(FunctionContext context) {
-        double x = context.blockX() * scale + shiftX.compute(context);
-        double z = context.blockZ() * scale + shiftZ.compute(context);
+        double x;
+        double z;
+        if (smootherScaling) {
+            x = (context.blockX() + shiftX.compute(context)) * scale;
+            z = (context.blockZ() + shiftZ.compute(context)) * scale;
+        } else {
+            x = context.blockX() * scale + shiftX.compute(context);
+            z = context.blockZ() * scale + shiftZ.compute(context);
+        }
         return noise.getValue(x, 0, z) * multiplier + offset;
     }
 

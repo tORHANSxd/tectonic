@@ -76,7 +76,7 @@ public class ConfigState {
 
     public NoiseState getNoiseState(String option) {
         return switch (option) {
-            case "continents" -> new NoiseState(continents.continentsScale, 1, 0);
+            case "continents" -> new NoiseState(continents.continentsScale, 1, 0, this.experimental.alternateErosionScaling);
             case "island" -> this.islands.noise;
             case "erosion" -> new NoiseState(continents.erosionScale, 1, 0, this.experimental.alternateErosionScaling);
             case "ridge" -> new NoiseState(continents.ridgeScale, 1, 0);
@@ -308,16 +308,20 @@ public class ConfigState {
     
     public static class Experimental {
         public static final boolean ALTERNATE_EROSION_SCALING = false;
+        public static final boolean ALTERNATE_CONTINENTS_SCALING = false;
         
-        public static final Experimental DEFAULT = new Experimental(ALTERNATE_EROSION_SCALING);
+        public static final Experimental DEFAULT = new Experimental(ALTERNATE_EROSION_SCALING, ALTERNATE_CONTINENTS_SCALING);
         public static final Codec<Experimental> CODEC = RecordCodecBuilder.create(i -> i.group(
-            Codec.BOOL.optionalFieldOf("alternate_erosion_scaling", ALTERNATE_EROSION_SCALING).forGetter(e -> e.alternateErosionScaling)
+            Codec.BOOL.optionalFieldOf("alternate_erosion_scaling", ALTERNATE_EROSION_SCALING).forGetter(e -> e.alternateErosionScaling),
+            Codec.BOOL.optionalFieldOf("alternate_continents_scaling", ALTERNATE_CONTINENTS_SCALING).forGetter(e -> e.alternateContinentsScaling)
         ).apply(i, Experimental::new));
         
         public boolean alternateErosionScaling;
+        public boolean alternateContinentsScaling;
         
-        public Experimental(boolean alternateErosionScaling) {
+        public Experimental(boolean alternateErosionScaling, boolean alternateContinentsScaling) {
             this.alternateErosionScaling = alternateErosionScaling;
+            this.alternateContinentsScaling = alternateContinentsScaling;
         }
     }
 }

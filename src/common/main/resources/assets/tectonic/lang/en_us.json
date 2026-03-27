@@ -101,6 +101,8 @@
   "config.tectonic.category.experimental": "Experimental",
   "config.tectonic.option.alternate_erosion_scaling": "Alternate Erosion Scaling",
   "config.tectonic.option.alternate_erosion_scaling.tooltip": "Uses an alternative method to scaling the erosion noise, improving terrain near mountain slopes.\n§cNot compatible with C2ME's hardware acceleration!",
+  "config.tectonic.option.alternate_continents_scaling": "Alternate Continents Scaling",
+  "config.tectonic.option.alternate_continents_scaling.tooltip": "Uses an alternative method to scaling the continents noise, improving terrain near coasts.\n§cNot compatible with C2ME's hardware acceleration!",
 
   "preset.tectonic.title": "Presets",
 
