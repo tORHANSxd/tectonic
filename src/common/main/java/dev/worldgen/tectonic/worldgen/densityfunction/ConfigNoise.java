@@ -9,7 +9,7 @@ import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 
-public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunction shiftZ, double scale, double multiplier, double offset) implements DensityFunction {
+public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunction shiftZ, double scale, double multiplier, double offset, boolean smootherScaling) implements DensityFunction {
     public static MapCodec<ConfigNoise> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.STRING.fieldOf("key").forGetter(df -> ""),
         NoiseHolder.CODEC.fieldOf("noise").forGetter(ConfigNoise::noise),
@@ -21,7 +21,7 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
 
     public static ConfigNoise create(String key, NoiseHolder noise, DensityFunction shiftX, DensityFunction shiftZ) {
         NoiseState state = ConfigHandler.getState().getNoiseState(key);
-        return new ConfigNoise(noise, shiftX, shiftZ, state.scale, state.multiplier, state.offset);
+        return new ConfigNoise(noise, shiftX, shiftZ, state.scale, state.multiplier, state.offset, state.smootherScaling);
     }
 
     @Override
@@ -38,6 +38,9 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
 
     @Override
     public DensityFunction mapAll(Visitor visitor) {
+        if (this.smootherScaling) {
+            return new ConfigNoise(visitor.visitNoise(noise), shiftX.mapAll(visitor), shiftZ.mapAll(visitor), scale, multiplier, offset, smootherScaling);
+        }
         return DensityFunctions.add(
             DensityFunctions.mul(
                 DensityFunctions.shiftedNoise2d(this.shiftX, this.shiftZ, this.scale, this.noise.noiseData()),

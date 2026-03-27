@@ -78,7 +78,7 @@ public class ConfigState {
         return switch (option) {
             case "continents" -> new NoiseState(continents.continentsScale, 1, 0);
             case "island" -> this.islands.noise;
-            case "erosion" -> this.experimental.alternateErosionScaling ? new NoiseState(0.25, 1, 0) : new NoiseState(continents.erosionScale, 1, 0);
+            case "erosion" -> new NoiseState(continents.erosionScale, 1, 0, this.experimental.alternateErosionScaling);
             case "ridge" -> new NoiseState(continents.ridgeScale, 1, 0);
             case "temperature" -> this.biomes.temperature;
             case "vegetation" -> this.biomes.vegetation;

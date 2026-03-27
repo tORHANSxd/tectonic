@@ -1,38 +1,26 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.17.1"
+    id("earth.terrarium.cloche") version "0.18.8"
 }
 
 repositories {
+    cloche.librariesMinecraft()
+    mavenCentral()
     cloche {
+        main()
         mavenNeoforgedMeta()
         mavenNeoforged()
-        mavenForge()
         mavenFabric()
-        mavenParchment()
-        librariesMinecraft()
-        main()
     }
-    mavenLocal()
-    mavenCentral()
     maven("https://api.modrinth.com/maven")
     maven("https://maven.terraformersmc.com/")
 }
 
 group = "dev.worldgen.tectonic"
 version = "3.0.20"
-val lithostitchedVersion = "1.6.1"
+val lithostitchedVersion = "1.6.3"
 
 cloche {
-    targets.all {
-        mappings {
-            official()
-            custom(minecraftVersion.map {
-                project.dependencies.create(files("mappings/$it.tiny"))
-            })
-        }
-    }
-
     metadata {
         modId = "tectonic"
         name = "Tectonic"
@@ -61,7 +49,7 @@ cloche {
             dependencies {
                 dependency {
                     modId = "lithostitched"
-                    version(lithostitchedVersion)
+                    version("1.6.0")
                 }
             }
         }
@@ -77,12 +65,19 @@ cloche {
     fabric("fabric:1.21.1") {
         dependsOn(sharedOld)
 
-        loaderVersion = "0.18.2"
+        loaderVersion = "0.18.5"
         minecraftVersion = "1.21.1"
+
+        mappings {
+            official()
+            custom(minecraftVersion.map {
+                project.dependencies.create(files("mappings/$it.tiny"))
+            })
+        }
 
         dependencies {
             fabricApi("0.116.1")
-            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-21.1")
             modImplementation("com.terraformersmc:modmenu:11.0.3")
         }
 
@@ -105,14 +100,14 @@ cloche {
     fabric("fabric:1.21.11") {
         dependsOn(sharedNew)
 
-        loaderVersion = "0.18.2"
-        minecraftVersion = "1.21.11"
+        loaderVersion = "0.18.5"
+        minecraftVersion = "26.1"
 
         dependencies {
-            fabricApi("0.139.4")
-            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-1.21.11")
+            fabricApi("0.144.3")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-26.1")
             modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
-        } //accessWidenFabric1218CommonMinecraft
+        }
 
         includedClient()
         runs {
@@ -133,11 +128,18 @@ cloche {
     neoforge("neoforge:1.21.1") {
         dependsOn(sharedOld)
 
-        loaderVersion = "21.1.209"
+        loaderVersion = "21.1.222"
         minecraftVersion = "1.21.1"
 
+        mappings {
+            official()
+            custom(minecraftVersion.map {
+                project.dependencies.create(files("mappings/$it.tiny"))
+            })
+        }
+
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-21.1")
         }
 
         runs {
@@ -153,7 +155,7 @@ cloche {
         minecraftVersion = "1.21.11"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-1.21.11")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-26.1")
         }
 
         runs {
