@@ -2,7 +2,6 @@ package dev.worldgen.tectonic.config.state;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.Tectonic;
 import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 
@@ -16,9 +15,10 @@ public class ConfigState {
         Islands.CODEC.fieldOf("islands").orElse(Islands.DEFAULT).forGetter(state -> state.islands),
         Oceans.CODEC.fieldOf("oceans").orElse(Oceans.DEFAULT).forGetter(state -> state.oceans),
         Biomes.CODEC.fieldOf("biomes").orElse(Biomes.DEFAULT).forGetter(state -> state.biomes),
-        Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves)
+        Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves),
+        Experimental.CODEC.fieldOf("experimental").orElse(Experimental.DEFAULT).forGetter(state -> state.experimental)
     ).apply(instance, ConfigState::new));
-    public static final Codec<ConfigState> CODEC = Tectonic.withAlternative(BASE_CODEC, V2ConfigState.CODEC, V2ConfigState::upgrade);
+    public static final Codec<ConfigState> CODEC = Codec.withAlternative(BASE_CODEC, V2ConfigState.CODEC, V2ConfigState::upgrade);
 
     public General general;
     public GlobalTerrain globalTerrain;
@@ -27,8 +27,9 @@ public class ConfigState {
     public Oceans oceans;
     public Biomes biomes;
     public Caves caves;
+    public Experimental experimental;
 
-    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves) {
+    public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves, Experimental experimental) {
         this.general = general;
         this.globalTerrain = globalTerrain;
         this.continents = continents;
@@ -36,6 +37,7 @@ public class ConfigState {
         this.oceans = oceans;
         this.biomes = biomes;
         this.caves = caves;
+        this.experimental = experimental;
 
         if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
             this.globalTerrain.heightLimits = HeightLimits.INCREASED_HEIGHT;
@@ -51,6 +53,7 @@ public class ConfigState {
             case "lava_tunnels" -> this.globalTerrain.lavaTunnels ? 1 : 0;
 
             case "ocean_offset" -> this.continents.oceanOffset;
+            case "alternate_erosion_scale" -> this.continents.erosionScale * 4;
             case "underground_rivers" -> this.continents.undergroundRivers ? -1 : 0;
             case "flat_terrain_skew" -> this.continents.flatTerrainSkew;
             case "rolling_hills" -> this.continents.rollingHills ? 1 : 0;
@@ -73,9 +76,9 @@ public class ConfigState {
 
     public NoiseState getNoiseState(String option) {
         return switch (option) {
-            case "continents" -> new NoiseState(continents.continentsScale, 1, 0);
+            case "continents" -> new NoiseState(continents.continentsScale, 1, 0, this.experimental.alternateErosionScaling);
             case "island" -> this.islands.noise;
-            case "erosion" -> new NoiseState(continents.erosionScale, 1, 0);
+            case "erosion" -> new NoiseState(continents.erosionScale, 1, 0, this.experimental.alternateErosionScaling);
             case "ridge" -> new NoiseState(continents.ridgeScale, 1, 0);
             case "temperature" -> this.biomes.temperature;
             case "vegetation" -> this.biomes.vegetation;
@@ -300,6 +303,25 @@ public class ConfigState {
             this.noodleAdditive = noodleAdditive;
             this.spaghettiEnabled = spaghettiEnabled;
             this.carversEnabled = carversEnabled;
+        }
+    }
+    
+    public static class Experimental {
+        public static final boolean ALTERNATE_EROSION_SCALING = false;
+        public static final boolean ALTERNATE_CONTINENTS_SCALING = false;
+        
+        public static final Experimental DEFAULT = new Experimental(ALTERNATE_EROSION_SCALING, ALTERNATE_CONTINENTS_SCALING);
+        public static final Codec<Experimental> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.BOOL.optionalFieldOf("alternate_erosion_scaling", ALTERNATE_EROSION_SCALING).forGetter(e -> e.alternateErosionScaling),
+            Codec.BOOL.optionalFieldOf("alternate_continents_scaling", ALTERNATE_CONTINENTS_SCALING).forGetter(e -> e.alternateContinentsScaling)
+        ).apply(i, Experimental::new));
+        
+        public boolean alternateErosionScaling;
+        public boolean alternateContinentsScaling;
+        
+        public Experimental(boolean alternateErosionScaling, boolean alternateContinentsScaling) {
+            this.alternateErosionScaling = alternateErosionScaling;
+            this.alternateContinentsScaling = alternateContinentsScaling;
         }
     }
 }

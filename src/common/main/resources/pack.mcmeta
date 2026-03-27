@@ -2,10 +2,10 @@
     "pack": {
         "supported_formats": [
             15,
-            99
+            999
         ],
         "min_format": 15,
-        "max_format": 99,
+        "max_format": 999,
         "description": "",
         "pack_format": 15
     }

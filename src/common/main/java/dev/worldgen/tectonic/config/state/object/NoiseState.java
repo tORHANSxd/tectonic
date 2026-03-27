@@ -9,11 +9,20 @@ public class NoiseState {
     public double scale;
     public double multiplier;
     public double offset;
+    public boolean smootherScaling;
 
     public NoiseState(double scale, double multiplier, double offset) {
         this.scale = scale;
         this.multiplier = multiplier;
         this.offset = offset;
+        this.smootherScaling = false;
+    }
+    
+    public NoiseState(double scale, double multiplier, double offset, boolean smootherScaling) {
+        this.scale = scale;
+        this.multiplier = multiplier;
+        this.offset = offset;
+        this.smootherScaling = smootherScaling;
     }
 
     public static MapCodec<NoiseState> codec(String name) {

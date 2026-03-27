@@ -1,37 +1,26 @@
 plugins {
     kotlin("jvm") version "2.1.21"
-    id("earth.terrarium.cloche") version "0.17.1"
+    id("earth.terrarium.cloche") version "0.18.8"
 }
 
 repositories {
+    cloche.librariesMinecraft()
+    mavenCentral()
     cloche {
+        main()
         mavenNeoforgedMeta()
         mavenNeoforged()
-        mavenForge()
         mavenFabric()
-        mavenParchment()
-        librariesMinecraft()
-        main()
     }
-    mavenLocal()
-    mavenCentral()
     maven("https://api.modrinth.com/maven")
     maven("https://maven.terraformersmc.com/")
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.19"
+version = "3.0.20"
+val lithostitchedVersion = "1.6.3"
 
 cloche {
-    targets.all {
-        mappings {
-            official()
-            custom(minecraftVersion.map {
-                project.dependencies.create(files("mappings/$it.tiny"))
-            })
-        }
-    }
-
     metadata {
         modId = "tectonic"
         name = "Tectonic"
@@ -60,28 +49,35 @@ cloche {
             dependencies {
                 dependency {
                     modId = "lithostitched"
-                    version("1.4.11")
+                    version("1.6.0")
                 }
             }
         }
     }
 
-    val sharedOld = common("shared:1.21.1") {
-        mixins.from(file("src/shared/1.21.1/main/tectonic_1.21.1.mixins.json"))
+    val sharedOld = common("shared:21.1") {
+        mixins.from(file("src/shared/21.1/main/tectonic.21.1.mixins.json"))
     }
-    val sharedNew = common("shared:1.21.11") {
-        mixins.from(file("src/shared/1.21.11/main/tectonic_1.21.11.mixins.json"))
+    val sharedNew = common("shared:26.1") {
+        mixins.from(file("src/shared/26.1/main/tectonic.26.1.mixins.json"))
     }
 
-    fabric("fabric:1.21.1") {
+    fabric("fabric:21.1") {
         dependsOn(sharedOld)
 
-        loaderVersion = "0.17.3"
+        loaderVersion = "0.18.5"
         minecraftVersion = "1.21.1"
+
+        mappings {
+            official()
+            custom(minecraftVersion.map {
+                project.dependencies.create(files("mappings/$it.tiny"))
+            })
+        }
 
         dependencies {
             fabricApi("0.116.1")
-            modImplementation("maven.modrinth:lithostitched:1.5.2-fabric-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-21.1")
             modImplementation("com.terraformersmc:modmenu:11.0.3")
         }
 
@@ -101,17 +97,17 @@ cloche {
         }
     }
 
-    fabric("fabric:1.21.11") {
+    fabric("fabric:26.1") {
         dependsOn(sharedNew)
 
-        loaderVersion = "0.18.2"
-        minecraftVersion = "1.21.11"
+        loaderVersion = "0.18.5"
+        minecraftVersion = "26.1"
 
         dependencies {
-            fabricApi("0.139.4")
-            modImplementation("maven.modrinth:lithostitched:1.5.2+beta2-fabric-1.21.11")
-            modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
-        } //accessWidenFabric1218CommonMinecraft
+            fabricApi("0.144.3")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-fabric-26.1")
+            modImplementation("com.terraformersmc:modmenu:18.0.0-alpha.8")
+        }
 
         includedClient()
         runs {
@@ -129,14 +125,21 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.1") {
+    neoforge("neoforge:21.1") {
         dependsOn(sharedOld)
 
-        loaderVersion = "21.1.209"
+        loaderVersion = "21.1.222"
         minecraftVersion = "1.21.1"
 
+        mappings {
+            official()
+            custom(minecraftVersion.map {
+                project.dependencies.create(files("mappings/$it.tiny"))
+            })
+        }
+
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.2-neoforge-1.21.1")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-21.1")
         }
 
         runs {
@@ -145,14 +148,14 @@ cloche {
         }
     }
 
-    neoforge("neoforge:1.21.11") {
+    neoforge("neoforge:26.1") {
         dependsOn(sharedNew)
 
-        loaderVersion = "21.11.12-beta"
-        minecraftVersion = "1.21.11"
+        loaderVersion = "26.1.0.7-beta"
+        minecraftVersion = "26.1"
 
         dependencies {
-            modImplementation("maven.modrinth:lithostitched:1.5.5-neoforge-1.21.11")
+            modImplementation("maven.modrinth:lithostitched:$lithostitchedVersion-neoforge-26.1")
         }
 
         runs {

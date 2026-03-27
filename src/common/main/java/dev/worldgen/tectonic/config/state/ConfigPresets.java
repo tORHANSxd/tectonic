@@ -13,7 +13,8 @@ public interface ConfigPresets {
         ConfigState.Islands.DEFAULT,
         ConfigState.Oceans.DEFAULT,
         ConfigState.Biomes.DEFAULT,
-        ConfigState.Caves.DEFAULT
+        ConfigState.Caves.DEFAULT,
+        ConfigState.Experimental.DEFAULT
     );
 
     ConfigState LARGE_BIOMES = new ConfigState(
@@ -27,7 +28,8 @@ public interface ConfigPresets {
             new NoiseState(0.06, 1.1, 0),
             new NoiseState(0.06, 1.1, 0)
         ),
-        ConfigState.Caves.DEFAULT
+        ConfigState.Caves.DEFAULT,
+        ConfigState.Experimental.DEFAULT
     );
 
     ConfigState DESERTED = new ConfigState(
@@ -41,7 +43,8 @@ public interface ConfigPresets {
             new NoiseState(0, 0, 1),
             NoiseState.DEFAULT
         ),
-        ConfigState.Caves.DEFAULT
+        ConfigState.Caves.DEFAULT,
+        ConfigState.Experimental.DEFAULT
     );
 
     ConfigState FROZEN_WASTELAND = new ConfigState(
@@ -72,7 +75,43 @@ public interface ConfigPresets {
             new NoiseState(0, 0, -0.69),
             new NoiseState(0.15, 0.1, -0.1)
         ),
-        ConfigState.Caves.DEFAULT
+        ConfigState.Caves.DEFAULT,
+        ConfigState.Experimental.DEFAULT
+    );
+    
+    ConfigState OVERKILL = new ConfigState(
+        ConfigState.MINOR_VERSION,
+        new ConfigState.General(
+            true,
+            512
+        ),
+        new ConfigState.GlobalTerrain(
+            2.5,
+            1.6,
+            new HeightLimits(-64, 768),
+            false,
+            true
+        ),
+        new ConfigState.Continents(
+            -0.5,
+            0.1,
+            0.08,
+            0.2,
+            false,
+            false,
+            false,
+            0.5,
+            false,
+            false
+        ),
+        ConfigState.Islands.DEFAULT,
+        ConfigState.Oceans.DEFAULT,
+        new ConfigState.Biomes(
+            new NoiseState(0.1, 1.1, 0),
+            new NoiseState(0.1, 1.1, -0.2)
+        ),
+        ConfigState.Caves.DEFAULT,
+        new ConfigState.Experimental(true, true)
     );
 
     static void acceptPresets(TriConsumer<String, ConfigState, Integer> consumer) {
@@ -80,5 +119,6 @@ public interface ConfigPresets {
         consumer.accept("large_biomes", ConfigPresets.LARGE_BIOMES, 0x88ff99);
         consumer.accept("deserted", ConfigPresets.DESERTED, 0xe2ca76);
         consumer.accept("frozen_wasteland", ConfigPresets.FROZEN_WASTELAND, 0xc1eaff);
+        consumer.accept("overkill", ConfigPresets.OVERKILL, 0xEA6F6F);
     }
 }
