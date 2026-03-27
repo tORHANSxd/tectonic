@@ -14,6 +14,7 @@ import static dev.worldgen.tectonic.config.state.ConfigState.General.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.GlobalTerrain.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.Islands.*;
 import static dev.worldgen.tectonic.config.state.ConfigState.Oceans.*;
+import static dev.worldgen.tectonic.config.state.ConfigState.Experimental.*;
 
 public interface ConfigListBuilder {
     void addCategory(DisplayMode displayMode, String name, Font font);
@@ -80,6 +81,9 @@ public interface ConfigListBuilder {
         this.addBoolean(DisplayMode.ALL, "spaghetti_enabled", bool -> state.caves.spaghettiEnabled = bool, state.caves.spaghettiEnabled, SPAGHETTI_ENABLED);
         this.addOverlay(DisplayMode.ALL, "carvers_enabled", bool -> state.caves.carversEnabled = bool, state.caves.carversEnabled, CARVERS_ENABLED);
         this.addBoolean(DisplayMode.ALL, "lava_tunnels", bool -> state.globalTerrain.lavaTunnels = bool, state.globalTerrain.lavaTunnels, LAVA_TUNNELS);
+        
+        this.addCategory(DisplayMode.MOD_ONLY, "experimental", font);
+        this.addBoolean(DisplayMode.MOD_ONLY, "alternate_erosion_scaling", bool -> state.experimental.alternateErosionScaling = bool, state.experimental.alternateErosionScaling, ALTERNATE_EROSION_SCALING);
     }
     
     static Component text(String name) {

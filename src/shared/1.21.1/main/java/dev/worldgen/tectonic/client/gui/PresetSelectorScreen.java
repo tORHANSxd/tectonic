@@ -1,5 +1,6 @@
 package dev.worldgen.tectonic.client.gui;
 
+import dev.worldgen.lithostitched.impl.LithostitchedPlatform;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.config.state.ConfigPresets;
 import dev.worldgen.tectonic.config.state.ConfigState;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PresetSelectorScreen extends Screen {
     private final ConfigScreen parent;
@@ -53,6 +55,13 @@ public class PresetSelectorScreen extends Screen {
     }
 
     public static Component text(String name) {
+        if (Objects.equals(name, "overkill")) {
+            if (LithostitchedPlatform.isModLoaded("distant_horizons")) {
+                name = "overkill.dh";
+            } else if (LithostitchedPlatform.isModLoaded("voxy")) {
+                name = "overkill.voxy";
+            }
+        }
         return Component.translatable("preset.tectonic." + name);
     }
 

@@ -77,7 +77,7 @@ cloche {
     fabric("fabric:1.21.1") {
         dependsOn(sharedOld)
 
-        loaderVersion = "0.17.3"
+        loaderVersion = "0.18.2"
         minecraftVersion = "1.21.1"
 
         dependencies {

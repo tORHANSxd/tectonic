@@ -99,13 +99,16 @@
   "config.tectonic.option.lava_tunnels.tooltip": "Rare, deep underground tunnels of lava sometimes generate at the bottom of the world.",
 
   "config.tectonic.category.experimental": "Experimental",
-  "config.tectonic.option.experimental_enabled": "Enabled",
-  "config.tectonic.option.experimental_enabled.tooltip": "Toggles on experimental terrain features that rely on mod-exclusive tech. Proceed with caution!",
+  "config.tectonic.option.alternate_erosion_scaling": "Alternate Erosion Scaling",
+  "config.tectonic.option.alternate_erosion_scaling.tooltip": "Uses an alternative method to scaling the erosion noise, improving terrain near mountain slopes.",
 
   "preset.tectonic.title": "Presets",
 
   "preset.tectonic.default": "Default",
   "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
-  "preset.tectonic.frozen_wasteland": "Frozen Wasteland"
+  "preset.tectonic.frozen_wasteland": "Frozen Wasteland",
+  "preset.tectonic.overkill": "Overkill",
+  "preset.tectonic.overkill.dh": "i use distant horizons btw",
+  "preset.tectonic.overkill.voxy": "i use voxy btw"
 }

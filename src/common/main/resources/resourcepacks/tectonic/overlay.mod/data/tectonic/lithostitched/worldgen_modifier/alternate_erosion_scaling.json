@@ -1,0 +1,67 @@
+{
+  "predicate": {
+    "type": "tectonic:config",
+    "key": "alternate_erosion_scaling"
+  },
+  "type": "lithostitched:wrap_density_function",
+  "target_function": "tectonic:__constants/noise/erosion_raw",
+  "wrapper_function": {
+    "type": "lithostitched:shift",
+    "input": {
+      "type": "lithostitched:wrapped_marker"
+    },
+    "shift_x": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": -1,
+        "argument2": {
+          "type": "lithostitched:axis",
+          "axis": "x"
+        }
+      },
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": 1,
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": -1,
+          "argument2": {
+            "type": "tectonic:invert",
+            "argument": {
+              "type": "lithostitched:axis",
+              "axis": "x"
+            }
+          }
+        }
+      }
+    },
+    "shift_y": 0,
+    "shift_z": {
+      "type": "minecraft:add",
+      "argument1": {
+        "type": "minecraft:mul",
+        "argument1": -1,
+        "argument2": {
+          "type": "lithostitched:axis",
+          "axis": "z"
+        }
+      },
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": 1,
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": -1,
+          "argument2": {
+            "type": "tectonic:invert",
+            "argument": {
+              "type": "lithostitched:axis",
+              "axis": "z"
+            }
+          }
+        }
+      }
+    }
+  }
+}

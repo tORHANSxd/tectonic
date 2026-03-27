@@ -19,11 +19,9 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * Exports the datapack config
- */
+// TODO: Finish this
 public class DatapackToolkitExporter implements ConfigListBuilder {
-	private static final boolean DISABLED = false;
+	private static final boolean DISABLED = true;
 	
 	private final JsonObject meta = new JsonObject();
 	private final JsonArray widgets = new JsonArray();

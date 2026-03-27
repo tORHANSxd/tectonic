@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.api.registry.LithostitchedRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.lithostitched.ConfigLoadPredicate;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
@@ -22,12 +23,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.jarcontents.JarContents;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.resource.JarContentsPackResources;
 import net.neoforged.neoforgespi.language.IModInfo;
@@ -42,13 +39,8 @@ import static dev.worldgen.tectonic.Tectonic.id;
 
 @Mod(Tectonic.MOD_ID)
 public class TectonicNeoforge {
-    public static final DeferredRegister<MapCodec<? extends ICondition>> CONDITION_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, Tectonic.MOD_ID);
-    public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<ConfigResourceCondition>> TECTONIC = CONDITION_TYPES.register("config", () -> ConfigResourceCondition.CODEC);
-
     public TectonicNeoforge(IEventBus bus) {
         Tectonic.init(FMLPaths.GAMEDIR.get());
-
-        CONDITION_TYPES.register(bus);
 
         bus.addListener(this::registerDensityFunctionTypes);
         bus.addListener(this::registerEnabledPacks);
@@ -64,6 +56,9 @@ public class TectonicNeoforge {
         });
         event.register(LithostitchedRegistries.MODIFIER_TYPE, helper -> {
             helper.register(id("set_height_limits"), SetHeightLimitsModifier.CODEC);
+        });
+        event.register(LithostitchedRegistries.LOAD_PREDICATE_TYPE, helper -> {
+            helper.register(id("config"), ConfigLoadPredicate.CODEC);
         });
     }
 
