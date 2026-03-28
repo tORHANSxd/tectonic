@@ -5,10 +5,16 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
+<<<<<<< Updated upstream
 MOD_VERSION = "3.0.18"
 CHANGELOG = """
 - Updated to 1.21.11.
 - Updated surface rules for Clifftree.
+=======
+MOD_VERSION = "3.0.21"
+CHANGELOG = """
+- Fixed crashing when River Lanterns were enabled.
+>>>>>>> Stashed changes
 """
 UPLOAD_VERSIONS = [
     ("fabric", "1.21.1"),

@@ -20,7 +20,12 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
+<<<<<<< Updated upstream
 version = "3.0.19"
+=======
+version = "3.0.21"
+val lithostitchedVersion = "1.6.3"
+>>>>>>> Stashed changes
 
 cloche {
     targets.all {
