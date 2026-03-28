@@ -45,8 +45,8 @@
   "config.tectonic.option.jungle_pillars.tooltip": "Some jungles generate massive pillars that can extend upwards of a hundred blocks tall.",
 
   "config.tectonic.category.islands": "Islands",
-  "config.tectonic.option.enabled": "Enabled",
-  "config.tectonic.option.enabled.tooltip": "Islands with vanilla mountainous terrain dot the oceans.\n§6With Terralith installed, these spawn volcanoes!",
+  "config.tectonic.option.islands_enabled": "Enabled",
+  "config.tectonic.option.islands_enabled.tooltip": "Islands with vanilla mountainous terrain dot the oceans.\n§6With Terralith installed, these spawn volcanoes!",
   "config.tectonic.option.noise_scale": "Noise Scale: %s",
   "config.tectonic.option.noise_scale.tooltip": "Horizontally scales islands. Lower values = larger islands and oceans between them.",
   "config.tectonic.option.noise_multiplier": "Noise Multiplier: %s",
@@ -98,15 +98,19 @@
   "config.tectonic.option.lava_tunnels": "Lava Tunnels",
   "config.tectonic.option.lava_tunnels.tooltip": "Rare, deep underground tunnels of lava sometimes generate at the bottom of the world.",
 
+  "config.tectonic.category.experimental": "Experimental",
+  "config.tectonic.option.alternate_erosion_scaling": "Alternate Erosion Scaling",
+  "config.tectonic.option.alternate_erosion_scaling.tooltip": "Uses an alternative method to scaling the erosion noise, improving terrain near mountain slopes.\n§cNot compatible with C2ME's hardware acceleration!",
+  "config.tectonic.option.alternate_continents_scaling": "Alternate Continents Scaling",
+  "config.tectonic.option.alternate_continents_scaling.tooltip": "Uses an alternative method to scaling the continents noise, improving terrain near coasts.\n§cNot compatible with C2ME's hardware acceleration!",
+
   "preset.tectonic.title": "Presets",
 
   "preset.tectonic.default": "Default",
   "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
   "preset.tectonic.frozen_wasteland": "Frozen Wasteland",
-
-  "pack_name.tectonic.tectonic/overlay.mod": "Tectonic mod-reliant data",
-  "pack_name.tectonic.tectonic/overlay.terratonic": "Terralith-Tectonic compat data",
-  "pack_name.tectonic.tectonic/overlay.increased_height": "Tectonic 640 build limit",
-  "pack_name.tectonic.tectonic/overlay.increased_height_terratonic": "Tectonic 640 build limit"
+  "preset.tectonic.overkill": "Overkill",
+  "preset.tectonic.overkill.dh": "i use distant horizons btw",
+  "preset.tectonic.overkill.voxy": "i use voxy btw"
 }

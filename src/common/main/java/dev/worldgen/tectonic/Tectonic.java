@@ -1,17 +1,18 @@
 package dev.worldgen.tectonic;
 
-import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.worldgen.densityfunction.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.DensityFunction;
 import net.msrandom.multiplatform.annotations.Expect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 public class Tectonic {
     public static final String MOD_ID = "tectonic";
@@ -25,16 +26,20 @@ public class Tectonic {
      */
     public static int BLENDING_VERSION = 1;
     public static String BLENDING_KEY = "tectonic:blending_version";
+    public static Path FOLDER;
 
     public static void init(Path folder) {
-        ConfigHandler.load(folder.resolve("tectonic.json"));
+        FOLDER = folder;
+        ConfigHandler.load(folder.resolve("config").resolve("tectonic.json"));
     }
 
-    @Expect
-    public static Identifier idVanilla(String name);
+    public static Identifier idVanilla(String name) {
+        return Identifier.withDefaultNamespace(name);
+    }
 
-    @Expect
-    public static Identifier id(String name);
+    public static Identifier id(String name) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, name);
+    }
 
     @Expect
     public static int getBlendingVersion(CompoundTag tag);
@@ -42,8 +47,11 @@ public class Tectonic {
     @Expect
     public static boolean canRunCommand(CommandSourceStack stack);
 
-    public static <T, U> Codec<T> withAlternative(final Codec<T> primary, final Codec<U> alternative, final Function<U, T> converter) {
-        return Codec.either(primary, alternative).xmap(either -> either.map(v -> v, converter), Either::left);
+    public static void registerDensityFunctionTypes(BiConsumer<String, MapCodec<? extends DensityFunction>> consumer) {
+        consumer.accept("config_clamp", ConfigClamp.DATA_CODEC);
+        consumer.accept("config_constant", ConfigConstant.DATA_CODEC);
+        consumer.accept("config_noise", ConfigNoise.DATA_CODEC);
+        consumer.accept("invert", Invert.DATA_CODEC);
     }
 
     public static boolean isEnabled() {

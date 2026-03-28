@@ -44,7 +44,7 @@ public record V1ConfigState(boolean modEnabled, Features features, Experimental 
 
 
 
-    public record Experimental(double horizontalMountainScale, boolean increasedHeight, double terrainScale) {
+    private record Experimental(double horizontalMountainScale, boolean increasedHeight, double terrainScale) {
         public static final Codec<Experimental> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("horizontal_mountain_scale").orElse(0.25).forGetter(Experimental::horizontalMountainScale),
             Codec.BOOL.fieldOf("increased_height").orElse(false).forGetter(Experimental::increasedHeight),

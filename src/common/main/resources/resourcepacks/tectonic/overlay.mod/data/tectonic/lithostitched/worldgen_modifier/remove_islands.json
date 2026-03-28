@@ -3,18 +3,6 @@
     "type": "tectonic:config",
     "key": "disable_islands"
   },
-  "fabric:load_conditions": [
-    {
-      "condition": "tectonic:config",
-      "key": "disable_islands"
-    }
-  ],
-  "neoforge:conditions": [
-    {
-      "type": "tectonic:config",
-      "key": "disable_islands"
-    }
-  ],
   "type": "lithostitched:wrap_density_function",
   "target_function": "tectonic:noise/raw_continents",
   "wrapper_function": {
