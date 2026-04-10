@@ -6,8 +6,10 @@ import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 
 public class ConfigState {
+    public static final String NOTICE = "Tectonic has a config screen that explains every setting if you go to the in-game mod menu! You can also find config info here -> https://github.com/Apollounknowndev/tectonic/wiki/Config";
     public static final int MINOR_VERSION = 1;
     public static final Codec<ConfigState> BASE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.STRING.fieldOf("__notice").orElse(NOTICE).forGetter(state -> NOTICE),
         Codec.INT.fieldOf("minor_version").orElse(0).forGetter(state -> MINOR_VERSION),
         General.CODEC.fieldOf("general").forGetter(state -> state.general),
         GlobalTerrain.CODEC.fieldOf("global_terrain").orElse(GlobalTerrain.DEFAULT).forGetter(state -> state.globalTerrain),
@@ -17,7 +19,7 @@ public class ConfigState {
         Biomes.CODEC.fieldOf("biomes").orElse(Biomes.DEFAULT).forGetter(state -> state.biomes),
         Caves.CODEC.fieldOf("caves").orElse(Caves.DEFAULT).forGetter(state -> state.caves),
         Experimental.CODEC.fieldOf("experimental").orElse(Experimental.DEFAULT).forGetter(state -> state.experimental)
-    ).apply(instance, ConfigState::new));
+    ).apply(instance, ConfigState::create));
     public static final Codec<ConfigState> CODEC = Codec.withAlternative(BASE_CODEC, V2ConfigState.CODEC, V2ConfigState::upgrade);
 
     public General general;
@@ -28,6 +30,10 @@ public class ConfigState {
     public Biomes biomes;
     public Caves caves;
     public Experimental experimental;
+    
+    public static ConfigState create(String ignored, int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves, Experimental experimental) {
+        return new ConfigState(minorVersion, general, globalTerrain, continents, islands, oceans, biomes, caves, experimental);
+    }
 
     public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves, Experimental experimental) {
         this.general = general;
@@ -94,6 +100,7 @@ public class ConfigState {
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
             case "river_ice" -> this.continents.riverIce;
+            case "ore_fix" -> this.caves.oreFix;
             case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
@@ -272,8 +279,9 @@ public class ConfigState {
         public static final double NOODLE_ADDITIVE = -0.075;
         public static final boolean SPAGHETTI_ENABLED = true;
         public static final boolean CARVERS_ENABLED = true;
+        public static final boolean ORE_FIX = false;
 
-        public static final Caves DEFAULT = new Caves(DEPTH_CUTOFF_START, DEPTH_CUTOFF_SIZE, CHEESE_ENABLED, CHEESE_ADDITIVE, NOODLE_ENABLED, NOODLE_ADDITIVE, SPAGHETTI_ENABLED, CARVERS_ENABLED);
+        public static final Caves DEFAULT = new Caves(DEPTH_CUTOFF_START, DEPTH_CUTOFF_SIZE, CHEESE_ENABLED, CHEESE_ADDITIVE, NOODLE_ENABLED, NOODLE_ADDITIVE, SPAGHETTI_ENABLED, CARVERS_ENABLED, ORE_FIX);
         public static final Codec<Caves> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("depth_cutoff_start").orElse(DEPTH_CUTOFF_START).forGetter(caves -> caves.depthCutoffStart),
             Codec.DOUBLE.fieldOf("depth_cutoff_size").orElse(DEPTH_CUTOFF_SIZE).forGetter(caves -> caves.depthCutoffSize),
@@ -282,7 +290,8 @@ public class ConfigState {
             Codec.BOOL.fieldOf("noodle_enabled").orElse(NOODLE_ENABLED).forGetter(caves -> caves.noodleEnabled),
             Codec.DOUBLE.fieldOf("noodle_additive").orElse(NOODLE_ADDITIVE).forGetter(caves -> caves.noodleAdditive),
             Codec.BOOL.fieldOf("spaghetti_enabled").orElse(SPAGHETTI_ENABLED).forGetter(caves -> caves.spaghettiEnabled),
-            Codec.BOOL.fieldOf("carvers_enabled").orElse(CARVERS_ENABLED).forGetter(caves -> caves.carversEnabled)
+            Codec.BOOL.fieldOf("carvers_enabled").orElse(CARVERS_ENABLED).forGetter(caves -> caves.carversEnabled),
+            Codec.BOOL.fieldOf("ore_fix").orElse(ORE_FIX).forGetter(caves -> caves.oreFix)
         ).apply(instance, Caves::new));
 
         public double depthCutoffStart;
@@ -293,8 +302,9 @@ public class ConfigState {
         public double noodleAdditive;
         public boolean spaghettiEnabled;
         public boolean carversEnabled;
+        public boolean oreFix;
 
-        public Caves(double depthCutoffStart, double depthCutoffSize, boolean cheeseEnabled, double cheeseAdditive, boolean noodleEnabled, double noodleAdditive, boolean spaghettiEnabled, boolean carversEnabled) {
+        public Caves(double depthCutoffStart, double depthCutoffSize, boolean cheeseEnabled, double cheeseAdditive, boolean noodleEnabled, double noodleAdditive, boolean spaghettiEnabled, boolean carversEnabled, boolean oreFix) {
             this.depthCutoffStart = depthCutoffStart;
             this.depthCutoffSize = depthCutoffSize;
             this.cheeseEnabled = cheeseEnabled;
@@ -303,6 +313,7 @@ public class ConfigState {
             this.noodleAdditive = noodleAdditive;
             this.spaghettiEnabled = spaghettiEnabled;
             this.carversEnabled = carversEnabled;
+            this.oreFix = oreFix;
         }
     }
     

@@ -27,6 +27,7 @@ public class TectonicFabric implements ModInitializer {
         ResourceConditions.register(ConfigResourceCondition.TYPE);
 
         Tectonic.registerDensityFunctionTypes((name, codec) -> Registry.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, id(name), codec));
+        Tectonic.registerPlacementModifierTypes((name, type) -> Registry.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, id(name), type));
         Registry.register(LithostitchedBuiltInRegistries.MODIFIER_TYPE, id("set_height_limits"), SetHeightLimitsModifier.CODEC);
         Registry.register(LithostitchedBuiltInRegistries.LOAD_PREDICATE_TYPE, id("config"), ConfigLoadPredicate.CODEC);
 

@@ -55,6 +55,18 @@
         ]
       },
       {
+        "directory": "overlay.ore_fix",
+        "formats": [1, 999],
+        "min_format": 1,
+        "max_format": 999,
+        "neoforge:conditions": [
+          {
+            "type": "tectonic:config",
+            "key": "ore_fix"
+          }
+        ]
+      },
+      {
         "directory": "overlay.ultrasmooth",
         "formats": [1, 999],
         "min_format": 1,
@@ -99,6 +111,13 @@
         "condition": {
           "condition": "tectonic:config",
           "key": "no_carvers"
+        }
+      },
+      {
+        "directory": "overlay.ore_fix",
+        "condition": {
+          "condition": "tectonic:config",
+          "key": "ore_fix"
         }
       },
       {

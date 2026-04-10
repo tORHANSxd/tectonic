@@ -81,6 +81,7 @@ public interface ConfigListBuilder {
         this.addBoolean(DisplayMode.ALL, "spaghetti_enabled", bool -> state.caves.spaghettiEnabled = bool, state.caves.spaghettiEnabled, SPAGHETTI_ENABLED);
         this.addOverlay(DisplayMode.ALL, "carvers_enabled", bool -> state.caves.carversEnabled = bool, state.caves.carversEnabled, CARVERS_ENABLED);
         this.addBoolean(DisplayMode.ALL, "lava_tunnels", bool -> state.globalTerrain.lavaTunnels = bool, state.globalTerrain.lavaTunnels, LAVA_TUNNELS);
+        this.addBoolean(DisplayMode.MOD_ONLY, "ore_fix", bool -> state.caves.oreFix = bool, state.caves.oreFix, ORE_FIX);
         
         this.addCategory(DisplayMode.MOD_ONLY, "experimental", font);
         this.addBoolean(DisplayMode.MOD_ONLY, "alternate_erosion_scaling", bool -> state.experimental.alternateErosionScaling = bool, state.experimental.alternateErosionScaling, ALTERNATE_EROSION_SCALING);

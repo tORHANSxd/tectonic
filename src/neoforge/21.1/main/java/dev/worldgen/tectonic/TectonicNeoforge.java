@@ -9,6 +9,7 @@ import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
+import dev.worldgen.tectonic.worldgen.placementmodifier.HeightStabilizedCount;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
@@ -48,6 +49,9 @@ public class TectonicNeoforge {
             helper.register(id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
             helper.register(id("invert"), Invert.CODEC_HOLDER.codec());
+        });
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, helper -> {
+            helper.register(id("height_stabilized_count"), HeightStabilizedCount.TYPE);
         });
         event.register(LithostitchedRegistries.MODIFIER_TYPE, helper -> {
             helper.register(id("set_height_limits"), SetHeightLimitsModifier.CODEC);

@@ -3,10 +3,12 @@ package dev.worldgen.tectonic;
 import com.mojang.serialization.MapCodec;
 import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.worldgen.densityfunction.*;
+import dev.worldgen.tectonic.worldgen.placementmodifier.HeightStabilizedCount;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.msrandom.multiplatform.annotations.Expect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,10 @@ public class Tectonic {
         consumer.accept("config_constant", ConfigConstant.DATA_CODEC);
         consumer.accept("config_noise", ConfigNoise.DATA_CODEC);
         consumer.accept("invert", Invert.DATA_CODEC);
+    }
+    
+    public static void registerPlacementModifierTypes(BiConsumer<String, PlacementModifierType<?>> consumer) {
+        consumer.accept("height_stabilized_count", HeightStabilizedCount.TYPE);
     }
 
     public static boolean isEnabled() {

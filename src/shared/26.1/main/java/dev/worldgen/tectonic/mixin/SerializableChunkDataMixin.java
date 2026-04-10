@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.PalettedContainerFactory;
@@ -31,7 +30,7 @@ public abstract class SerializableChunkDataMixin {
     @Inject(method = "parse", at = @At("HEAD"))
     private static void tectonic$parse(LevelHeightAccessor heightAccessor, PalettedContainerFactory factory, CompoundTag nbt, CallbackInfoReturnable<SerializableChunkData> cir) {
         // Safe cast unless some mod does weird bs
-        if (!((ServerLevel)heightAccessor).dimension().equals(Level.OVERWORLD)) return;
+        if (!((Level)heightAccessor).dimension().equals(Level.OVERWORLD)) return;
 
         if (STATUSES_TO_SKIP_BLENDING.contains(ChunkStatus.byName(nbt.getStringOr("Status", "unknown")).toString())) return;
         if (nbt.getIntOr(Tectonic.BLENDING_KEY, 0) != Tectonic.BLENDING_VERSION) {
