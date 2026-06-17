@@ -17,6 +17,8 @@ UPLOAD_VERSIONS = [
     ("neoforge", "21.1"),
     ("fabric", "26.1"),
     ("neoforge", "26.1"),
+    ("fabric", "26.2"),
+    ("neoforge", "26.2"),
 ]
 
 DEPENDENCIES = [
@@ -44,7 +46,8 @@ if not MODRINTH_TOKEN:
     raise EnvironmentError("MODRINTH_TOKEN is unset!")
 MODRINTH_GAME_VERSIONS = {
     "21.1": ["1.21.1"],
-    "26.1": ["26.1"],
+    "26.1": ["26.1", "26.1.1", "26.1.2"],
+    "26.2": ["26.2"]
 }
 
 CURSEFORGE_TOKEN = os.getenv('TOKEN_CF')
@@ -53,7 +56,7 @@ if not CURSEFORGE_TOKEN:
 CURSEFORGE_URL = f"https://minecraft.curseforge.com/api/v1/projects/{CURSEFORGE_ID}/upload-file"
 CURSEFORGE_GAME_VERSIONS = {
     "21.1": [11779],
-    "26.1": [15933],
+    "26.1": [15933, 16021, 16082],
 }
 CURSEFORGE_LOADERS = {
     "fabric": 7499,

@@ -1,8 +1,9 @@
 package dev.worldgen.tectonic;
 
 import com.mojang.serialization.MapCodec;
+import dev.worldgen.apollib.config.ApollibConfigHolder;
 import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.worldgen.densityfunction.*;
+import dev.worldgen.tectonic.config.state.ConfigState;
 import dev.worldgen.tectonic.worldgen.placementmodifier.HeightStabilizedCount;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
@@ -29,10 +30,13 @@ public class Tectonic {
     public static int BLENDING_VERSION = 1;
     public static String BLENDING_KEY = "tectonic:blending_version";
     public static Path FOLDER;
+    
+    @Expect
+    public static final ApollibConfigHolder<ConfigState> CONFIG;
 
     public static void init(Path folder) {
         FOLDER = folder;
-        ConfigHandler.load(folder.resolve("config").resolve("tectonic.json"));
+        CONFIG.load();
     }
 
     public static Identifier idVanilla(String name) {
@@ -49,12 +53,8 @@ public class Tectonic {
     @Expect
     public static boolean canRunCommand(CommandSourceStack stack);
 
-    public static void registerDensityFunctionTypes(BiConsumer<String, MapCodec<? extends DensityFunction>> consumer) {
-        consumer.accept("config_clamp", ConfigClamp.DATA_CODEC);
-        consumer.accept("config_constant", ConfigConstant.DATA_CODEC);
-        consumer.accept("config_noise", ConfigNoise.DATA_CODEC);
-        consumer.accept("invert", Invert.DATA_CODEC);
-    }
+    @Expect
+    public static void registerDensityFunctionTypes(BiConsumer<String, MapCodec<? extends DensityFunction>> consumer);
     
     public static void registerPlacementModifierTypes(BiConsumer<String, PlacementModifierType<?>> consumer) {
         consumer.accept("height_stabilized_count", HeightStabilizedCount.TYPE);

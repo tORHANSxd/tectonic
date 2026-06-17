@@ -39,7 +39,7 @@ public interface ConfigListBuilder {
         this.addInteger(DisplayMode.MOD_ONLY, "snow_start_offset", 0, 256, 1, value -> state.general.snowStartOffset = value, state.general.snowStartOffset, SNOW_START_OFFSET);
 
         this.addCategory(DisplayMode.ALL, "global_terrain", font);
-        this.addDouble(DisplayMode.ALL, "vertical_scale", 0.75, 15, 0.005, value -> state.globalTerrain.verticalScale = value, state.globalTerrain.verticalScale, VERTICAL_SCALE);
+        this.addDouble(DisplayMode.ALL, "vertical_scale", 0.1, 15, 0.005, value -> state.globalTerrain.verticalScale = value, state.globalTerrain.verticalScale, VERTICAL_SCALE);
         this.addDouble(DisplayMode.ALL, "elevation_boost", 0, 1, 0.01, value -> state.globalTerrain.elevationBoost = value, state.globalTerrain.elevationBoost, ELEVATION_BOOST);
         this.addInteger(DisplayMode.ALL, "min_y", -2032, -64, 16, value -> state.globalTerrain.heightLimits.minY = value, state.globalTerrain.heightLimits.minY, HEIGHT_LIMITS.minY);
         this.addInteger(DisplayMode.ALL, "max_y", 256, 2032, 16, value -> state.globalTerrain.heightLimits.maxY = value, state.globalTerrain.heightLimits.maxY, HEIGHT_LIMITS.maxY);
