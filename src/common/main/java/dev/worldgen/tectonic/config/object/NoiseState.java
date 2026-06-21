@@ -1,4 +1,4 @@
-package dev.worldgen.tectonic.config.state.object;
+package dev.worldgen.tectonic.config.object;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

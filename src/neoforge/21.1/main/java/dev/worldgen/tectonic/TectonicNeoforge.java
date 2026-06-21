@@ -65,7 +65,7 @@ public class TectonicNeoforge {
     }
 
     private void registerEnabledPacks(final AddPackFindersEvent event) {
-        if (event.getPackType() == PackType.SERVER_DATA && ConfigHandler.getState().general.modEnabled) {
+        if (event.getPackType() == PackType.SERVER_DATA && Tectonic.CONFIG.getState().general.modEnabled) {
             Path resourcePath = ModList.get().getModFileById("tectonic").getFile().findResource("resourcepacks/tectonic");
 
             Pack dataPack = Pack.readMetaAndCreate(

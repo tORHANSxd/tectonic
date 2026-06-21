@@ -2,7 +2,7 @@ package dev.worldgen.tectonic.client.gui;
 
 import dev.worldgen.tectonic.client.ConfigListBuilder;
 import dev.worldgen.tectonic.client.gui.widget.SliderWidget;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.object.NoiseState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

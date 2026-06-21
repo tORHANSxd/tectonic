@@ -1,9 +1,9 @@
-package dev.worldgen.tectonic.config.state;
+package dev.worldgen.tectonic.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.state.object.HeightLimits;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.object.HeightLimits;
+import dev.worldgen.tectonic.config.object.NoiseState;
 
 public class V2ConfigState {
     public static final Codec<V2ConfigState> BASE_CODEC = RecordCodecBuilder.create(instance -> instance.group(

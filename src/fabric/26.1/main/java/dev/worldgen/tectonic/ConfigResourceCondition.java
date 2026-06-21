@@ -3,12 +3,9 @@ package dev.worldgen.tectonic;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditionType;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
-import org.jetbrains.annotations.Nullable;
 
 public record ConfigResourceCondition(String key) implements ResourceCondition {
 	public static final MapCodec<ConfigResourceCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -23,6 +20,6 @@ public record ConfigResourceCondition(String key) implements ResourceCondition {
 	
 	@Override
 	public boolean test(RegistryOps.RegistryInfoLookup lookup) {
-		return ConfigHandler.getState().test(this.key);
+		return Tectonic.CONFIG.getState().test(this.key);
 	}
 }

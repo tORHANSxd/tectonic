@@ -6,8 +6,7 @@ import dev.worldgen.lithostitched.Lithostitched;
 import dev.worldgen.lithostitched.api.predicate.LoadPredicate;
 import dev.worldgen.lithostitched.api.worldgen.modifier.WorldgenModifier;
 import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.object.HeightLimits;
+import dev.worldgen.tectonic.config.object.HeightLimits;
 import dev.worldgen.tectonic.mixin.DimensionTypeAccessor;
 import dev.worldgen.tectonic.mixin.NoiseSettingsAccessor;
 import net.minecraft.core.Holder;
@@ -31,7 +30,7 @@ public record SetHeightLimitsModifier(Optional<LoadPredicate> predicate, int pri
     public void apply(RegistryAccess registries) {
         if (!Tectonic.isEnabled()) return;
 
-        HeightLimits limits = ConfigHandler.getState().globalTerrain.heightLimits;
+        HeightLimits limits = Tectonic.CONFIG.getState().globalTerrain.heightLimits;
         if (limits.isVanilla()) return;
 
         // Set heights on dimension type

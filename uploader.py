@@ -5,16 +5,13 @@ import json
 # Per-mod: Update this for each mod!!!
 
 MOD_ID = "tectonic"
-MOD_VERSION = "3.0.22"
+MOD_VERSION = "3.0.25"
 CHANGELOG = """
-- Added `ore_fix` config option, which adjusts ore generation to be more consistent when below the usual minimum y value of -64.
-- Fixed a crash with some mods that query chunk data on the client like JourneyMap.
-- Fixed surface rules being broken with newer Clifftree versions.
-- Lithostitched is now correctly marked as a dependency on Modrinth and Curseforge.
+Fixed various issues with the new config file and config screen introduced in 3.0.23.
 """
 UPLOAD_VERSIONS = [
-    ("fabric", "21.1"),
-    ("neoforge", "21.1"),
+    #("fabric", "21.1"),
+    #("neoforge", "21.1"),
     ("fabric", "26.1"),
     ("neoforge", "26.1"),
     ("fabric", "26.2"),

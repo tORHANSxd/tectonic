@@ -1,6 +1,6 @@
 package dev.worldgen.tectonic.mixin;
 
-import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.Tectonic;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
@@ -18,8 +18,8 @@ public class StructurePieceMixin {
         argsOnly = true
     )
     private static BoundingBox tectonic$lowerOceanMonuments(BoundingBox boundingBox, StructurePieceType type) {
-        if (type == StructurePieceType.OCEAN_MONUMENT_BUILDING && ConfigHandler.getState().general.modEnabled) {
-            return boundingBox.moved(0, ConfigHandler.getState().oceans.monumentOffset, 0);
+        if (type == StructurePieceType.OCEAN_MONUMENT_BUILDING && Tectonic.CONFIG.getState().general.modEnabled) {
+            return boundingBox.moved(0, Tectonic.CONFIG.getState().oceans.monumentOffset, 0);
         }
         return boundingBox;
     }

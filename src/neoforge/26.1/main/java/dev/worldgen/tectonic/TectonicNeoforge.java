@@ -2,7 +2,6 @@ package dev.worldgen.tectonic;
 
 import dev.worldgen.lithostitched.api.registry.LithostitchedRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.ConfigLoadPredicate;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
@@ -21,7 +20,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.jarcontents.JarContents;
-import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -41,7 +39,7 @@ import static dev.worldgen.tectonic.Tectonic.id;
 @Mod(Tectonic.MOD_ID)
 public class TectonicNeoforge {
     public TectonicNeoforge(IEventBus bus) {
-        Tectonic.init(FMLPaths.GAMEDIR.get());
+        Tectonic.init();
 
         bus.addListener(this::registerDensityFunctionTypes);
         bus.addListener(this::registerEnabledPacks);
@@ -70,7 +68,7 @@ public class TectonicNeoforge {
     }
 
     private void registerEnabledPacks(final AddPackFindersEvent event) {
-        if (ConfigHandler.getState().general.modEnabled) {
+        if (Tectonic.CONFIG.getState().general.modEnabled) {
             addPackFinders(
                 event,
                 Identifier.fromNamespaceAndPath(Tectonic.MOD_ID, "resourcepacks/tectonic"),

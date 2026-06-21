@@ -1,7 +1,7 @@
-package dev.worldgen.tectonic.config.state;
+package dev.worldgen.tectonic.config;
 
-import dev.worldgen.tectonic.config.state.object.HeightLimits;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.object.HeightLimits;
+import dev.worldgen.tectonic.config.object.NoiseState;
 import org.apache.logging.log4j.util.TriConsumer;
 
 public interface ConfigPresets {

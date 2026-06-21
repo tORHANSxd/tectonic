@@ -14,7 +14,7 @@ public record ConfigResourceCondition(String key) implements ICondition {
 	
 	@Override
 	public boolean test(@NotNull IContext context) {
-		return ConfigHandler.getState().test(this.key);
+		return Tectonic.CONFIG.getState().test(this.key);
 	}
 	
 	@Override

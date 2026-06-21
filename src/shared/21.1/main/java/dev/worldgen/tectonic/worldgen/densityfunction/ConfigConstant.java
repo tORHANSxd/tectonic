@@ -18,7 +18,7 @@ public record ConfigConstant(double value) implements DensityFunction {
     public static KeyDispatchDataCodec<ConfigConstant> CODEC_HOLDER = KeyDispatchDataCodec.of(DATA_CODEC);
 
     public static ConfigConstant create(String key) {
-        return new ConfigConstant(ConfigHandler.getState().getValue(key));
+        return new ConfigConstant(Tectonic.CONFIG.getState().getValue(key));
     }
 
     @Override

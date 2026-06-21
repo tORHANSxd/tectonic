@@ -2,7 +2,6 @@ package dev.worldgen.tectonic;
 
 import dev.worldgen.lithostitched.api.registry.LithostitchedBuiltInRegistries;
 import dev.worldgen.tectonic.command.TectonicCommand;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.lithostitched.ConfigLoadPredicate;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import net.fabricmc.api.ModInitializer;
@@ -20,7 +19,7 @@ import static dev.worldgen.tectonic.Tectonic.id;
 public class TectonicFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        Tectonic.init(FabricLoader.getInstance().getGameDir());
+        Tectonic.init();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, _, _) -> TectonicCommand.register(dispatcher));
         
@@ -31,7 +30,7 @@ public class TectonicFabric implements ModInitializer {
         Registry.register(LithostitchedBuiltInRegistries.MODIFIER_TYPE, id("set_height_limits"), SetHeightLimitsModifier.CODEC);
         Registry.register(LithostitchedBuiltInRegistries.LOAD_PREDICATE_TYPE, id("config"), ConfigLoadPredicate.CODEC);
 
-        if (ConfigHandler.getState().general.modEnabled) {
+        if (Tectonic.CONFIG.getState().general.modEnabled) {
             ResourceLoader.registerBuiltinPack(
                 id("tectonic"),
                 FabricLoader.getInstance().getModContainer("tectonic").get(),

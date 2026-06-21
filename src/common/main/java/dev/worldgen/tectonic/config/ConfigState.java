@@ -1,12 +1,10 @@
-package dev.worldgen.tectonic.config.state;
+package dev.worldgen.tectonic.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.apollib.codec.ApollibCodecs;
-import dev.worldgen.apollib.codec.CommentedMapCodec;
 import dev.worldgen.apollib.config.ApollibCopyable;
-import dev.worldgen.tectonic.config.state.object.HeightLimits;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.object.HeightLimits;
+import dev.worldgen.tectonic.config.object.NoiseState;
 
 import static dev.worldgen.apollib.codec.ApollibCodecs.*;
 
@@ -131,7 +129,7 @@ public class ConfigState implements ApollibCopyable<ConfigState> {
             new GlobalTerrain(
                 this.globalTerrain.verticalScale,
                 this.globalTerrain.elevationBoost,
-                this.globalTerrain.heightLimits,
+                this.globalTerrain.heightLimits.copy(),
                 this.globalTerrain.lavaTunnels,
                 this.globalTerrain.ultrasmooth
             ),
@@ -396,8 +394,8 @@ public class ConfigState implements ApollibCopyable<ConfigState> {
         
         public static final Experimental DEFAULT = new Experimental(ALTERNATE_EROSION_SCALING, ALTERNATE_CONTINENTS_SCALING);
         public static final Codec<Experimental> CODEC = RecordCodecBuilder.create(i -> i.group(
-            Codec.BOOL.optionalFieldOf("alternate_erosion_scaling", ALTERNATE_EROSION_SCALING).forGetter(e -> e.alternateErosionScaling),
-            Codec.BOOL.optionalFieldOf("alternate_continents_scaling", ALTERNATE_CONTINENTS_SCALING).forGetter(e -> e.alternateContinentsScaling)
+            Codec.BOOL.fieldOf("alternate_erosion_scaling").orElse(ALTERNATE_EROSION_SCALING).forGetter(e -> e.alternateErosionScaling),
+            Codec.BOOL.fieldOf("alternate_continents_scaling").orElse(ALTERNATE_CONTINENTS_SCALING).forGetter(e -> e.alternateContinentsScaling)
         ).apply(i, Experimental::new));
         
         public boolean alternateErosionScaling;

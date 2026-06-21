@@ -3,8 +3,8 @@ package dev.worldgen.tectonic.worldgen.densityfunction;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.Tectonic;
+import dev.worldgen.tectonic.config.object.NoiseState;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
@@ -20,7 +20,7 @@ public record ConfigNoise(NoiseHolder noise, DensityFunction shiftX, DensityFunc
     public static KeyDispatchDataCodec<ConfigNoise> CODEC_HOLDER = KeyDispatchDataCodec.of(DATA_CODEC);
 
     public static ConfigNoise create(String key, NoiseHolder noise, DensityFunction shiftX, DensityFunction shiftZ) {
-        NoiseState state = ConfigHandler.getState().getNoiseState(key);
+        NoiseState state = Tectonic.CONFIG.getState().getNoiseState(key);
         return new ConfigNoise(noise, shiftX, shiftZ, state.scale, state.multiplier, state.offset, state.smootherScaling);
     }
 

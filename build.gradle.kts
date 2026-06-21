@@ -20,9 +20,9 @@ repositories {
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.23"
+version = "3.0.25"
 val lithostitchedVersion = "1.6.3"
-val apollibVersion = "1.1.1"
+val apollibVersion = "1.1.2"
 
 cloche {
     metadata {
@@ -47,7 +47,7 @@ cloche {
 
         dependencies {
             compileOnly("org.spongepowered:mixin:0.8.3")
-            compileOnly("maven.modrinth:apollib:$apollibVersion-fabric-21.1")
+            compileOnly("maven.modrinth:apollib:$apollibVersion-fabric-26.1")
             implementation("de.marhali:json5-java:3.0.0")
         }
 
@@ -61,13 +61,13 @@ cloche {
         }
     }
 
-    val sharedOld = common("shared:21.1") {
+    /*val sharedOld = common("shared:21.1") {
         mixins.from(file("src/shared/21.1/main/tectonic.21.1.mixins.json"))
 
         dependencies {
             compileOnly("maven.modrinth:apollib:$apollibVersion-fabric-21.1")
         }
-    }
+    }*/
     val sharedNew = common("shared:26.1") {
         mixins.from(file("src/shared/26.1/main/tectonic.26.1.mixins.json"))
 
@@ -83,7 +83,7 @@ cloche {
         }
     }
 
-    fabric("fabric:21.1") {
+    /*fabric("fabric:21.1") {
         dependsOn(sharedOld)
 
         loaderVersion = "0.19.2"
@@ -119,7 +119,7 @@ cloche {
                 value = "dev.worldgen.tectonic.compat.TectonicModMenuCompat"
             }
         }
-    }
+    }*/
 
     fabric("fabric:26.1") {
         dependsOn(sharedNew)
@@ -183,7 +183,7 @@ cloche {
         }
     }
 
-    neoforge("neoforge:21.1") {
+    /*neoforge("neoforge:21.1") {
         dependsOn(sharedOld)
 
         loaderVersion = "21.1.222"
@@ -207,7 +207,7 @@ cloche {
             client()
             server()
         }
-    }
+    }*/
 
     neoforge("neoforge:26.1") {
         dependsOn(sharedNew)

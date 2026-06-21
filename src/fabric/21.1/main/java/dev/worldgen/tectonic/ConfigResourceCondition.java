@@ -22,6 +22,6 @@ public record ConfigResourceCondition(String key) implements ResourceCondition {
 	
 	@Override
 	public boolean test(@Nullable HolderLookup.Provider registries) {
-		return ConfigHandler.getState().test(this.key);
+		return Tectonic.CONFIG.getState().test(this.key);
 	}
 }

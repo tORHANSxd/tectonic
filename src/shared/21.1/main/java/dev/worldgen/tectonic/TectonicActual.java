@@ -18,14 +18,6 @@ import java.util.function.BiConsumer;
 
 public class TectonicActual {
     @Actual
-    public static final ApollibConfigHolder<ConfigState> CONFIG = new ApollibConfigHolder<>(
-        Tectonic.id("tectonic"),
-        ApollibConfigHolder.CONFIG_DIRECTORY.resolve("tectonic.json"),
-        ConfigState.CODEC,
-        ConfigState.DEFAULT_STATE
-    );
-    
-    @Actual
     public static int getBlendingVersion(CompoundTag tag) {
         return tag.getInt(Tectonic.BLENDING_KEY);
     }

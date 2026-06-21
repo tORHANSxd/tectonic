@@ -1,4 +1,4 @@
-package dev.worldgen.tectonic.config.state.object;
+package dev.worldgen.tectonic.config.object;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -32,6 +32,10 @@ public final class HeightLimits {
         this.minY = minY;
         this.maxY = maxY;
     }
+    
+    public HeightLimits copy() {
+        return new HeightLimits(this.minY, this.maxY);
+    }
 
     public boolean isVanilla() {
         return this.minY == -64 && this.maxY == 320;
@@ -44,4 +48,5 @@ public final class HeightLimits {
     public int getHeight() {
         return this.maxY - this.minY;
     }
+    
 }

@@ -7,7 +7,6 @@ import dev.worldgen.lithostitched.api.worldgen.densityfunction.SimpleContext;
 import dev.worldgen.lithostitched.api.worldgen.util.DensityFunctionWrapper;
 import dev.worldgen.lithostitched.mixin.common.RandomStateAccessor;
 import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -36,9 +35,9 @@ public class TectonicCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> locate = literal("locate");
         addTarget(locate, "mountain_range", LocateTargets.MOUNTAIN_RANGE, () -> true);
-        addTarget(locate, "underground_river", LocateTargets.UNDERGROUND_RIVER, () -> ConfigHandler.getState().continents.undergroundRivers);
-        addTarget(locate, "jungle_pillars", LocateTargets.JUNGLE_PILLARS, () -> ConfigHandler.getState().continents.junglePillars);
-        addTarget(locate, "rolling_hills", LocateTargets.ROLLING_HILLS, () -> ConfigHandler.getState().continents.rollingHills);
+        addTarget(locate, "underground_river", LocateTargets.UNDERGROUND_RIVER, () -> Tectonic.CONFIG.getState().continents.undergroundRivers);
+        addTarget(locate, "jungle_pillars", LocateTargets.JUNGLE_PILLARS, () -> Tectonic.CONFIG.getState().continents.junglePillars);
+        addTarget(locate, "rolling_hills", LocateTargets.ROLLING_HILLS, () -> Tectonic.CONFIG.getState().continents.rollingHills);
         addTarget(locate, "badlands_canyon", LocateTargets.BADLANDS_CANYON, () -> true);
         addTarget(locate, "badlands_plateaus", LocateTargets.BADLANDS_PLATEAUS, () -> true);
         addTarget(locate, "desert_dunes", LocateTargets.DESERT_DUNES, () -> true);
@@ -139,7 +138,7 @@ public class TectonicCommand {
     private static DensityFunctionWrapper getDensityFunctionWrapper(CommandSourceStack source) {
         ServerLevel level = source.getLevel();
 
-        if (!ConfigHandler.getState().general.modEnabled) {
+        if (!Tectonic.CONFIG.getState().general.modEnabled) {
             failure(source, "Tectonic is not currently enabled.");
             return null;
         }

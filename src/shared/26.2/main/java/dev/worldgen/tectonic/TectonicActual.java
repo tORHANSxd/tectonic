@@ -1,8 +1,6 @@
 package dev.worldgen.tectonic;
 
 import com.mojang.serialization.MapCodec;
-import dev.worldgen.apollib.config.ApollibConfigHolder;
-import dev.worldgen.tectonic.config.state.ConfigState;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
@@ -16,14 +14,6 @@ import net.msrandom.multiplatform.annotations.Actual;
 import java.util.function.BiConsumer;
 
 public class TectonicActual {
-    @Actual
-    public static final ApollibConfigHolder<ConfigState> CONFIG = new ApollibConfigHolder<>(
-        Tectonic.id("tectonic"),
-        ApollibConfigHolder.CONFIG_DIRECTORY.resolve("tectonic.json"),
-        ConfigState.CODEC,
-        ConfigState.DEFAULT_STATE
-    );
-    
     @Actual
     public static int getBlendingVersion(CompoundTag tag) {
         return tag.getIntOr(Tectonic.BLENDING_KEY, 0);

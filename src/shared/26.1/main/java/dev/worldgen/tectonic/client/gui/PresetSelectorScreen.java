@@ -1,9 +1,10 @@
 package dev.worldgen.tectonic.client.gui;
 
+import dev.worldgen.apollib.client.gui.ApollibConfigScreen;
 import dev.worldgen.lithostitched.impl.LithostitchedPlatform;
-import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.ConfigPresets;
-import dev.worldgen.tectonic.config.state.ConfigState;
+import dev.worldgen.tectonic.Tectonic;
+import dev.worldgen.tectonic.config.ConfigPresets;
+import dev.worldgen.tectonic.config.ConfigState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -20,14 +21,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class PresetSelectorScreen extends Screen {
-    private final ConfigScreen parent;
+    private final ApollibConfigScreen<ConfigState> parent;
 
     private PresetList list;
     final HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this);
 
-    public PresetSelectorScreen(ConfigScreen parent) {
+    public PresetSelectorScreen(ApollibConfigScreen<?> parent) {
         super(text("title"));
-        this.parent = parent;
+        this.parent = (ApollibConfigScreen<ConfigState>) parent;
     }
 
     @Override
@@ -43,7 +44,8 @@ public class PresetSelectorScreen extends Screen {
         layout.visitWidgets(this::addRenderableWidget);
         this.repositionElements();
     }
-
+    
+    @Override
     protected void repositionElements() {
         this.layout.arrangeElements();
         if (this.list != null) {
@@ -51,8 +53,9 @@ public class PresetSelectorScreen extends Screen {
         }
     }
 
+    @Override
     public void onClose() {
-        this.minecraft.setScreen(new ConfigScreen(this.parent.parent));
+        this.parent.onClose();
     }
     
     public static Component text(String name) {
@@ -74,11 +77,13 @@ public class PresetSelectorScreen extends Screen {
         public void addEntry(String name, ConfigState state, int color) {
             this.addEntry(new Entry(name, state, color));
         }
-
+        
+        @Override
         public int getRowWidth() {
             return 310;
         }
-
+        
+        @Override
         public void updateSize(int width, HeaderAndFooterLayout layout) {
             super.updateSize(width, layout);
             this.children().forEach(entry -> entry.widget.setX(width / 2 - 155));
@@ -94,8 +99,8 @@ public class PresetSelectorScreen extends Screen {
             }
 
             private void select(Button button) {
-                ConfigHandler.setState(state);
-                ConfigHandler.save();
+                Tectonic.CONFIG.setState(this.state.copy());
+                Tectonic.CONFIG.save();
                 PresetSelectorScreen.this.onClose();
             }
 

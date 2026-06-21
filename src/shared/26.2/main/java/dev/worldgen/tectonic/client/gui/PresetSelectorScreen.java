@@ -3,9 +3,8 @@ package dev.worldgen.tectonic.client.gui;
 import dev.worldgen.apollib.client.gui.ApollibConfigScreen;
 import dev.worldgen.lithostitched.impl.LithostitchedPlatform;
 import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.ConfigPresets;
-import dev.worldgen.tectonic.config.state.ConfigState;
+import dev.worldgen.tectonic.config.ConfigPresets;
+import dev.worldgen.tectonic.config.ConfigState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -101,6 +100,7 @@ public class PresetSelectorScreen extends Screen {
 
             private void select(Button button) {
                 Tectonic.CONFIG.setState(this.state.copy());
+                Tectonic.CONFIG.save();
                 PresetSelectorScreen.this.onClose();
             }
 

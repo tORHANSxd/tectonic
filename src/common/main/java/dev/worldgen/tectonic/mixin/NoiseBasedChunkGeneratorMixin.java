@@ -2,7 +2,6 @@ package dev.worldgen.tectonic.mixin;
 
 import com.google.common.base.Suppliers;
 import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -33,7 +32,7 @@ public class NoiseBasedChunkGeneratorMixin {
     private void tectonic$fixLavaLevel(BiomeSource source, Holder<NoiseGeneratorSettings> settings, CallbackInfo ci) {
         if (Tectonic.isEnabled() && settings.unwrapKey().map(key -> key.identifier().getPath().equals("overworld")).orElse(false)) {
             this.globalFluidPicker = Suppliers.memoize(() -> {
-                int lavaLevel = ConfigHandler.getState().globalTerrain.heightLimits.minY + 10;
+                int lavaLevel = Tectonic.CONFIG.getState().globalTerrain.heightLimits.minY + 10;
                 Aquifer.FluidStatus lavaStatus = new Aquifer.FluidStatus(lavaLevel, Blocks.LAVA.defaultBlockState());
                 int seaLevel = settings.value().seaLevel();
                 Aquifer.FluidStatus seaStatus = new Aquifer.FluidStatus(seaLevel, settings.value().defaultFluid());

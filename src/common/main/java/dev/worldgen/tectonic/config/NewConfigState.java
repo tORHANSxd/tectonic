@@ -1,8 +1,8 @@
-package dev.worldgen.tectonic.config.state;
+package dev.worldgen.tectonic.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.object.NoiseState;
 
 public class NewConfigState {
 	

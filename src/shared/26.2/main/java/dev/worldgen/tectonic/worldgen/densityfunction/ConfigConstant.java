@@ -3,7 +3,7 @@ package dev.worldgen.tectonic.worldgen.densityfunction;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.Tectonic;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
@@ -18,7 +18,7 @@ public record ConfigConstant(double value) implements DensityFunction {
     public static KeyDispatchDataCodec<ConfigConstant> CODEC_HOLDER = KeyDispatchDataCodec.of(DATA_CODEC);
 
     public static ConfigConstant create(String key) {
-        return new ConfigConstant(ConfigHandler.getState().getValue(key));
+        return new ConfigConstant(Tectonic.CONFIG.getState().getValue(key));
     }
 
     @Override

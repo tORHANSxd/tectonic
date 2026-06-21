@@ -2,10 +2,9 @@ package dev.worldgen.tectonic.client;
 
 import dev.worldgen.apollib.client.gui.element.ApollibRowHelper;
 import dev.worldgen.apollib.client.gui.element.ApollibSlider;
-import dev.worldgen.tectonic.Tectonic;
-import dev.worldgen.tectonic.config.state.ConfigState;
-import dev.worldgen.tectonic.config.state.ConfigState.*;
-import dev.worldgen.tectonic.config.state.object.NoiseState;
+import dev.worldgen.tectonic.config.ConfigState;
+import dev.worldgen.tectonic.config.ConfigState.*;
+import dev.worldgen.tectonic.config.object.NoiseState;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -14,12 +13,12 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
 
-import static dev.worldgen.tectonic.config.state.ConfigState.General.*;
-import static dev.worldgen.tectonic.config.state.ConfigState.GlobalTerrain.*;
-import static dev.worldgen.tectonic.config.state.ConfigState.Continents.*;
-import static dev.worldgen.tectonic.config.state.ConfigState.Islands.*;
-import static dev.worldgen.tectonic.config.state.ConfigState.Oceans.*;
-import static dev.worldgen.tectonic.config.state.ConfigState.Caves.*;
+import static dev.worldgen.tectonic.config.ConfigState.General.*;
+import static dev.worldgen.tectonic.config.ConfigState.GlobalTerrain.*;
+import static dev.worldgen.tectonic.config.ConfigState.Continents.*;
+import static dev.worldgen.tectonic.config.ConfigState.Islands.*;
+import static dev.worldgen.tectonic.config.ConfigState.Oceans.*;
+import static dev.worldgen.tectonic.config.ConfigState.Caves.*;
 
 public class ConfigScreenBuilder {
 	public static void build(ApollibRowHelper helper) {

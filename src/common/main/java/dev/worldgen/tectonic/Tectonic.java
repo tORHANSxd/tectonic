@@ -2,8 +2,7 @@ package dev.worldgen.tectonic;
 
 import com.mojang.serialization.MapCodec;
 import dev.worldgen.apollib.config.ApollibConfigHolder;
-import dev.worldgen.tectonic.config.ConfigHandler;
-import dev.worldgen.tectonic.config.state.ConfigState;
+import dev.worldgen.tectonic.config.ConfigState;
 import dev.worldgen.tectonic.worldgen.placementmodifier.HeightStabilizedCount;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +13,6 @@ import net.msrandom.multiplatform.annotations.Expect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public class Tectonic {
@@ -29,13 +27,15 @@ public class Tectonic {
      */
     public static int BLENDING_VERSION = 1;
     public static String BLENDING_KEY = "tectonic:blending_version";
-    public static Path FOLDER;
     
-    @Expect
-    public static final ApollibConfigHolder<ConfigState> CONFIG;
+    public static final ApollibConfigHolder<ConfigState> CONFIG = new ApollibConfigHolder<>(
+        Tectonic.id("tectonic"),
+        ApollibConfigHolder.CONFIG_DIRECTORY.resolve("tectonic.json"),
+        ConfigState.CODEC,
+        ConfigState.DEFAULT_STATE
+    );
 
-    public static void init(Path folder) {
-        FOLDER = folder;
+    public static void init() {
         CONFIG.load();
     }
 
@@ -61,7 +61,6 @@ public class Tectonic {
     }
 
     public static boolean isEnabled() {
-        return ConfigHandler.getState().general.modEnabled;
+        return Tectonic.CONFIG.getState().general.modEnabled;
     }
-
 }

@@ -3,7 +3,6 @@ package dev.worldgen.tectonic;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.tectonic.config.ConfigHandler;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ public record ConfigResourceCondition(String key) implements ICondition {
 	
 	@Override
 	public boolean test(@NotNull IContext context) {
-		return ConfigHandler.getState().test(this.key);
+		return Tectonic.CONFIG.getState().test(this.key);
 	}
 	
 	@Override

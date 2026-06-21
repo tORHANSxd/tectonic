@@ -1,4 +1,4 @@
-package dev.worldgen.tectonic.config.state;
+package dev.worldgen.tectonic.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

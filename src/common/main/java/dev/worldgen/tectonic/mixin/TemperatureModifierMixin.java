@@ -1,6 +1,6 @@
 package dev.worldgen.tectonic.mixin;
 
-import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.Tectonic;
 import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +15,6 @@ public abstract class TemperatureModifierMixin {
         argsOnly = true
     )
     public BlockPos tectonic$adjustSnowStart(BlockPos pos) {
-        return pos.above(ConfigHandler.getState().general.snowStartOffset);
+        return pos == null ? null : pos.above(Tectonic.CONFIG.getState().general.snowStartOffset);
     }
 }
