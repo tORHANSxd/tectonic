@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license = "MIT"
+
+[[mods]]
+modId = "${id}"
+displayName = "${name}"
+version = "${version}"
+authors = "Apollo"
+description = "Terrain shaping brought to new heights, grander and more varied than ever before!"
+
+logoFile = "pack.png"
+#displayURL = "..."
+#issueTrackerUrl = "..."
+
+[[mixins]]
+config = "tectonic.mixins.json"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"
