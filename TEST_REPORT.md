@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 13 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 14 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -149,6 +149,14 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 ### P2-JAR-001：Java 21 字节码复核
 
 新类 `dev.worldgen.tectonic.config.ConfigSnapshot` 在重映射发布 JAR 中为 class major 65；本阶段没有恢复 Java 17 `--release`。发布制品仍位于 `build/libs/intermediates/tectonic-3.0.17-forge-1.20.1.jar`，最终社区版命名将在发布阶段统一调整。
+
+## Phase 3A：3.0.19 通用修复
+
+### P3A-HEIGHT-001：默认高度与外部数据包解耦
+
+上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`。当 Tectonic 配置仍为原版 Overworld 高度 `-64..320` 时，`SetHeightLimitsModifier` 不再覆盖外部数据包提供的维度和噪声高度；只有用户显式选择非原版高度时才写入。现有 modifier 资源只绑定 `minecraft:overworld`，Nether、End 与模组维度不在修改目标中。
+
+回归测试覆盖原版、扩展上限和扩展下限的识别；Forge 1.20.1 干净构建、单元测试、重映射 JAR 与 Java 21 class major 65 复核均作为提交阻断检查。
 
 ### 尚未完成的 Phase 2 项
 

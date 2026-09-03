@@ -57,6 +57,10 @@ public final class HeightLimits {
         return new HeightLimits(this.minY, this.maxY, false);
     }
 
+    public boolean isVanilla() {
+        return this.minY == DEFAULT.minY && this.maxY == DEFAULT.maxY;
+    }
+
     public int getHeight() {
         return this.maxY - this.minY;
     }

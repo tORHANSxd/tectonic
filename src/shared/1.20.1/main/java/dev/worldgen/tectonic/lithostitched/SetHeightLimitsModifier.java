@@ -35,6 +35,7 @@ public record SetHeightLimitsModifier(Holder<DimensionType> dimensionType, Holde
         if (!Tectonic.isEnabled()) return;
 
         HeightLimits limits = ConfigHandler.getState().globalTerrain.heightLimits;
+        if (limits.isVanilla()) return;
 
         DimensionTypeAccessor typeAccessor = (DimensionTypeAccessor) (Object) this.dimensionType.value();
         typeAccessor.setMinY(limits.minY);
