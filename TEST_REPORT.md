@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 10 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 13 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -134,6 +134,18 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 - NaN、Infinity、越界数值与不符合 1.20.1 区块节约束的高度回退到字段默认值；
 - 已规范化配置连续加载不会改变文件内容。
 
+### P2-PACK-001：内置数据包注册幂等化
+
+`TectonicRepositorySource` 统一按 Minecraft 1.20.1 `Pack#getId()` 注册内置数据包，重复 ID 采用 first-wins；注册与仓库发现通过同步区和不可变快照隔离，保留首次注册顺序。Forge/Fabric 1.20.1 入口不再直接修改公开静态列表。
+
+回归测试覆盖同一 ID 重复注册、并行重复注册和不同 ID 的稳定顺序。命令：
+
+```powershell
+.\gradlew.bat --no-daemon forge1201UnitTest --console=plain
+```
+
+结果：通过。该修复消除了初始化入口重复执行时静态数据包集合持续累加的路径。
+
 ### P2-JAR-001：Java 21 字节码复核
 
 新类 `dev.worldgen.tectonic.config.ConfigSnapshot` 在重映射发布 JAR 中为 class major 65；本阶段没有恢复 Java 17 `--release`。发布制品仍位于 `build/libs/intermediates/tectonic-3.0.17-forge-1.20.1.jar`，最终社区版命名将在发布阶段统一调整。
@@ -142,5 +154,4 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 
 - #473、#520 的长时间新区块压力复现；
 - Mixin audit、纯专服客户端类隔离复测及同类警告刷屏统计；
-- 内置数据包注册幂等化；
 - 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。

@@ -62,7 +62,7 @@ public class TectonicFabric implements ModInitializer {
 
     private static void addPack(String packName) {
         Path resourcePath = FabricLoader.getInstance().getModContainer("tectonic").get().findPath("resourcepacks/"+packName).get();
-        TectonicRepositorySource.PACKS.add(Pack.readMetaAndCreate(
+        TectonicRepositorySource.register(Pack.readMetaAndCreate(
             "tectonic/" + packName.toLowerCase(),
             Component.translatable("pack_name.tectonic."+packName),
             false,

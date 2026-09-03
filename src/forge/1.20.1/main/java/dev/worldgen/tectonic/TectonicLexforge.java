@@ -76,7 +76,7 @@ public class TectonicLexforge {
 
     private void addPack(String packName) {
         Path resourcePath = ModList.get().getModFileById("tectonic").getFile().findResource("resourcepacks/" + packName.toLowerCase());
-        TectonicRepositorySource.PACKS.add(Pack.readMetaAndCreate(
+        TectonicRepositorySource.register(Pack.readMetaAndCreate(
             "tectonic/" + packName.toLowerCase(),
             Component.translatable("pack_name.tectonic."+packName),
             false,
