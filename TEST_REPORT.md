@@ -107,3 +107,40 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 - 官方 JAR 与本地 Java 21 JAR 的固定种子世界生成行为对照。
 
 这些项目不会被伪装成通过，将在世界生成测试工具完成后补齐。
+
+## Phase 2：配置与线程安全硬化
+
+### P2-CONFIG-001：Forge 1.20.1 单元测试通道
+
+新增 `forge1201UnitTest`，仅使用 Forge 1.20.1 的编译/运行 classpath，并由 `check` 调用。Cloche 0.13.6 的根 `test` 任务会尝试解析所有 loader 和 Minecraft 版本，不适合作为此单目标社区分支的验证入口。
+
+命令：
+
+```powershell
+.\gradlew.bat --no-daemon clean forge1201UnitTest forge1201RemapJar --stacktrace --warning-mode all --console=plain
+.\gradlew.bat --no-daemon check --console=plain
+```
+
+结果：通过。共 10 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+
+覆盖行为：
+
+- 配置及所有嵌套可变对象执行深复制，预设调用方每次拿到独立副本；
+- 世界生成读取不可变、`volatile` 发布的 `ConfigSnapshot`；
+- GUI 使用独立工作副本，Cancel/Back 不保存，选择预设也不再立即写盘；
+- 世界已打开时，保存前显示确认页，并仅写入下次启动配置，不替换当前世界的活跃快照；
+- 配置以 UTF-8 写入同目录临时文件，再原子替换；不支持原子移动的文件系统回退为替换移动；
+- 覆盖有效文件前保留 `.bak`，语法或数值非法的输入保留为 `.invalid`；
+- NaN、Infinity、越界数值与不符合 1.20.1 区块节约束的高度回退到字段默认值；
+- 已规范化配置连续加载不会改变文件内容。
+
+### P2-JAR-001：Java 21 字节码复核
+
+新类 `dev.worldgen.tectonic.config.ConfigSnapshot` 在重映射发布 JAR 中为 class major 65；本阶段没有恢复 Java 17 `--release`。发布制品仍位于 `build/libs/intermediates/tectonic-3.0.17-forge-1.20.1.jar`，最终社区版命名将在发布阶段统一调整。
+
+### 尚未完成的 Phase 2 项
+
+- #473、#520 的长时间新区块压力复现；
+- Mixin audit、纯专服客户端类隔离复测及同类警告刷屏统计；
+- 内置数据包注册幂等化；
+- 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。

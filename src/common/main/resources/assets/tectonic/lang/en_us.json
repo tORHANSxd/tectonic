@@ -3,6 +3,8 @@
   "config.tectonic.default": "Default: ",
 
   "config.tectonic.view_presets": "View Presets...",
+  "config.tectonic.restart_required.title": "Save changes for next restart?",
+  "config.tectonic.restart_required.message": "A world is currently open. Saving now will not change its active world generation; the new settings will take effect after restarting the game.",
 
   "config.tectonic.category.general": "General",
   "config.tectonic.option.mod_enabled": "Mod Enabled",

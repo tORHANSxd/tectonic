@@ -22,6 +22,8 @@ $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 | `forge1201Jar` | 生成重映射前的开发 JAR | `build/libs/intermediates/tectonic-3.0.17-forge-1.20.1-dev.jar` |
 | `forge1201Classes` | 编译 Forge 1.20.1 的 common、shared 1.20.1 与 forge 源集 | `build/classes`、`build/resources` |
 | `compileForge1201Java` | 仅执行 Forge 1.20.1 Java 编译链 | `build/classes/java/forge1201` |
+| `forge1201UnitTest` | 运行仅绑定 Forge 1.20.1 classpath 的 JUnit 5 回归测试 | `build/test-results/forge1201UnitTest`、`build/reports/tests/forge1201UnitTest` |
+| `check` | 运行本分支支持目标的验证入口；当前委托给 `forge1201UnitTest` | 同上 |
 | `runForge1201Client` | 启动 Forge 1.20.1 开发客户端 | `run/` |
 | `runForge1201Server` | 启动 Forge 1.20.1 开发专服 | `run/` |
 | `javaToolchains` | 审计 Gradle 实际发现/下载的 JDK | 控制台报告 |
@@ -31,9 +33,12 @@ $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 
 ```powershell
 .\gradlew.bat --stop
+.\gradlew.bat --no-daemon check --console=plain
 .\gradlew.bat --no-daemon clean forge1201RemapJar --stacktrace --warning-mode all --console=plain
 .\gradlew.bat --no-daemon runForge1201Server --console=plain
 .\gradlew.bat --no-daemon runForge1201Client --console=plain
 ```
 
 不要用不带目标的 `build` 代替 Forge 1.20.1 验收；该任务可能同时构建 Fabric、NeoForge 和其他 Minecraft 版本，既放大噪声，也不能证明 Forge 1.20.1 的独立发布链正确。
+
+Cloche 0.13.6 的根 `test` source set 会把全部 loader/版本的运行时 classpath 合并解析。社区回移分支因此使用独立的 `forge1201UnitTest` source set，并让 `check` 只执行这一受支持目标，避免测试配置反过来要求生成无关 Fabric/NeoForge 游戏文件。

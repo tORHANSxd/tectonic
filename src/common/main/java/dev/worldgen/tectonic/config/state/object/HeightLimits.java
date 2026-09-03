@@ -13,28 +13,48 @@ public final class HeightLimits {
     private static final MapCodec<HeightLimits> NEW_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.fieldOf("min_y").forGetter(limits -> limits.minY),
         Codec.INT.fieldOf("max_y").forGetter(limits -> limits.maxY)
-    ).apply(instance, HeightLimits::new));
+    ).apply(instance, HeightLimits::decoded));
     public static final MapCodec<HeightLimits> FULL_CODEC = Codec.mapEither(NEW_CODEC, OLD_CODEC).xmap(either -> either.map(t -> t, t -> t), Either::left);
 
-    public int minY;
-    public int maxY;
+    public final int minY;
+    public final int maxY;
 
     public HeightLimits(int minY, int maxY) {
-        if (minY % 16 != 0) {
-            throw new IllegalArgumentException("min_y should be a multiple of 16!");
-        } else if (minY > 0) {
-            throw new IllegalArgumentException("min_y should be greater than 0!");
-        } else if (maxY % 16 != 0) {
-            throw new IllegalArgumentException("max_y should be a multiple of 16!");
-        } else if (maxY < 256) {
-            throw new IllegalArgumentException("max_y should be less than 256!");
+        this(minY, maxY, true);
+    }
+
+    private HeightLimits(int minY, int maxY, boolean validate) {
+        if (validate) {
+            validate(minY, maxY);
         }
         this.minY = minY;
         this.maxY = maxY;
     }
 
+    private static void validate(int minY, int maxY) {
+        if (minY % 16 != 0) {
+            throw new IllegalArgumentException("min_y should be a multiple of 16!");
+        } else if (minY < -2032 || minY > -64) {
+            throw new IllegalArgumentException("min_y should be between -2032 and -64!");
+        } else if (maxY % 16 != 0) {
+            throw new IllegalArgumentException("max_y should be a multiple of 16!");
+        } else if (maxY < 256 || maxY > 2032) {
+            throw new IllegalArgumentException("max_y should be between 256 and 2032!");
+        } else if (maxY <= minY) {
+            throw new IllegalArgumentException("max_y should be greater than min_y!");
+        }
+    }
+
+    private static HeightLimits decoded(int minY, int maxY) {
+        return new HeightLimits(minY, maxY, false);
+    }
+
     public static HeightLimits defaultLimits(boolean increasedHeight) {
-        return increasedHeight ? INCREASED_HEIGHT : DEFAULT;
+        return (increasedHeight ? INCREASED_HEIGHT : DEFAULT).copy();
+    }
+
+    public HeightLimits copy() {
+        return new HeightLimits(this.minY, this.maxY, false);
     }
 
     public int getHeight() {

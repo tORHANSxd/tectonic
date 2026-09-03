@@ -1,6 +1,7 @@
 import net.msrandom.minecraftcodev.remapper.task.LoadMappings
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -212,6 +213,19 @@ cloche {
     }
 }
 
+val forge1201Main = sourceSets.named("forge1201")
+val forge1201UnitTest = sourceSets.create("forge1201UnitTest") {
+    java.srcDir("src/forge/1.20.1/test/java")
+    resources.srcDir("src/forge/1.20.1/test/resources")
+    compileClasspath += forge1201Main.get().output + forge1201Main.get().compileClasspath
+    runtimeClasspath += forge1201Main.get().output + forge1201Main.get().runtimeClasspath
+}
+
+dependencies {
+    add(forge1201UnitTest.implementationConfigurationName, "org.junit.jupiter:junit-jupiter:5.11.4")
+    add(forge1201UnitTest.runtimeOnlyConfigurationName, "org.junit.platform:junit-platform-launcher:1.11.4")
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
@@ -237,4 +251,22 @@ tasks.withType<LoadMappings>().configureEach {
 tasks.withType<JavaExec>().matching { it.name.startsWith("run") }.configureEach {
     javaLauncher.set(java21Launcher)
     standardInput = System.`in`
+}
+
+tasks.withType<Test>().configureEach {
+    javaLauncher.set(java21Launcher)
+    useJUnitPlatform()
+}
+
+tasks.register<Test>("forge1201UnitTest") {
+    description = "Runs Forge 1.20.1 backport unit tests."
+    group = "verification"
+    testClassesDirs = forge1201UnitTest.output.classesDirs
+    classpath = forge1201UnitTest.runtimeClasspath
+}
+
+tasks.named("check") {
+    // Cloche's root test source set spans every configured loader/version. This branch verifies
+    // the supported target explicitly so `check` does not resolve unrelated Fabric/NeoForge games.
+    setDependsOn(listOf("forge1201UnitTest"))
 }

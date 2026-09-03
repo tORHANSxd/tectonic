@@ -1,6 +1,5 @@
 package dev.worldgen.tectonic.client.gui;
 
-import dev.worldgen.tectonic.config.ConfigHandler;
 import dev.worldgen.tectonic.config.state.ConfigPresets;
 import dev.worldgen.tectonic.config.state.ConfigState;
 import net.minecraft.client.Minecraft;
@@ -47,7 +46,7 @@ public class PresetSelectorScreen extends Screen {
     }
 
     public void onClose() {
-        this.minecraft.setScreen(new ConfigScreen(this.parent.parent));
+        this.minecraft.setScreen(this.parent);
     }
 
     public static Component text(String name) {
@@ -81,9 +80,7 @@ public class PresetSelectorScreen extends Screen {
             }
 
             private void select(Button button) {
-                ConfigHandler.setState(state);
-                ConfigHandler.save();
-                PresetSelectorScreen.this.onClose();
+                parent.applyPreset(state);
             }
 
             public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {

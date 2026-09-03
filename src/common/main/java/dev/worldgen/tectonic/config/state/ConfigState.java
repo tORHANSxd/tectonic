@@ -29,17 +29,43 @@ public class ConfigState {
     public Caves caves;
 
     public ConfigState(int minorVersion, General general, GlobalTerrain globalTerrain, Continents continents, Islands islands, Oceans oceans, Biomes biomes, Caves caves) {
-        this.general = general;
-        this.globalTerrain = globalTerrain;
-        this.continents = continents;
-        this.islands = islands;
-        this.oceans = oceans;
-        this.biomes = biomes;
-        this.caves = caves;
+        this.general = general.copy();
+        this.globalTerrain = globalTerrain.copy();
+        this.continents = continents.copy();
+        this.islands = islands.copy();
+        this.oceans = oceans.copy();
+        this.biomes = biomes.copy();
+        this.caves = caves.copy();
 
         if (minorVersion < 1 && this.globalTerrain.ultrasmooth) {
             this.globalTerrain.heightLimits = HeightLimits.INCREASED_HEIGHT;
         }
+    }
+
+    public static ConfigState defaults() {
+        return new ConfigState(
+            MINOR_VERSION,
+            General.DEFAULT,
+            GlobalTerrain.DEFAULT,
+            Continents.DEFAULT,
+            Islands.DEFAULT,
+            Oceans.DEFAULT,
+            Biomes.DEFAULT,
+            Caves.DEFAULT
+        );
+    }
+
+    public ConfigState copy() {
+        return new ConfigState(
+            MINOR_VERSION,
+            this.general,
+            this.globalTerrain,
+            this.continents,
+            this.islands,
+            this.oceans,
+            this.biomes,
+            this.caves
+        );
     }
 
     public double getValue(String option) {
@@ -113,6 +139,10 @@ public class ConfigState {
             this.modEnabled = modEnabled;
             this.snowStartOffset = snowStartOffset;
         }
+
+        public General copy() {
+            return new General(this.modEnabled, this.snowStartOffset);
+        }
     }
 
     public static class GlobalTerrain {
@@ -140,9 +170,13 @@ public class ConfigState {
         public GlobalTerrain(double verticalScale, double elevationBoost, HeightLimits heightLimits, boolean lavaTunnels, boolean ultrasmooth) {
             this.verticalScale = verticalScale;
             this.elevationBoost = elevationBoost;
-            this.heightLimits = heightLimits;
+            this.heightLimits = heightLimits.copy();
             this.lavaTunnels = lavaTunnels;
             this.ultrasmooth = ultrasmooth;
+        }
+
+        public GlobalTerrain copy() {
+            return new GlobalTerrain(this.verticalScale, this.elevationBoost, this.heightLimits, this.lavaTunnels, this.ultrasmooth);
         }
     }
 
@@ -191,6 +225,10 @@ public class ConfigState {
             this.rollingHills = rollingHills;
             this.junglePillars = junglePillars;
         }
+
+        public Continents copy() {
+            return new Continents(this.oceanOffset, this.continentsScale, this.erosionScale, this.ridgeScale, this.undergroundRivers, this.riverLanterns, this.flatTerrainSkew, this.rollingHills, this.junglePillars);
+        }
     }
 
     public static class Islands {
@@ -208,7 +246,11 @@ public class ConfigState {
 
         public Islands(boolean enabled, NoiseState noise) {
             this.enabled = enabled;
-            this.noise = noise;
+            this.noise = noise.copy();
+        }
+
+        public Islands copy() {
+            return new Islands(this.enabled, this.noise);
         }
     }
 
@@ -237,6 +279,10 @@ public class ConfigState {
             this.monumentOffset = monumentOffset;
             this.removeFrozenOceanIce = removeFrozenOceanIce;
         }
+
+        public Oceans copy() {
+            return new Oceans(this.oceanDepth, this.deepOceanDepth, this.monumentOffset, this.removeFrozenOceanIce);
+        }
     }
 
     public static class Biomes {
@@ -250,8 +296,12 @@ public class ConfigState {
         public NoiseState vegetation;
 
         public Biomes(NoiseState temperature, NoiseState vegetation) {
-            this.temperature = temperature;
-            this.vegetation = vegetation;
+            this.temperature = temperature.copy();
+            this.vegetation = vegetation.copy();
+        }
+
+        public Biomes copy() {
+            return new Biomes(this.temperature, this.vegetation);
         }
     }
 
@@ -295,6 +345,10 @@ public class ConfigState {
             this.noodleAdditive = noodleAdditive;
             this.spaghettiEnabled = spaghettiEnabled;
             this.carversEnabled = carversEnabled;
+        }
+
+        public Caves copy() {
+            return new Caves(this.depthCutoffStart, this.depthCutoffSize, this.cheeseEnabled, this.cheeseAdditive, this.noodleEnabled, this.noodleAdditive, this.spaghettiEnabled, this.carversEnabled);
         }
     }
 }

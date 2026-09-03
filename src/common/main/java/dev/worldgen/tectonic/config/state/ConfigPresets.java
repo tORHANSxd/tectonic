@@ -3,8 +3,8 @@ package dev.worldgen.tectonic.config.state;
 import dev.worldgen.tectonic.config.state.object.NoiseState;
 import org.apache.logging.log4j.util.TriConsumer;
 
-public interface ConfigPresets {
-    ConfigState DEFAULT = new ConfigState(
+public final class ConfigPresets {
+    private static final ConfigState DEFAULT = new ConfigState(
         ConfigState.MINOR_VERSION,
         ConfigState.General.DEFAULT,
         ConfigState.GlobalTerrain.DEFAULT,
@@ -15,7 +15,7 @@ public interface ConfigPresets {
         ConfigState.Caves.DEFAULT
     );
 
-    ConfigState LARGE_BIOMES = new ConfigState(
+    private static final ConfigState LARGE_BIOMES = new ConfigState(
         ConfigState.MINOR_VERSION,
         ConfigState.General.DEFAULT,
         ConfigState.GlobalTerrain.DEFAULT,
@@ -29,7 +29,7 @@ public interface ConfigPresets {
         ConfigState.Caves.DEFAULT
     );
 
-    ConfigState DESERTED = new ConfigState(
+    private static final ConfigState DESERTED = new ConfigState(
         ConfigState.MINOR_VERSION,
         ConfigState.General.DEFAULT,
         ConfigState.GlobalTerrain.DEFAULT,
@@ -43,9 +43,12 @@ public interface ConfigPresets {
         ConfigState.Caves.DEFAULT
     );
 
-    static void acceptPresets(TriConsumer<String, ConfigState, Integer> consumer) {
-        consumer.accept("default", ConfigPresets.DEFAULT, 0xffffff);
-        consumer.accept("large_biomes", ConfigPresets.LARGE_BIOMES, 0x88ff99);
-        consumer.accept("deserted", ConfigPresets.DESERTED, 0xe2ca76);
+    private ConfigPresets() {
+    }
+
+    public static void acceptPresets(TriConsumer<String, ConfigState, Integer> consumer) {
+        consumer.accept("default", DEFAULT.copy(), 0xffffff);
+        consumer.accept("large_biomes", LARGE_BIOMES.copy(), 0x88ff99);
+        consumer.accept("deserted", DESERTED.copy(), 0xe2ca76);
     }
 }

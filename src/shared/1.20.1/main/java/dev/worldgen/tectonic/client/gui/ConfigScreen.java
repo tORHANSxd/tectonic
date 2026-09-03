@@ -1,27 +1,35 @@
 package dev.worldgen.tectonic.client.gui;
 
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.config.state.ConfigState;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public class ConfigScreen extends Screen {
     protected final Screen parent;
+    private ConfigState workingState;
 
     private ConfigList list;
 
     public ConfigScreen(Screen parent) {
+        this(parent, ConfigHandler.copyConfig());
+    }
+
+    ConfigScreen(Screen parent, ConfigState workingState) {
         super(text("title"));
         this.parent = parent;
+        this.workingState = workingState.copy();
     }
 
     @Override
     public void init() {
         list = new ConfigList(minecraft, this);
         list.addEntry(Button.builder(ConfigScreen.text("view_presets"), button -> minecraft.setScreen(new PresetSelectorScreen(this))).build());
-        list.build(font);
+        list.build(font, workingState);
 
         this.addWidget(list);
 
@@ -45,8 +53,25 @@ public class ConfigScreen extends Screen {
     }
 
     private void onDone() {
-        ConfigHandler.save();
+        if (minecraft.level != null) {
+            minecraft.setScreen(new ConfirmScreen(confirmed -> {
+                if (confirmed) {
+                    ConfigHandler.save(workingState, false);
+                    this.onClose();
+                } else {
+                    minecraft.setScreen(this);
+                }
+            }, text("restart_required.title"), text("restart_required.message")));
+            return;
+        }
+
+        ConfigHandler.save(workingState, true);
         this.onClose();
+    }
+
+    void applyPreset(ConfigState state) {
+        this.workingState = state.copy();
+        this.minecraft.setScreen(this);
     }
 
     public void onClose() {

@@ -16,6 +16,10 @@ public class NoiseState {
         this.offset = offset;
     }
 
+    public NoiseState copy() {
+        return new NoiseState(this.scale, this.multiplier, this.offset);
+    }
+
     public static MapCodec<NoiseState> codec(String name) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.DOUBLE.fieldOf(name + "_scale").forGetter(state -> state.scale),
