@@ -23,7 +23,7 @@
 | 3.0.19：River Lanterns | `REQUIRED` | amplitudes 改为 `[2]`，并吸收 3.0.21 删除重复 loader condition 的修复 |
 | 3.0.19：Ocean Offset 洪泛 | `REQUIRED` | 给 raw continents 加 `[-1, 2]` clamp，不限制用户输入范围 |
 | 3.0.19：默认高度解耦 | `REQUIRED` | 默认 `-64..320` 时 height modifier no-op，保留外部数据包高度 |
-| 3.0.20：region cache | `REQUIRED` | 只增加 `flat_cache`/`cache_2d` 包装，不改数值表达式 |
+| 3.0.20：region cache | `REQUIRED` | 给五个未缓存 region spline 增加一层 `flat_cache`/`cache_2d`；基线 `diamond` 已有同等缓存，不复制上游的重复套娃，也不改数值表达式 |
 | 3.0.20：Overkill | `REQUIRED` | 用旧 Schema 可表达字段实现；先修正上游 alternate continents 接线错误 |
 | 3.0.20：alternate noise scaling | `DEFERRED` | 上游字段接线有误且首版无必要，不为实验功能扩大配置模型 |
 | 3.0.21：lantern 开启崩溃 | `REQUIRED` | 与 lantern 频率作为同一原子变更 |

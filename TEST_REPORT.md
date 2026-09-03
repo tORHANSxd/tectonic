@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 246 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 247 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -183,6 +183,16 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 本回移有意保留 Forge 1.20.1 已发布的 `tectonic:river_lanterns` 资源 ID 和路径，没有跟随高版本重命名为 `underground_river`，以免无必要地破坏现有数据包引用。自动测试断言振幅、配置键和两个加载器专用字段的缺失，并继续严格解析全部 JSON 资源。
 
 真实专服以默认开启的 `river_lanterns=true` 启动，在 Temurin 21 上于 `Done (3.971s)` 后强制生成 `[64,64]..[79,79]` 共 256 个新区块，随后解除强加载、保存并正常停服。`run/logs/latest.log` 未命中 ERROR、FATAL、Mixin 应用失败、链接错误、注册表映射失败、资源解析失败或非重叠 MIN 输入等阻断模式；生成期间出现一次 `Can't keep up`（落后 13.078 秒），仅记录为后续统一压力测试的性能观察。
+
+## Phase 3B：3.0.20—3.0.22 回移
+
+### P3B-REGION-CACHE-001：水平 region spline 缓存
+
+上游来源为 `5c02e8d042a4e0183389e0599ac6a0e4cb3cb4f6`。`club`、`club_weak`、`heart`、`spade` 和 `spade_weak` 五个 region spline 增加一层 `minecraft:flat_cache → minecraft:cache_2d`，内部 spline 数值与引用保持不变。Forge 1.20.1 已原生提供这两个 DensityFunction marker 类型，相关输入只依赖水平坐标。
+
+上游还给 `diamond` 再套了一层相同包装，但 3.0.17 基线中的该资源本来已经是 `flat_cache → cache_2d → spline`。本分支按 Ponytail 最小化原则保留现有单层缓存，并用测试锁定六个 region 都恰好只有一层，避免无收益的缓存套娃。该偏差已同步记录在 `UPSTREAM_DELTA.md`。
+
+自动测试通过，共 247 个实例且全部 JSON 严格解析成功。真实专服使用默认配置在 Temurin 21 上于 `Done (3.841s)` 后强制生成 `[96,96]..[111,111]` 共 256 个新区块，随后解除强加载、保存并正常停服。日志未命中阻断错误模式；生成期间出现一次 `Can't keep up`（落后 12.523 秒），只作为后续固定种子性能基准的观察值。缓存前后地形数值等价性仍需固定种子快照验证，当前不冒充为已完成。
 
 ### 尚未完成的 Phase 2 项
 

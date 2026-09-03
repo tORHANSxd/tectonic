@@ -33,6 +33,17 @@ class WorldgenResourceTest {
     private static final Path RIVER_LANTERN_MODIFIER = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/river_lanterns.json"
     );
+    private static final Path REGION_ROOT = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/data/tectonic/worldgen/density_function/region"
+    );
+    private static final List<String> HORIZONTAL_CACHE_REGIONS = List.of(
+        "club.json",
+        "club_weak.json",
+        "heart.json",
+        "spade.json",
+        "spade_weak.json",
+        "diamond.json"
+    );
 
     static List<Path> jsonResources() throws IOException {
         try (var paths = Files.walk(RESOURCE_ROOT)) {
@@ -89,6 +100,20 @@ class WorldgenResourceTest {
             assertEquals("river_lanterns", modifier.getAsJsonObject("predicate").get("key").getAsString());
             assertFalse(modifier.has("fabric:load_conditions"));
             assertFalse(modifier.has("neoforge:conditions"));
+        }
+    }
+
+    @Test
+    void regionSplinesUseOneHorizontalCacheLayer() throws IOException {
+        for (String fileName : HORIZONTAL_CACHE_REGIONS) {
+            try (Reader reader = Files.newBufferedReader(REGION_ROOT.resolve(fileName), StandardCharsets.UTF_8)) {
+                JsonObject flatCache = JsonParser.parseReader(reader).getAsJsonObject();
+                JsonObject cache2d = flatCache.getAsJsonObject("argument");
+
+                assertEquals("minecraft:flat_cache", flatCache.get("type").getAsString(), fileName);
+                assertEquals("minecraft:cache_2d", cache2d.get("type").getAsString(), fileName);
+                assertEquals("minecraft:spline", cache2d.getAsJsonObject("argument").get("type").getAsString(), fileName);
+            }
         }
     }
 }
