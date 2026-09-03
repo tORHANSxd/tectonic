@@ -29,7 +29,7 @@
 | 3.0.21：lantern 开启崩溃 | `REQUIRED` | 与 lantern 频率作为同一原子变更 |
 | 3.0.22：ore_fix | `REQUIRED` | 将 `HeightStabilizedCount` 适配到 1.20.1 Codec/Forge 注册，限定原版矿石资源 |
 | 3.0.22：地图模组区块查询 | `NOT_APPLICABLE`（源码 hunk） | 上游修复位于 26.x `SerializableChunkDataMixin`；基线 1.20.1 参数本来就是 `ServerLevel`，继续做黑盒兼容测试 |
-| 3.0.22：Lithostitched 依赖 | `REQUIRED` | 加载阶段声明最低 1.4.11，禁止误取 1.21/26.x 制品 |
+| 3.0.22：Lithostitched 依赖 | `REQUIRED` | 保留 Forge 1.20.1 已验证的最低 1.4.11；最终 JAR 回归检查加载元数据，上传器同步声明 Modrinth/CurseForge 必需关系，禁止误取 1.21/26.x 制品 |
 | 3.0.23：配置清理/JSON5 | `DEFERRED` | 保留稳定 JSON；不引入没有必要的 Apollib/JSON5 依赖 |
 | 3.0.23/3.0.25：Back 与深复制 | `REQUIRED` | 在旧 GUI 中实现取消不保存，并吸收 3.0.25 深复制/空值保护 |
 | 3.0.24：Sulfur Caves | `NOT_APPLICABLE` | 提交历史无独立 3.0.24，1.20.1 基线也无对应注册内容 |

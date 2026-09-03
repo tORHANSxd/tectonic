@@ -206,6 +206,12 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 
 本项目前只证明配置可持久化、832 高度新世界可创建并可生成小批新区块。出生点安全、结构可达、山体截断、五种子 1024/4096 区块基准和内存增长曲线尚未完成，不能据此宣称 Overkill 性能达标。
 
+### P3B-LITHOSTITCHED-METADATA-001：运行与发布依赖
+
+Forge 1.20.1 继续使用经实际加载验证的 `maven.modrinth:lithostitched:1.4.11-forge-1.20`（JAR SHA-256 `c19a5a36c0e6cb3782cf7ca5b9648fb1bce5fc41fd737bed423a1f4971bccf75`）。最终重映射 JAR 的 `META-INF/mods.toml` 声明 `lithostitched` 为 `mandatory = true`、`type = "required"`、`versionRange = "[1.4.11,)"`；发布脚本也分别向 Modrinth（项目 `XaDC71GB`）和 CurseForge（项目 `936015`、关系 `3`）发送必需依赖关系。上游较新的 1.6.0 属于高版本 Minecraft 线，不能拿来卡死仍然正确的 Forge 1.20.1 依赖。
+
+回归测试现在直接依赖 `forge1201RemapJar` 并读取最终制品，而不是只检查模板。Temurin 21 下执行 `clean forge1201UnitTest` 通过，共 251 个测试，0 failures、0 errors、0 skipped；`javap -verbose` 同时确认制品内 `dev.worldgen.tectonic.Tectonic` 为 class major 65（Java 21）。
+
 ### 尚未完成的 Phase 2 项
 
 - #473、#520 的长时间新区块压力复现；

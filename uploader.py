@@ -19,6 +19,16 @@ UPLOAD_VERSIONS = [
     ("neoforge", "1.21.10"),
 ]
 
+DEPENDENCIES = [
+    {
+        "name": "Lithostitched",
+        "project_id": "XaDC71GB",
+        "dependency_type": "required",
+        "modId": 936015,
+        "relationType": 3,
+    }
+]
+
 MODRINTH_ID = "lWDHr9jE"
 CURSEFORGE_ID = "686836"
 
@@ -51,7 +61,7 @@ CURSEFORGE_LOADERS = {
 
 # Code
 
-def upload_modrinth(loader: str, version: str, file_path: str):
+def upload_modrinth(loader: str, version: str, file_path: str, dependencies):
     metadata = {
         "name": f"v{MOD_VERSION} ~ {loader.title()} {version}",
         "version_number": MOD_VERSION,
@@ -62,7 +72,7 @@ def upload_modrinth(loader: str, version: str, file_path: str):
         "changelog": CHANGELOG,
         "version_type": RELEASE_TYPE,
         "file_parts": ["file"],
-        "dependencies": []
+        "dependencies": dependencies
     }
 
     with open(file_path, 'rb') as mod_file:
@@ -89,7 +99,7 @@ def upload_modrinth(loader: str, version: str, file_path: str):
             print(response.text)
 
 
-def upload_curseforge(loader: str, version: str, file_path: str):
+def upload_curseforge(loader: str, version: str, file_path: str, dependencies):
     headers = {
         "X-Api-Token": CURSEFORGE_TOKEN
     }
@@ -108,7 +118,8 @@ def upload_curseforge(loader: str, version: str, file_path: str):
         "gameVersions": game_version_ids + [modloader_id],
         "releaseType": RELEASE_TYPE,
         "changelog": CHANGELOG,
-        "changelogType": "markdown"
+        "changelogType": "markdown",
+        "dependencies": dependencies
     }
     metastr = json.dumps(metadata)
 
@@ -143,9 +154,11 @@ for modloader, game_version in UPLOAD_VERSIONS:
         f'{MOD_ID}-{MOD_VERSION}-{modloader}-{game_version}.jar'
     )
 
+    dependencies = DEPENDENCIES.copy()
+
     if not os.path.exists(mod_path):
         print(f"File not found, skipping: {mod_path}")
         continue
 
-    upload_modrinth(modloader, game_version, mod_path)
-    upload_curseforge(modloader, game_version, mod_path)
+    upload_modrinth(modloader, game_version, mod_path, dependencies)
+    upload_curseforge(modloader, game_version, mod_path, dependencies)

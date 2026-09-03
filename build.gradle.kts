@@ -261,8 +261,16 @@ tasks.withType<Test>().configureEach {
 tasks.register<Test>("forge1201UnitTest") {
     description = "Runs Forge 1.20.1 backport unit tests."
     group = "verification"
+    dependsOn("forge1201RemapJar")
     testClassesDirs = forge1201UnitTest.output.classesDirs
     classpath = forge1201UnitTest.runtimeClasspath
+    doFirst {
+        systemProperty(
+            "tectonic.forge1201.jar",
+            layout.buildDirectory.file("libs/intermediates/tectonic-${project.version}-forge-1.20.1.jar")
+                .get().asFile.absolutePath
+        )
+    }
 }
 
 tasks.named("check") {
