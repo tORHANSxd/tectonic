@@ -1,5 +1,6 @@
 package dev.worldgen.tectonic.config;
 
+import dev.worldgen.tectonic.config.state.ConfigPresets;
 import dev.worldgen.tectonic.config.state.ConfigState;
 import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -104,5 +106,25 @@ class ConfigHandlerTest {
         ConfigHandler.load(path);
 
         assertFalse(ConfigHandler.getState().continents.riverIce);
+    }
+
+    @Test
+    void overkillLimitsSurviveSaveAndReload() throws IOException {
+        Path path = tempDirectory.resolve("tectonic.json");
+        ConfigHandler.load(path);
+        AtomicReference<ConfigState> preset = new AtomicReference<>();
+        ConfigPresets.acceptPresets((name, state, color) -> {
+            if (name.equals("overkill")) preset.set(state);
+        });
+
+        ConfigHandler.save(preset.get(), true);
+        assertEquals(512, ConfigHandler.getState().general.snowStartOffset);
+        assertEquals(1.6, ConfigHandler.getState().globalTerrain.elevationBoost);
+        assertEquals(768, ConfigHandler.getState().globalTerrain.heightLimits.maxY);
+
+        ConfigHandler.load(path);
+        assertEquals(512, ConfigHandler.getState().general.snowStartOffset);
+        assertEquals(1.6, ConfigHandler.getState().globalTerrain.elevationBoost);
+        assertEquals(768, ConfigHandler.getState().globalTerrain.heightLimits.maxY);
     }
 }

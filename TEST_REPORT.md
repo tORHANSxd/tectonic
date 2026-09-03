@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 247 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 250 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -193,6 +193,18 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 上游还给 `diamond` 再套了一层相同包装，但 3.0.17 基线中的该资源本来已经是 `flat_cache → cache_2d → spline`。本分支按 Ponytail 最小化原则保留现有单层缓存，并用测试锁定六个 region 都恰好只有一层，避免无收益的缓存套娃。该偏差已同步记录在 `UPSTREAM_DELTA.md`。
 
 自动测试通过，共 247 个实例且全部 JSON 严格解析成功。真实专服使用默认配置在 Temurin 21 上于 `Done (3.841s)` 后强制生成 `[96,96]..[111,111]` 共 256 个新区块，随后解除强加载、保存并正常停服。日志未命中阻断错误模式；生成期间出现一次 `Can't keep up`（落后 12.523 秒），只作为后续固定种子性能基准的观察值。缓存前后地形数值等价性仍需固定种子快照验证，当前不冒充为已完成。
+
+### P3B-OVERKILL-001：Overkill 预设
+
+预设初次来源为 `70bbe33a068caf8dea276781a66a86bf6433a7f6`，最终值来源为 `5c02e8d042a4e0183389e0599ac6a0e4cb3cb4f6`，并对照至 `34241bdb35acda67b5367d49f354c66c05e098e2`。Forge 1.20.1 版本使用旧 Schema 可表达的最终参数：`snow_start_offset=512`、`vertical_scale=2.5`、`elevation_boost=1.6`、高度 `-64..768`、Ultrasmooth 开启、Lava Tunnels 关闭，以及上游最终的 continents/biome 参数。
+
+当前保存校验和 GUI 原先只允许 snow offset `0..256`、elevation boost `0..1`，会把预设值重置或让滑块越界；两处范围现同步放宽至 `0..512` 和 `0..1.6`。预设按钮显示为 `Overkill - Very High Worldgen Cost`，直接在 GUI 提示成本。自动测试覆盖最终参数、按钮警告，以及保存、激活、重新读盘后 `512/1.6/768` 不变。
+
+上游 `Experimental(true, true)` 属于独立的 alternate noise scaling 功能，不在旧 Schema 中硬塞；该功能截至审计终点仍把 continents 接到错误的 erosion 标志，且与 C2ME hardware acceleration 有已知约束，继续按矩阵标记 `DEFERRED`。因此这里声称的是 1.20.1 旧 Schema 版 Overkill，不冒充高版本逐方块同构。
+
+真实专服使用固定种子 `8675309` 创建独立 `world-overkill`，维度总高度 832。出生区准备耗时 `36.783s`，服务端于 `Done (43.693s)` 后可用；随后强制生成 `[64,64]..[79,79]` 共 256 个新区块，解除强加载、保存并正常停服。批量生成产生一次 `Can't keep up`（落后 30.723 秒）；生成结束后的 `forge tps` 为总体 `3.729ms / 20 TPS`。`jcmd GC.heap_info` 单点样本为 G1 heap `3,072,000K` total、`2,184,278K` used，Metaspace `122,577K` used。日志无 Tectonic/Lithostitched、Codec、Mixin、链接或注册表阻断错误；首次创建世界时 Forge 自动补齐自身 server config 的警告不属于 Tectonic 故障。
+
+本项目前只证明配置可持久化、832 高度新世界可创建并可生成小批新区块。出生点安全、结构可达、山体截断、五种子 1024/4096 区块基准和内存增长曲线尚未完成，不能据此宣称 Overkill 性能达标。
 
 ### 尚未完成的 Phase 2 项
 

@@ -24,11 +24,11 @@ public interface ConfigListBuilder {
     default void build(Font font, ConfigState state) {
         this.addCategory("general", font);
         this.addBoolean("mod_enabled", bool -> state.general.modEnabled = bool, state.general.modEnabled, MOD_ENABLED);
-        this.addInteger("snow_start_offset", 0, 256, 1, value -> state.general.snowStartOffset = value, state.general.snowStartOffset, SNOW_START_OFFSET);
+        this.addInteger("snow_start_offset", 0, 512, 1, value -> state.general.snowStartOffset = value, state.general.snowStartOffset, SNOW_START_OFFSET);
 
         this.addCategory("global_terrain", font);
         this.addDouble("vertical_scale", 0.1, 15, 0.005, value -> state.globalTerrain.verticalScale = value, state.globalTerrain.verticalScale, VERTICAL_SCALE);
-        this.addDouble("elevation_boost", 0, 1, 0.01, value -> state.globalTerrain.elevationBoost = value, state.globalTerrain.elevationBoost, ELEVATION_BOOST);
+        this.addDouble("elevation_boost", 0, 1.6, 0.01, value -> state.globalTerrain.elevationBoost = value, state.globalTerrain.elevationBoost, ELEVATION_BOOST);
         this.addInteger("min_y", -2032, -64, 16, value -> state.globalTerrain.heightLimits = new HeightLimits(value, state.globalTerrain.heightLimits.maxY), state.globalTerrain.heightLimits.minY, HEIGHT_LIMITS.minY);
         this.addInteger("max_y", 256, 2032, 16, value -> state.globalTerrain.heightLimits = new HeightLimits(state.globalTerrain.heightLimits.minY, value), state.globalTerrain.heightLimits.maxY, HEIGHT_LIMITS.maxY);
         this.addBoolean("ultrasmooth", bool -> state.globalTerrain.ultrasmooth = bool, state.globalTerrain.ultrasmooth, ULTRASMOOTH);

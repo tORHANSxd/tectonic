@@ -198,10 +198,10 @@ public final class ConfigHandler {
         ConfigState state = source.copy();
         List<String> invalid = new ArrayList<>();
 
-        state.general.snowStartOffset = validInt(state.general.snowStartOffset, 0, 256, ConfigState.General.SNOW_START_OFFSET, "general.snow_start_offset", invalid);
+        state.general.snowStartOffset = validInt(state.general.snowStartOffset, 0, 512, ConfigState.General.SNOW_START_OFFSET, "general.snow_start_offset", invalid);
 
         state.globalTerrain.verticalScale = validDouble(state.globalTerrain.verticalScale, 0.1, 15, ConfigState.GlobalTerrain.VERTICAL_SCALE, "global_terrain.vertical_scale", invalid);
-        state.globalTerrain.elevationBoost = validDouble(state.globalTerrain.elevationBoost, 0, 1, ConfigState.GlobalTerrain.ELEVATION_BOOST, "global_terrain.elevation_boost", invalid);
+        state.globalTerrain.elevationBoost = validDouble(state.globalTerrain.elevationBoost, 0, 1.6, ConfigState.GlobalTerrain.ELEVATION_BOOST, "global_terrain.elevation_boost", invalid);
         try {
             state.globalTerrain.heightLimits = new HeightLimits(state.globalTerrain.heightLimits.minY, state.globalTerrain.heightLimits.maxY);
         } catch (IllegalArgumentException exception) {

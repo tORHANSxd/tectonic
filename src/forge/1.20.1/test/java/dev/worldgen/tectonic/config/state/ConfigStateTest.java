@@ -91,4 +91,38 @@ class ConfigStateTest {
         assertEquals(-0.69, state.biomes.temperature.offset);
         assertEquals(0.15, state.biomes.vegetation.scale);
     }
+
+    @Test
+    void overkillMatchesFinalUpstreamValuesSupportedByThe1201Schema() {
+        AtomicReference<ConfigState> preset = new AtomicReference<>();
+        ConfigPresets.acceptPresets((name, state, color) -> {
+            if (name.equals("overkill")) preset.set(state);
+        });
+
+        ConfigState state = preset.get();
+        assertTrue(state.general.modEnabled);
+        assertEquals(512, state.general.snowStartOffset);
+        assertEquals(2.5, state.globalTerrain.verticalScale);
+        assertEquals(1.6, state.globalTerrain.elevationBoost);
+        assertEquals(-64, state.globalTerrain.heightLimits.minY);
+        assertEquals(768, state.globalTerrain.heightLimits.maxY);
+        assertFalse(state.globalTerrain.lavaTunnels);
+        assertTrue(state.globalTerrain.ultrasmooth);
+        assertEquals(-0.5, state.continents.oceanOffset);
+        assertEquals(0.1, state.continents.continentsScale);
+        assertEquals(0.08, state.continents.erosionScale);
+        assertEquals(0.2, state.continents.ridgeScale);
+        assertFalse(state.continents.undergroundRivers);
+        assertFalse(state.continents.riverLanterns);
+        assertFalse(state.continents.riverIce);
+        assertEquals(0.5, state.continents.flatTerrainSkew);
+        assertFalse(state.continents.rollingHills);
+        assertFalse(state.continents.junglePillars);
+        assertEquals(0.1, state.biomes.temperature.scale);
+        assertEquals(1.1, state.biomes.temperature.multiplier);
+        assertEquals(0, state.biomes.temperature.offset);
+        assertEquals(0.1, state.biomes.vegetation.scale);
+        assertEquals(1.1, state.biomes.vegetation.multiplier);
+        assertEquals(-0.2, state.biomes.vegetation.offset);
+    }
 }

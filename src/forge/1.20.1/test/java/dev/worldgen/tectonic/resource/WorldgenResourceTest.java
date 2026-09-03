@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class WorldgenResourceTest {
     private static final Path RESOURCE_ROOT = Path.of("src/common/main/resources");
+    private static final Path EN_US = RESOURCE_ROOT.resolve("assets/tectonic/lang/en_us.json");
     private static final Path RAW_CONTINENTS = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/data/tectonic/worldgen/density_function/noise/raw_continents.json"
     );
@@ -114,6 +115,18 @@ class WorldgenResourceTest {
                 assertEquals("minecraft:cache_2d", cache2d.get("type").getAsString(), fileName);
                 assertEquals("minecraft:spline", cache2d.getAsJsonObject("argument").get("type").getAsString(), fileName);
             }
+        }
+    }
+
+    @Test
+    void overkillPresetLabelWarnsAboutWorldgenCost() throws IOException {
+        try (Reader reader = Files.newBufferedReader(EN_US, StandardCharsets.UTF_8)) {
+            JsonObject language = JsonParser.parseReader(reader).getAsJsonObject();
+
+            assertEquals(
+                "Overkill - Very High Worldgen Cost",
+                language.get("preset.tectonic.overkill").getAsString()
+            );
         }
     }
 }

@@ -106,6 +106,7 @@
   "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
   "preset.tectonic.frozen_wasteland": "Frozen Wasteland",
+  "preset.tectonic.overkill": "Overkill - Very High Worldgen Cost",
 
   "pack_name.tectonic.tectonic/overlay.mod": "Tectonic mod-reliant data",
   "pack_name.tectonic.tectonic/overlay.terratonic": "Terralith-Tectonic compat data",
