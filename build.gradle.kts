@@ -1,3 +1,10 @@
+import net.msrandom.minecraftcodev.remapper.task.LoadMappings
+import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "2.1.21"
     id("earth.terrarium.cloche") version "0.13.6"
@@ -203,4 +210,31 @@ cloche {
             server()
         }
     }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+}
+
+val java21Launcher = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+tasks.withType<LoadMappings>().configureEach {
+    javaExecutable.set(java21Launcher.map { it.executablePath })
+}
+
+tasks.withType<JavaExec>().matching { it.name.startsWith("run") }.configureEach {
+    javaLauncher.set(java21Launcher)
+    standardInput = System.`in`
 }
