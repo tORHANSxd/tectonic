@@ -47,3 +47,7 @@ bin/
 ### Minecraft ###
 /run/
 /logs/
+
+### Python ###
+__pycache__/
+*.py[cod]
