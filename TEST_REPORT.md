@@ -246,9 +246,9 @@ Temurin 21 下执行 `clean forge1201UnitTest forge1201RemapJar` 通过，共 27
 - 默认高度 no-op 通过：`ore_fix=true` 与关闭组四种目标矿物的比值均为 `0.999..1.000`，说明激活保护没有偷偷改掉原版高度行为。
 - #438 覆盖通过：`minY=-320` 时关闭组 diamond/gold 分别有 `10/16`、`15/16` 个深层 16 格均值桶为零；开启后 diamond/gold/lapis/redstone 均为 `0/16` 个零桶。`minY=-128` 的 gold 也从 `3/4` 个零桶降为 `0/4`。
 - 数量门槛暂不判通过：`minY=-320` 开启/关闭总量倍率为 diamond `9.485×`、gold `3.383×`、lapis `3.888×`、redstone `11.815×`。红石深层 16 桶均值为每区块 `23.79`、CV `4.0%`，表明它是上游按垂直 section 线性扩展造成的稳定高密度，不是 placed-feature 循环；但 diamond/redstone 的富集仍与上游 issue #498 的现象一致。在完成密度校准前，`ore_fix` 继续默认关闭，也不声称满足 Stable 的“无失衡”门槛。
-- 严格确定性暂不判通过：同配置、同种子、同 256 区块的重复运行逐桶向量不相等；社区默认高度控制组目标矿总量差异为 `0..0.131%`，原版控制组为 `0..0.138%`。原版控制也复现同类差异，说明当前一次性强加载 256 区块的并发/顺序噪声不能归因于 Tectonic；但计划要求的是一致而非“差不多”，后续必须用确定顺序生成器复验。
+- 严格确定性未通过：同配置、同种子、同 256 区块的重复运行逐桶向量不相等；社区默认高度控制组目标矿总量差异为 `0..0.131%`，原版控制组为 `0..0.138%`。原版控制也复现同类差异，说明旧流程的差异不能归因于 Tectonic；后续固定顺序生成器仍在 16 个区块中发现 15 个真实方块内容差异，详见 `P2-SNAPSHOT-001`。
 
-因此本项当前状态是：实现、默认 no-op、#438 深层覆盖和注册表安全通过；矿物密度与严格确定性仍阻断 Stable。详细方法、输入来源与复现说明见 `benchmarks/ore_fix/2026-09-03/README.md`。
+因此本项当前状态是：实现、默认 no-op、#438 深层覆盖和注册表安全通过；矿物密度与严格确定性仍阻断 Stable。矿物统计见 `benchmarks/ore_fix/2026-09-03/README.md`，规范化地形哈希见 `benchmarks/determinism/2026-09-03/README.md`。
 
 ## Phase 3C：3.0.26 资源审计
 
@@ -320,10 +320,21 @@ tectonic:overworld/underground_river/total
 - 分析器回归：单区块生产专服运行完成，`ore_analysis.enabled=true`、`status=passed`，生成逐桶 CSV 与 JSON 汇总；`SkipOreAnalysis` 模式以及其与 `IncludeMaterials` 的冲突校验也分别通过；
 - 参数负向校验：`32×9=288` 的 tile 在启动前被拒绝，Java 17 路径在启动前被拒绝。
 
-这只证明目标区块请求顺序、逐目标 FULL 屏障和主要后台 worker 约束已经固定；Vanilla 仍可能为目标周边 halo 区块安排内部工作。因此它是严格重复性测试的可靠输入通道，不是世界内容已经位级确定的结论。下一门槛仍是对独立重复世界执行规范化区块哈希并要求完全一致。
+这只证明目标区块请求顺序、逐目标 FULL 屏障和后台池的目标 parallelism 已固定；Vanilla 仍可能为目标周边 halo 区块安排内部工作，`ForkJoinPool` 也可能创建补偿 worker。因此它是严格重复性测试的可靠输入通道，不是世界内容已经位级确定的结论。
+
+### P2-SNAPSHOT-001：规范化地形快照与严格比较
+
+新增标准库工具 `scripts/hash_test_world.py`，schema 为 `tectonic-terrain-snapshot-v1`。它按位置保留完整 `block_states`、方块属性和 `biomes`，规范化 palette/compound/section 顺序与 long padding；只排除时间、scheduled ticks、光照、Heightmaps、结构元数据、实体等运行期或派生数据。扫描严格要求闭区间内每个区块为 `minecraft:full`、DataVersion `3465`、坐标与完整 Y section 范围一致，并按 `Z → X` 汇总逐区块 SHA-256。比较器会反向校验闭区间覆盖和总哈希，拒绝损坏或自相矛盾的快照。扫描立即摘要每个区块，不保留完整规范化区块，适用于 20,000+ 区块窗口。
+
+Python 验证通过，共 18 个测试；固定 golden chunk SHA-256 为 `95bf96285803e311e4c58304048dfdf56e3fb541d764bb351403d091d36c7196`，单区块 world SHA-256 为 `faebc3a0f07e97ca91e7a943475ade642687cb51b60ed4270f5da7bfc3f2ca6b`。同一快照自比较返回 `0`；损坏 gzip 会以含区块坐标的格式错误返回 `2`。矿物 CSV 聚合也改为强制绑定 SHA-256 匹配的扫描 summary，并把闭区间、maxY、DataVersion 和区块数纳入重复性签名；50 份既有输入已重新校验并更新 `acceptance.json`。
+
+严格重复性结果未通过。Forge 47.4.22 正式服务端、指定 Temurin 21、相同生产 JAR、seed `0`、默认高度、`ore_fix=false`、唯一 `-Dmax.bg.threads=1`，按固定顺序分别生成两个独立的 `[700,700]..[703,703]` 世界。两次都正常保存停服，但 terrain SHA-256 分别为 `fc8dfbc9cedb72f2f08f5d1c5a451a021b3115570ae4c1a6a821285309108ba2` 和 `2ec87c3d440cfda5fd27c778fa7180fbe5fcb33cae5d633f01acf10198cb0468`，严格比较返回 `1`，15/16 个区块不同。
+
+补充解码确认 biome 没有任何位置差异，方块状态共有 5,544 个位置不同，主要集中在 Ancient City 的 `sculk`/`sculk_vein` 及邻近 `deepslate`/`air`，另有树叶 `distance` 属性变化。这不是时间戳或 palette 编码噪声，不能从规范化 schema 中删掉。日志分别出现 `Worker-Main-1/6` 与 `Worker-Main-1/6/7`；`max.bg.threads=1` 只是目标 parallelism，不是硬单线程保证。详细输入、逐区块差异矩阵和快照文件哈希见 `benchmarks/determinism/2026-09-03/README.md`。
 
 ### 尚未完成的 Phase 2 项
 
 - #473 的确定顺序 Java 21 压力通道已经完成并通过短程真实专服验证，但仍需实际跑完不少于 20,000 个新区块；
+- 固定顺序生产专服的规范化地形快照仍有 15/16 个区块不一致；严格确定性继续阻断发布，当前优先隔离 halo/decorator 与 `ForkJoinPool` 补偿 worker 路径；
 - `BlendingDataMixin` 仍需旧/新区块交界触发；其余已加载 Mixin 的 strict/verify、真专服客户端类隔离和启动期警告计数已经完成；
 - 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。

@@ -70,7 +70,7 @@
 
 ## 文件
 
-- `acceptance.json`：输入 case ID、逐 CSV SHA-256、矩阵维度和确定性状态
+- `acceptance.json`：输入 case ID、逐 CSV/summary SHA-256、精确 chunk 闭区间、矩阵维度和确定性状态
 - `ore-distribution-raw.csv`：所有 case 的 family/block 逐 16 格桶原始行
 - `ore-distribution-mean.csv`：按场景、高度、family 聚合的五种子均值
 - `ore-totals.csv`：每区块总量均值、样本标准差和 `Y < -64` 均值
@@ -92,4 +92,4 @@ python scripts/analyze_ore_distribution.py aggregate `
   --output benchmarks/ore_fix/2026-09-03
 ```
 
-生成新世界使用 `scripts/benchmark_worldgen.ps1`。脚本会拒绝覆盖已有世界，并在 `finally` 中逐字节恢复 `tectonic.json`、`.bak`、`.invalid` 与 `server.properties`。本页的原始数据由旧版“一次强加载整个 256 区块窗口”流程生成；当前脚本已改为固定 tile/区块顺序、逐区块 FULL 回执、单后台 worker 和可选周期保存/重启。新流程用于后续严格重复性复验，不应与本页旧流程的数据混作同一生成协议。
+生成新世界使用 `scripts/benchmark_worldgen.ps1`。脚本会拒绝覆盖已有世界，并在 `finally` 中逐字节恢复 `tectonic.json`、`.bak`、`.invalid` 与 `server.properties`。本页的原始数据由旧版“一次强加载整个 256 区块窗口”流程生成；当前脚本已改为固定 tile/区块顺序、逐区块 FULL 回执、后台池目标 parallelism `1` 和可选周期保存/重启。该参数不是硬单线程保证；新流程的严格重复性复验结果见 `benchmarks/determinism/2026-09-03/README.md`，不能与本页旧流程的数据混作同一生成协议。

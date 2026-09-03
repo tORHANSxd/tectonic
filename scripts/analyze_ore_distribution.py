@@ -173,38 +173,57 @@ class RegionFile:
         if compression & 0x80:
             raise FormatError(f"暂不支持外置 .mcc 区块 ({chunk_x}, {chunk_z})")
         compression &= 0x7F
-        if compression == 1:
-            unpacked = gzip.decompress(payload)
-        elif compression == 2:
-            unpacked = zlib.decompress(payload)
-        elif compression == 3:
-            unpacked = payload
-        else:
-            raise FormatError(f"区块 ({chunk_x}, {chunk_z}) 使用未知压缩类型 {compression}")
+        try:
+            if compression == 1:
+                unpacked = gzip.decompress(payload)
+            elif compression == 2:
+                unpacked = zlib.decompress(payload)
+            elif compression == 3:
+                unpacked = payload
+            else:
+                raise FormatError(
+                    f"区块 ({chunk_x}, {chunk_z}) 使用未知压缩类型 {compression}"
+                )
+        except (EOFError, OSError, zlib.error) as error:
+            raise FormatError(
+                f"区块 ({chunk_x}, {chunk_z}) 解压失败: {error}"
+            ) from error
         return parse_nbt(unpacked)
 
 
-def unpack_palette_frequencies(palette_size: int, packed: list[int] | None) -> list[int]:
+def unpack_palette_indices(
+    palette_size: int,
+    packed: list[int] | None,
+    *,
+    value_count: int,
+    min_bits: int,
+) -> list[int]:
     if palette_size < 1:
-        raise FormatError("block_states.palette 为空")
+        raise FormatError("palette 为空")
+    if palette_size > value_count:
+        raise FormatError(f"palette={palette_size} 超过值数量 {value_count}")
+    if value_count < 1 or min_bits < 1:
+        raise ValueError("value_count 和 min_bits 必须为正数")
     if palette_size == 1:
         if packed:
             raise FormatError("单值 palette 不应包含 data")
-        return [4096]
-    if not packed:
+        return [0] * value_count
+    if not isinstance(packed, list) or not packed:
         raise FormatError("多值 palette 缺少 data")
+    if any(type(word) is not int for word in packed):
+        raise FormatError("palette data 必须是 long 数组")
 
-    bits = max(4, (palette_size - 1).bit_length())
+    bits = max(min_bits, (palette_size - 1).bit_length())
     values_per_long = 64 // bits
-    required_longs = math.ceil(4096 / values_per_long)
+    required_longs = math.ceil(value_count / values_per_long)
     if len(packed) != required_longs:
         raise FormatError(
             f"palette={palette_size} 需要 {required_longs} 个 long，实际 {len(packed)}"
         )
 
     mask = (1 << bits) - 1
-    frequencies = [0] * palette_size
-    remaining = 4096
+    indices = []
+    remaining = value_count
     for signed_word in packed:
         word = signed_word & MASK_64
         entries = min(values_per_long, remaining)
@@ -214,11 +233,23 @@ def unpack_palette_frequencies(palette_size: int, packed: list[int] | None) -> l
                 raise FormatError(
                     f"palette 索引 {palette_index} 超出 palette={palette_size}"
                 )
-            frequencies[palette_index] += 1
+            indices.append(palette_index)
             word >>= bits
         remaining -= entries
     if remaining != 0:
-        raise FormatError(f"palette data 少解码 {remaining} 个方块")
+        raise FormatError(f"palette data 少解码 {remaining} 个值")
+    return indices
+
+
+def unpack_palette_frequencies(palette_size: int, packed: list[int] | None) -> list[int]:
+    frequencies = [0] * palette_size
+    for palette_index in unpack_palette_indices(
+        palette_size,
+        packed,
+        value_count=4096,
+        min_bits=4,
+    ):
+        frequencies[palette_index] += 1
     return frequencies
 
 
@@ -306,6 +337,10 @@ def scan_world(args: argparse.Namespace) -> int:
                     raise FormatError(f"区块 ({chunk_x}, {chunk_z}) 缺少 sections")
                 seen_sections = set()
                 for section in sections:
+                    if not isinstance(section, dict):
+                        raise FormatError(
+                            f"区块 ({chunk_x}, {chunk_z}) section 必须是 compound"
+                        )
                     section_y = section.get("Y")
                     if not isinstance(section_y, int):
                         raise FormatError(f"区块 ({chunk_x}, {chunk_z}) section 缺少 Y")
@@ -315,6 +350,8 @@ def scan_world(args: argparse.Namespace) -> int:
                         )
                     seen_sections.add(section_y)
                     if section_y not in expected_sections:
+                        if set(section) <= {"Y", "BlockLight", "SkyLight"}:
+                            continue
                         raise FormatError(
                             f"区块 ({chunk_x}, {chunk_z}) 出现范围外 section Y={section_y}"
                         )
@@ -340,8 +377,8 @@ def scan_world(args: argparse.Namespace) -> int:
                         family = block_to_family.get(block)
                         if family is not None:
                             counts[(family, block, bucket_y)] += frequencies[index]
-                if seen_sections != expected_sections:
-                    missing = sorted(expected_sections - seen_sections)
+                missing = sorted(expected_sections - seen_sections)
+                if missing:
                     raise FormatError(
                         f"区块 ({chunk_x}, {chunk_z}) section 范围不完整，缺少 {missing}"
                     )
@@ -451,6 +488,46 @@ def discover_csv(inputs: list[Path]) -> list[Path]:
     return sorted(found)
 
 
+def load_scan_summary(csv_path: Path) -> tuple[Path, dict, tuple[int, int, int, int]]:
+    csv_digest = sha256(csv_path)
+    candidates = []
+    for candidate in (csv_path.with_suffix(".json"), csv_path.parent / "ore-summary.json"):
+        if candidate not in candidates and candidate.is_file():
+            candidates.append(candidate)
+    matches = []
+    for candidate in candidates:
+        summary = json.loads(candidate.read_text(encoding="utf-8"))
+        if isinstance(summary, dict) and summary.get("csv_sha256") == csv_digest:
+            matches.append((candidate, summary))
+    if len(matches) != 1:
+        raise FormatError(
+            f"{csv_path} 需要唯一且 csv_sha256 匹配的 ore-counts.json/ore-summary.json"
+        )
+
+    summary_path, summary = matches[0]
+    bounds = summary.get("chunk_bounds_inclusive")
+    if (
+        not isinstance(bounds, list)
+        or len(bounds) != 4
+        or any(type(value) is not int for value in bounds)
+    ):
+        raise FormatError(f"{summary_path} 的 chunk_bounds_inclusive 非法")
+    min_x, min_z, max_x, max_z = bounds
+    if min_x > max_x or min_z > max_z:
+        raise FormatError(f"{summary_path} 的 chunk_bounds_inclusive 不是有效闭区间")
+    expected_chunks = (max_x - min_x + 1) * (max_z - min_z + 1)
+    if summary.get("chunks") != expected_chunks:
+        raise FormatError(f"{summary_path} 的 chunks 与闭区间面积不匹配")
+    versions = summary.get("data_versions")
+    if (
+        not isinstance(versions, list)
+        or len(versions) != 1
+        or type(versions[0]) is not int
+    ):
+        raise FormatError(f"{summary_path} 必须包含唯一 data_versions")
+    return summary_path, summary, (min_x, min_z, max_x, max_z)
+
+
 def mean(values: list[float]) -> float:
     return sum(values) / len(values)
 
@@ -515,12 +592,54 @@ def svg_chart(path: Path, title: str, series: dict[str, list[tuple[int, float]]]
 def aggregate(args: argparse.Namespace) -> int:
     csv_paths = discover_csv(args.input)
     rows = []
+    case_protocols = {}
+    source_files = []
     for path in csv_paths:
         with path.open("r", encoding="utf-8", newline="") as stream:
             reader = csv.DictReader(stream)
             if tuple(reader.fieldnames or ()) != CSV_FIELDS:
                 raise FormatError(f"CSV 字段不匹配: {path}")
-            rows.extend(reader)
+            file_rows = list(reader)
+        if not file_rows:
+            raise FormatError(f"CSV 为空: {path}")
+        case_ids = {row["case_id"] for row in file_rows}
+        if len(case_ids) != 1:
+            raise FormatError(f"CSV 必须只包含一个 case_id: {path}")
+        case_id = next(iter(case_ids))
+        if case_id in case_protocols:
+            raise FormatError(f"case_id 重复: {case_id}")
+
+        summary_path, summary, bounds = load_scan_summary(path)
+        expected_fields = {
+            "case_id": summary.get("case_id"),
+            "scenario": summary.get("scenario"),
+            "seed": summary.get("seed"),
+            "min_y": summary.get("min_y"),
+            "max_y": summary.get("max_y"),
+            "mod_enabled": summary.get("mod_enabled"),
+            "ore_fix": summary.get("ore_fix"),
+            "data_version": summary["data_versions"][0],
+            "chunks": summary.get("chunks"),
+        }
+        for field, expected in expected_fields.items():
+            if expected is None or {row[field] for row in file_rows} != {str(expected)}:
+                raise FormatError(f"{path} 的 {field} 与 {summary_path} 不匹配")
+
+        case_protocols[case_id] = (
+            int(summary["max_y"]),
+            int(summary["data_versions"][0]),
+            int(summary["chunks"]),
+            bounds,
+        )
+        source_files.append(
+            {
+                "case_id": case_id,
+                "csv_sha256": summary["csv_sha256"],
+                "summary_sha256": sha256(summary_path),
+                "chunk_bounds_inclusive": list(bounds),
+            }
+        )
+        rows.extend(file_rows)
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     write_csv(output / "ore-distribution-raw.csv", rows)
@@ -529,9 +648,7 @@ def aggregate(args: argparse.Namespace) -> int:
     distribution_groups: dict[tuple[str, int, str, int], list[float]] = defaultdict(list)
     per_case_totals: dict[tuple[str, str, int, str], float] = defaultdict(float)
     per_case_below: dict[tuple[str, str, int, str], float] = defaultdict(float)
-    case_vectors: dict[
-        tuple[str, str, int, str, str, str, str], list[tuple[int, int]]
-    ] = defaultdict(list)
+    case_vectors = defaultdict(list)
     for row in family_rows:
         scenario = row["scenario"]
         min_y = int(row["min_y"])
@@ -548,6 +665,7 @@ def aggregate(args: argparse.Namespace) -> int:
             scenario,
             row["seed"],
             min_y,
+            *case_protocols[row["case_id"]],
             row["mod_enabled"],
             row["ore_fix"],
             row["case_id"],
@@ -617,14 +735,12 @@ def aggregate(args: argparse.Namespace) -> int:
     (chart_root / "index.md").write_text("\n".join(index_lines), encoding="utf-8")
 
     deterministic_checks = []
-    raw_case_signatures: dict[tuple[str, str, int, str, str], dict[str, dict[str, tuple[int, ...]]]] = defaultdict(lambda: defaultdict(dict))
+    raw_case_signatures = defaultdict(lambda: defaultdict(dict))
     for vector_key, vector in case_vectors.items():
-        signature = vector_key[:5]
-        case_id = vector_key[5]
-        family = vector_key[6]
-        raw_case_signatures[signature][case_id][family] = tuple(
-            count for _, count in sorted(vector)
-        )
+        signature = vector_key[:9]
+        case_id = vector_key[9]
+        family = vector_key[10]
+        raw_case_signatures[signature][case_id][family] = tuple(sorted(vector))
     for signature, cases in sorted(raw_case_signatures.items()):
         if len(cases) < 2:
             continue
@@ -634,17 +750,19 @@ def aggregate(args: argparse.Namespace) -> int:
                 "scenario": signature[0],
                 "seed": signature[1],
                 "min_y": signature[2],
-                "mod_enabled": signature[3],
-                "ore_fix": signature[4],
+                "max_y": signature[3],
+                "data_version": signature[4],
+                "chunks": signature[5],
+                "chunk_bounds_inclusive": list(signature[6]),
+                "mod_enabled": signature[7],
+                "ore_fix": signature[8],
                 "case_ids": sorted(cases),
                 "equal": all(value == values[0] for value in values[1:]),
             }
         )
 
     acceptance = {
-        "source_csv_files": [
-            {"case_id": path.parent.name, "sha256": sha256(path)} for path in csv_paths
-        ],
+        "source_csv_files": source_files,
         "case_count": len({row["case_id"] for row in family_rows}),
         "scenarios": sorted({row["scenario"] for row in family_rows}),
         "seeds": sorted({row["seed"] for row in family_rows}, key=int),

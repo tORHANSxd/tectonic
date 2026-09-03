@@ -2,203 +2,553 @@
   "source_csv_files": [
     {
       "case_id": "20260903-community-off-community-off-miny-m128-seed-0",
-      "sha256": "315d899af41b9c5d75fd3cc884f62a0c2c5b113a0d085e53f1ba288e6930e1c7"
+      "csv_sha256": "315d899af41b9c5d75fd3cc884f62a0c2c5b113a0d085e53f1ba288e6930e1c7",
+      "summary_sha256": "4a6de1624d770767fb77ab76bab6a34964cb12e3895564decc66e62f518850d7",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m128-seed-1",
-      "sha256": "0d6cca96cb0caa132afd0a0c298a7393ea43e3e7117938d07ac9343466702262"
+      "csv_sha256": "0d6cca96cb0caa132afd0a0c298a7393ea43e3e7117938d07ac9343466702262",
+      "summary_sha256": "9ee41026402715dc9b853b197e77b4bfde21c43c3eb7d03aeaa04b7f86a8107b",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m128-seed-123456789",
-      "sha256": "39084b7a77f86928c8ebbdfbbbc36dbaa191d0adfae66f4816d2255ed28d03e7"
+      "csv_sha256": "39084b7a77f86928c8ebbdfbbbc36dbaa191d0adfae66f4816d2255ed28d03e7",
+      "summary_sha256": "dd86ef25ba93d93740e20975393d04bf2c399a16ba4fdc2163a3db236396425d",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m128-seed-m1",
-      "sha256": "b0f0a35abaac732e2cf5f11e27847cfed709d2550e7042943786812500ea815f"
+      "csv_sha256": "b0f0a35abaac732e2cf5f11e27847cfed709d2550e7042943786812500ea815f",
+      "summary_sha256": "085ad01a0ff1489eb6f32c0d84a339a8c89e86c2a83a7c7bb6bd3ffc5005476e",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m128-seed-m987654321987654321",
-      "sha256": "54898fd22bc5c86994605d0d53b7b65a978168207ae46a978edf5079145901c9"
+      "csv_sha256": "54898fd22bc5c86994605d0d53b7b65a978168207ae46a978edf5079145901c9",
+      "summary_sha256": "9da19fa29a1e1bc91c1b88566a4407beb34cdeae1f8cc7253c9f57b4d59390a2",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m320-seed-0",
-      "sha256": "a148186be119b2c9e38914cd8d75936cf8b3dc1fb495124a46bffae6463fa5fa"
+      "csv_sha256": "a148186be119b2c9e38914cd8d75936cf8b3dc1fb495124a46bffae6463fa5fa",
+      "summary_sha256": "03e669e8be0d48f03621a50872beda5620e65cbd8cad4aca62dd13994ad85473",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m320-seed-1",
-      "sha256": "a156cffdac24ed15f01f24f1ad69ba4f101da3bd4ecf104b81d26b8704d6392c"
+      "csv_sha256": "a156cffdac24ed15f01f24f1ad69ba4f101da3bd4ecf104b81d26b8704d6392c",
+      "summary_sha256": "1f720fb7e2bba2d083339cbc7d0990738caaf42d386f23d1cc6ea4b1125824dc",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m320-seed-123456789",
-      "sha256": "f4940396f4c26e0ff0159cb2463f922a149175225c9b22e2252409a105590b22"
+      "csv_sha256": "f4940396f4c26e0ff0159cb2463f922a149175225c9b22e2252409a105590b22",
+      "summary_sha256": "0dcc00135f5ccd53f3827a80219e68b4a83e85cdf9af4811ffd07cfc17b8c222",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m320-seed-m1",
-      "sha256": "ddf398670e0a5f6dc2a20a3033fe94160971f588b55aafcb6dfb026627a8ae07"
+      "csv_sha256": "ddf398670e0a5f6dc2a20a3033fe94160971f588b55aafcb6dfb026627a8ae07",
+      "summary_sha256": "5e96b129ffa9480d8a548e3242940c929f843d952db575427b3b2c37d4327271",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m320-seed-m987654321987654321",
-      "sha256": "dc9207fcd18f04a5d9608abf0782e0d452151f86d7f748905c5edc628a0c931c"
+      "csv_sha256": "dc9207fcd18f04a5d9608abf0782e0d452151f86d7f748905c5edc628a0c931c",
+      "summary_sha256": "e89f4c7d8905caefaf7a867b87a24887f4fb9e465bb29ac2f1bc25a4a58c2faa",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m64-seed-0",
-      "sha256": "3f79972d36ff810d43e0dee22c8d069cb50f6cecef3575d813e4b8b23831bd8e"
+      "csv_sha256": "3f79972d36ff810d43e0dee22c8d069cb50f6cecef3575d813e4b8b23831bd8e",
+      "summary_sha256": "495f0aa25ad414348268d461d84342becca8b109fa185e31cf3ed2e69bd93d2b",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m64-seed-1",
-      "sha256": "c4841aeaf0047c1a0301349b860d530c1284a6826b6526d6a607fbf301fca4dd"
+      "csv_sha256": "c4841aeaf0047c1a0301349b860d530c1284a6826b6526d6a607fbf301fca4dd",
+      "summary_sha256": "4fbd228afd305ba3f6224de6f4d2eeb62f295b85e94a461a8d1df70622a5fe75",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m64-seed-123456789",
-      "sha256": "edb58ba846ffac5aee4b2476d95c2477b6ddcaf21e965c5b54c4bb64777af859"
+      "csv_sha256": "edb58ba846ffac5aee4b2476d95c2477b6ddcaf21e965c5b54c4bb64777af859",
+      "summary_sha256": "8d624978967af3aeac67cad90898943c621c5e1d5fa25b3e7f2a40e8085c7d59",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m64-seed-m1",
-      "sha256": "e5f75dd0ed293cdde303e1d8cbd3ee32d05df22228245d0c2c10adcf41d5727a"
+      "csv_sha256": "e5f75dd0ed293cdde303e1d8cbd3ee32d05df22228245d0c2c10adcf41d5727a",
+      "summary_sha256": "b6c3a707ebcd33bdbde3c6ad475f882fbd4323207a8bdf9088ee2668b3014f8b",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-off-community-off-miny-m64-seed-m987654321987654321",
-      "sha256": "41232ad93fcde5123ec481e05912e510b80cd65694d20c6eccdb85f4600d9e03"
+      "csv_sha256": "41232ad93fcde5123ec481e05912e510b80cd65694d20c6eccdb85f4600d9e03",
+      "summary_sha256": "36ac3ba6310f6253da14c6234c4a175601d13826d35bf88397de3502334accca",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m128-seed-0",
-      "sha256": "53fd9ea0d074e52f6f4921d4a1d8dd5e4d64908fc0961920c4124075f91d8da2"
+      "csv_sha256": "53fd9ea0d074e52f6f4921d4a1d8dd5e4d64908fc0961920c4124075f91d8da2",
+      "summary_sha256": "e07f53c44c1f375a114f97120ae2b8eff2e6bb5b5714eca16eb7c907107771c1",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m128-seed-1",
-      "sha256": "c1fadbbaa2178c0ce52f38f7ec643739f71eade9afead735590da6b7922d850d"
+      "csv_sha256": "c1fadbbaa2178c0ce52f38f7ec643739f71eade9afead735590da6b7922d850d",
+      "summary_sha256": "c968296555b5de7bec5da11d2e3d047539f5f7b0c970d81fee87349572f55208",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m128-seed-123456789",
-      "sha256": "e31d29b663e662cbeff2892046a55cef8ffd1bd77ef00855ae151c3a28afee54"
+      "csv_sha256": "e31d29b663e662cbeff2892046a55cef8ffd1bd77ef00855ae151c3a28afee54",
+      "summary_sha256": "e4b06b335bb8f483665a736581744b765f4f11a4c0fb573216bea2a94189c7a6",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m128-seed-m1",
-      "sha256": "f03f87a5036088a356f38e4797678fb0ae58c66a459c9889b0aee4484aeb3b1d"
+      "csv_sha256": "f03f87a5036088a356f38e4797678fb0ae58c66a459c9889b0aee4484aeb3b1d",
+      "summary_sha256": "55059d91517e1e4e470c3d30b554e3c72918222723a983436946d67d015a53f2",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m128-seed-m987654321987654321",
-      "sha256": "1f8b650f11911eb6abe0cda3b166832f84b7783b78ebc7b2c01d6750b0d0796c"
+      "csv_sha256": "1f8b650f11911eb6abe0cda3b166832f84b7783b78ebc7b2c01d6750b0d0796c",
+      "summary_sha256": "fe7c685ab24cadaad377ab7f3655074b242061ae9b51649db3ca66d326e791b4",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m320-seed-0",
-      "sha256": "e6649f3f16e6d0ba7f749d2581b44c1dcffafac42c159fba5516b1385d8d89ab"
+      "csv_sha256": "e6649f3f16e6d0ba7f749d2581b44c1dcffafac42c159fba5516b1385d8d89ab",
+      "summary_sha256": "a4cce9522c8008944222bd0b05244e02bf874944bd6aa56e5898ebb6d2478934",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m320-seed-1",
-      "sha256": "3b7e28c0b464d9dd630019022ef0c8bbfb25fdfa5d4b346ed4b51ccdcf4901ed"
+      "csv_sha256": "3b7e28c0b464d9dd630019022ef0c8bbfb25fdfa5d4b346ed4b51ccdcf4901ed",
+      "summary_sha256": "08346c246be9a6744550b7ea5c88d4292a08e049b3746b21336376ba15bb0e7c",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m320-seed-123456789",
-      "sha256": "3fb11d084119fe24feaaccc2bda96ffcaec336f9c05a9e13715c6603cf014a0c"
+      "csv_sha256": "3fb11d084119fe24feaaccc2bda96ffcaec336f9c05a9e13715c6603cf014a0c",
+      "summary_sha256": "2c482ae538bcc49b237a015c963dba30ab37625656e6ee56804a012d9bf78615",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m320-seed-m1",
-      "sha256": "674583f7f8f1a9390e7925a629f4c9f7d5702b93d17c32b6cefd6dd03ea08c1a"
+      "csv_sha256": "674583f7f8f1a9390e7925a629f4c9f7d5702b93d17c32b6cefd6dd03ea08c1a",
+      "summary_sha256": "fc8bdb510ae84009d4928902481a02147c27792c06d6d2b91d9be31b6624b368",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m320-seed-m987654321987654321",
-      "sha256": "a79ecc8732b36ca737b3a9aa2fc65ddbb0e09e4cef37d68aa5333f3dda7966a2"
+      "csv_sha256": "a79ecc8732b36ca737b3a9aa2fc65ddbb0e09e4cef37d68aa5333f3dda7966a2",
+      "summary_sha256": "4bc3306bae4ef69999a2a336263208035b387e09421bec2d03c9f7428c549552",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m64-seed-0",
-      "sha256": "c2e9d9417012e8f02cb0ee28a2ea4cc1cc6264e50be2bf9ef0322829d0eee93c"
+      "csv_sha256": "c2e9d9417012e8f02cb0ee28a2ea4cc1cc6264e50be2bf9ef0322829d0eee93c",
+      "summary_sha256": "cb1b168efc9cdfd01b0523ad2f0c173debf98184ae9e92e05085ba3aea0a37c9",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m64-seed-1",
-      "sha256": "39c95dec9fbef8a1d3937ffa27255c66c99f6fccb65925da914e0ab2427e8f1d"
+      "csv_sha256": "39c95dec9fbef8a1d3937ffa27255c66c99f6fccb65925da914e0ab2427e8f1d",
+      "summary_sha256": "910a48b66cd854d1a7919d7f831168beb08974714ccc1054220010b9c7f1264c",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m64-seed-123456789",
-      "sha256": "c259fda444a0004c29ffb043de5fe459c6e24d69df54417496ef97a29abb0ab7"
+      "csv_sha256": "c259fda444a0004c29ffb043de5fe459c6e24d69df54417496ef97a29abb0ab7",
+      "summary_sha256": "1488b58fbd370a3df156288bf39dc9e740a3950318816ba8d8e0ba37c8199147",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m64-seed-m1",
-      "sha256": "4c00342c1f675c8f59e27195d7336b46aa466e5541c6f5d3b53a37c7557b58df"
+      "csv_sha256": "4c00342c1f675c8f59e27195d7336b46aa466e5541c6f5d3b53a37c7557b58df",
+      "summary_sha256": "2e804ba565829873d80d8268293a2c2940c858893d5df590abafe59a614c22de",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-community-on-final-community-on-miny-m64-seed-m987654321987654321",
-      "sha256": "1eedba38ea95003cafd9446d2f6fcabed73699bd1c65bc74c48f5edb176e9954"
+      "csv_sha256": "1eedba38ea95003cafd9446d2f6fcabed73699bd1c65bc74c48f5edb176e9954",
+      "summary_sha256": "93312a0f20773be971eef38b683f4be1459eeddcc3304639983ac401a38f0578",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-0",
-      "sha256": "035f8146794e8a3a0a727079463315cfed95caf55b3fcb8d22b0180870762776"
+      "csv_sha256": "035f8146794e8a3a0a727079463315cfed95caf55b3fcb8d22b0180870762776",
+      "summary_sha256": "df2b89fbd7b826481333b6faa6fefba504983d2be5b308f9b6a54bb27e366ba5",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-1",
-      "sha256": "e986ac94f85afaf4a97fe8978d82adefb5f5bf95566df6d4771060a3a28cb9b6"
+      "csv_sha256": "e986ac94f85afaf4a97fe8978d82adefb5f5bf95566df6d4771060a3a28cb9b6",
+      "summary_sha256": "acc42b759f6e77be1bb1ff870ca48ab1957cf343626c8a0ab8feb22c63aaf816",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-123456789",
-      "sha256": "8c4d77f8919fc29118b9ec9fc93559a5b4617da027ae225ce9e14d658c3456a7"
+      "csv_sha256": "8c4d77f8919fc29118b9ec9fc93559a5b4617da027ae225ce9e14d658c3456a7",
+      "summary_sha256": "3cc75419522b358b3c458eb58a1eb871821733bd312da751e287d33a3e869d43",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-m1",
-      "sha256": "f4ddb2f596ff5399c11bcfaa62ec88fe035a5ae32731b5b808bd36b4c03d8ff6"
+      "csv_sha256": "f4ddb2f596ff5399c11bcfaa62ec88fe035a5ae32731b5b808bd36b4c03d8ff6",
+      "summary_sha256": "9174d57e888b40e0c6fcf50a77f5bd8e9ffd4ae2a4903c179550426fc11b00ac",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-m987654321987654321",
-      "sha256": "8e06050da82d6aab11d1531e45cb9b5f4c8951f4f701ccd931f15740cf83682f"
+      "csv_sha256": "8e06050da82d6aab11d1531e45cb9b5f4c8951f4f701ccd931f15740cf83682f",
+      "summary_sha256": "da49e2a1a8988f27b8e82041af805d05136a534b03390b0cdf286c7e7cceee0f",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m128-seed-0",
-      "sha256": "91c2c057f930d2a7b21c5d99d12dbb7d8826a698f817779373693ff3883fc1c7"
+      "csv_sha256": "91c2c057f930d2a7b21c5d99d12dbb7d8826a698f817779373693ff3883fc1c7",
+      "summary_sha256": "f13dfa6c99512bd30ec5acd2db10f00aa12cc5149615a7f970596400768f511e",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m128-seed-1",
-      "sha256": "d4802781ad50111b3d0b9ff091a17c0542284f2b30a59f9232f27e3e0e2a2945"
+      "csv_sha256": "d4802781ad50111b3d0b9ff091a17c0542284f2b30a59f9232f27e3e0e2a2945",
+      "summary_sha256": "01696442571b545938c4a3c0e7f89008bab156a4ec0b7b64cedaef99bcbdab8c",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m128-seed-123456789",
-      "sha256": "74105c841c8a55ac31e489f9d8685161b0be91e438b8571863c3d0f505c68def"
+      "csv_sha256": "74105c841c8a55ac31e489f9d8685161b0be91e438b8571863c3d0f505c68def",
+      "summary_sha256": "9f30e3fb3ee48d984fc45aa48d4987cb57db01e06beaeb490450ec045cda4da1",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m128-seed-m1",
-      "sha256": "0c033c978f970ee7c06246bb4406e2026131e794b1ff485f66b95db2353136e2"
+      "csv_sha256": "0c033c978f970ee7c06246bb4406e2026131e794b1ff485f66b95db2353136e2",
+      "summary_sha256": "bb94fb0cd4a280e6919ec20ef3ffa6c59ba34e8f06210907689910166f9d0a96",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m128-seed-m987654321987654321",
-      "sha256": "b51cce61ab45a781f734c753afd367bdc0d70859fdbc4409a7c67fffa8caf6dd"
+      "csv_sha256": "b51cce61ab45a781f734c753afd367bdc0d70859fdbc4409a7c67fffa8caf6dd",
+      "summary_sha256": "c3343058bf9515d12d384b98df9205c2f8ec8b07fd60fdb2fa6acc628e637a75",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m320-seed-0",
-      "sha256": "b32688b4cc426b90778f61e47faba90d7ada123c5e60e3913b9468432f420497"
+      "csv_sha256": "b32688b4cc426b90778f61e47faba90d7ada123c5e60e3913b9468432f420497",
+      "summary_sha256": "72d5801f6f7d51ba68d5e00633f7a7c541b1327a7504df58828b244d9fee0c98",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m320-seed-1",
-      "sha256": "00db269912681d99932d0b2d72d412fe0b4d439f832e0432330b76e98ec0fd6d"
+      "csv_sha256": "00db269912681d99932d0b2d72d412fe0b4d439f832e0432330b76e98ec0fd6d",
+      "summary_sha256": "e307af0895a2f74a72f12adba559add2641b2623eb5d055ff55c2cb87de71240",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m320-seed-123456789",
-      "sha256": "51a663958b04e3893802161b99618fb8c8a6a1d354eef09caf63f6f5b4edba5f"
+      "csv_sha256": "51a663958b04e3893802161b99618fb8c8a6a1d354eef09caf63f6f5b4edba5f",
+      "summary_sha256": "5cd8fc860b27d0922d73770510f4edcc6a100de7d1a56d227999b9d250a8dfa4",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m320-seed-m1",
-      "sha256": "8f49a296fdeca1b53788d39cca7fd3277d1976ff1169c55a59cc1680aed4773c"
+      "csv_sha256": "8f49a296fdeca1b53788d39cca7fd3277d1976ff1169c55a59cc1680aed4773c",
+      "summary_sha256": "8c33e396675a2625ff00eef37b47de9e131d2944217ee64ad35b9b50c83f4588",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m320-seed-m987654321987654321",
-      "sha256": "0523a1b3be63161d12cf7eb724d03524ab08afee4d96a1b319348c31adca37ae"
+      "csv_sha256": "0523a1b3be63161d12cf7eb724d03524ab08afee4d96a1b319348c31adca37ae",
+      "summary_sha256": "fbab1a521dae600301fb8192f1e6938953eea03b2868bca30fd054b3f32f6e2a",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m64-seed-0",
-      "sha256": "c1b22976b84ae6bdf4d62e08b30719343fea45f10cc54051b54a5daaefb93b75"
+      "csv_sha256": "c1b22976b84ae6bdf4d62e08b30719343fea45f10cc54051b54a5daaefb93b75",
+      "summary_sha256": "7195a856e2dd9e2f31bda21d446b8ebff9aa34f3922181046cee8f57a4626f98",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m64-seed-1",
-      "sha256": "e59a2b0fc4cdc3455c38c8374497d6e2837fa8ef5ce2f8bb6031f2a032e886bb"
+      "csv_sha256": "e59a2b0fc4cdc3455c38c8374497d6e2837fa8ef5ce2f8bb6031f2a032e886bb",
+      "summary_sha256": "69b469e34cd4cfae8cf04498631bf9acb8d4ef0f10aeccd9d7b01f44d2157861",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m64-seed-123456789",
-      "sha256": "043b55c037557b6f752f3bcb502fca6f73a52e59300077a7c83884e686002223"
+      "csv_sha256": "043b55c037557b6f752f3bcb502fca6f73a52e59300077a7c83884e686002223",
+      "summary_sha256": "2076c6ba6ec54792dba46912da198d08adc95ac0cac1f21adb72134bdba55569",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m64-seed-m1",
-      "sha256": "beea19d0dbfd54ade4335cbd6b7fe81468a0628d03f2f6b641004b60f65a69ff"
+      "csv_sha256": "beea19d0dbfd54ade4335cbd6b7fe81468a0628d03f2f6b641004b60f65a69ff",
+      "summary_sha256": "4b6f32aeba1d8cfa55e2543d908fc2ff1821201c553ee13a2ff650985d9aff97",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     },
     {
       "case_id": "20260903-official-3.0.17-official-3.0.17-miny-m64-seed-m987654321987654321",
-      "sha256": "f3f8a510afa61aa868d4a0195b0bd3f263cdac4ac994dea77d92488225a372ea"
+      "csv_sha256": "f3f8a510afa61aa868d4a0195b0bd3f263cdac4ac994dea77d92488225a372ea",
+      "summary_sha256": "06a10b73c8b2f4596efffc8b2e7c4eb68aff225a34ec52a744a17d20029cad6e",
+      "chunk_bounds_inclusive": [
+        64,
+        64,
+        79,
+        79
+      ]
     }
   ],
   "case_count": 50,
