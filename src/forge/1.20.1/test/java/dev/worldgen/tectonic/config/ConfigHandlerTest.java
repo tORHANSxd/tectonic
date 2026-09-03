@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigHandlerTest {
@@ -89,5 +90,19 @@ class ConfigHandlerTest {
         String second = Files.readString(path, StandardCharsets.UTF_8);
 
         assertEquals(first, second);
+    }
+
+    @Test
+    void configFromBeforeRiverIceDefaultsTheNewToggleOff() throws IOException {
+        Path path = tempDirectory.resolve("tectonic.json");
+        ConfigHandler.load(path);
+        String oldConfig = Files.readString(path, StandardCharsets.UTF_8)
+            .replace("    \"river_ice\": false,\n", "");
+        assertFalse(oldConfig.contains("\"river_ice\""));
+        Files.writeString(path, oldConfig, StandardCharsets.UTF_8);
+
+        ConfigHandler.load(path);
+
+        assertFalse(ConfigHandler.getState().continents.riverIce);
     }
 }

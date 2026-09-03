@@ -116,6 +116,7 @@ public class ConfigState {
             case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
+            case "river_ice" -> this.continents.riverIce;
             case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
@@ -187,11 +188,12 @@ public class ConfigState {
         public static final double RIDGE_SCALE = 0.25;
         public static final boolean UNDERGROUND_RIVERS = true;
         public static final boolean RIVER_LANTERNS = true;
+        public static final boolean RIVER_ICE = false;
         public static final double FLAT_TERRAIN_SKEW = 0.1;
         public static final boolean ROLLING_HILLS = true;
         public static final boolean JUNGLE_PILLARS = true;
 
-        public static final Continents DEFAULT = new Continents(OCEAN_OFFSET, CONTINENTS_SCALE, EROSION_SCALE, RIDGE_SCALE, UNDERGROUND_RIVERS, RIVER_LANTERNS, FLAT_TERRAIN_SKEW, ROLLING_HILLS, JUNGLE_PILLARS);
+        public static final Continents DEFAULT = new Continents(OCEAN_OFFSET, CONTINENTS_SCALE, EROSION_SCALE, RIDGE_SCALE, UNDERGROUND_RIVERS, RIVER_LANTERNS, RIVER_ICE, FLAT_TERRAIN_SKEW, ROLLING_HILLS, JUNGLE_PILLARS);
         public static final Codec<Continents> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("ocean_offset").orElse(OCEAN_OFFSET).forGetter(continents -> continents.oceanOffset),
             Codec.DOUBLE.fieldOf("continents_scale").orElse(CONTINENTS_SCALE).forGetter(continents -> continents.continentsScale),
@@ -199,6 +201,7 @@ public class ConfigState {
             Codec.DOUBLE.fieldOf("ridge_scale").orElse(RIDGE_SCALE).forGetter(continents -> continents.ridgeScale),
             Codec.BOOL.fieldOf("underground_rivers").orElse(UNDERGROUND_RIVERS).forGetter(continents -> continents.undergroundRivers),
             Codec.BOOL.fieldOf("river_lanterns").orElse(RIVER_LANTERNS).forGetter(continents -> continents.riverLanterns),
+            Codec.BOOL.fieldOf("river_ice").orElse(RIVER_ICE).forGetter(continents -> continents.riverIce),
             Codec.DOUBLE.fieldOf("flat_terrain_skew").orElse(FLAT_TERRAIN_SKEW).forGetter(continents -> continents.flatTerrainSkew),
             Codec.BOOL.fieldOf("rolling_hills").orElse(ROLLING_HILLS).forGetter(continents -> continents.rollingHills),
             Codec.BOOL.fieldOf("jungle_pillars").orElse(JUNGLE_PILLARS).forGetter(continents -> continents.junglePillars)
@@ -210,24 +213,26 @@ public class ConfigState {
         public double ridgeScale;
         public boolean undergroundRivers;
         public boolean riverLanterns;
+        public boolean riverIce;
         public double flatTerrainSkew;
         public boolean rollingHills;
         public boolean junglePillars;
 
-        public Continents(double oceanOffset, double continentsScale, double erosionScale, double ridgeScale, boolean undergroundRivers, boolean riverLanterns, double flatTerrainSkew, boolean rollingHills, boolean junglePillars) {
+        public Continents(double oceanOffset, double continentsScale, double erosionScale, double ridgeScale, boolean undergroundRivers, boolean riverLanterns, boolean riverIce, double flatTerrainSkew, boolean rollingHills, boolean junglePillars) {
             this.oceanOffset = oceanOffset;
             this.continentsScale = continentsScale;
             this.erosionScale = erosionScale;
             this.ridgeScale = ridgeScale;
             this.undergroundRivers = undergroundRivers;
             this.riverLanterns = riverLanterns;
+            this.riverIce = riverIce;
             this.flatTerrainSkew = flatTerrainSkew;
             this.rollingHills = rollingHills;
             this.junglePillars = junglePillars;
         }
 
         public Continents copy() {
-            return new Continents(this.oceanOffset, this.continentsScale, this.erosionScale, this.ridgeScale, this.undergroundRivers, this.riverLanterns, this.flatTerrainSkew, this.rollingHills, this.junglePillars);
+            return new Continents(this.oceanOffset, this.continentsScale, this.erosionScale, this.ridgeScale, this.undergroundRivers, this.riverLanterns, this.riverIce, this.flatTerrainSkew, this.rollingHills, this.junglePillars);
         }
     }
 

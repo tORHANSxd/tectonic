@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigStateTest {
     @Test
@@ -56,5 +58,17 @@ class ConfigStateTest {
 
         assertEquals(ConfigState.GlobalTerrain.VERTICAL_SCALE, snapshot.globalTerrain.verticalScale);
         assertEquals(ConfigState.Islands.NOISE.scale, snapshot.getNoiseState("island").scale);
+    }
+
+    @Test
+    void riverIceDefaultsOffAndIsCopiedIntoRuntimeSnapshot() {
+        ConfigState state = ConfigState.defaults();
+        assertFalse(state.continents.riverIce);
+
+        state.continents.riverIce = true;
+        ConfigSnapshot snapshot = ConfigSnapshot.from(state);
+
+        state.continents.riverIce = false;
+        assertTrue(snapshot.test("river_ice"));
     }
 }

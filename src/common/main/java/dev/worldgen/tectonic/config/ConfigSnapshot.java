@@ -77,6 +77,7 @@ public final class ConfigSnapshot {
             case "ultrasmooth" -> this.globalTerrain.ultrasmooth;
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
+            case "river_ice" -> this.continents.riverIce;
             case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
@@ -115,6 +116,7 @@ public final class ConfigSnapshot {
         public final double ridgeScale;
         public final boolean undergroundRivers;
         public final boolean riverLanterns;
+        public final boolean riverIce;
         public final double flatTerrainSkew;
         public final boolean rollingHills;
         public final boolean junglePillars;
@@ -126,6 +128,7 @@ public final class ConfigSnapshot {
             this.ridgeScale = state.ridgeScale;
             this.undergroundRivers = state.undergroundRivers;
             this.riverLanterns = state.riverLanterns;
+            this.riverIce = state.riverIce;
             this.flatTerrainSkew = state.flatTerrainSkew;
             this.rollingHills = state.rollingHills;
             this.junglePillars = state.junglePillars;

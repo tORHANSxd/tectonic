@@ -23,6 +23,9 @@ class WorldgenResourceTest {
     private static final Path RAW_CONTINENTS = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/data/tectonic/worldgen/density_function/noise/raw_continents.json"
     );
+    private static final Path RIVER_ICE_MODIFIER = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/ice.json"
+    );
 
     static List<Path> jsonResources() throws IOException {
         try (var paths = Files.walk(RESOURCE_ROOT)) {
@@ -53,6 +56,17 @@ class WorldgenResourceTest {
             assertEquals(-1, clamp.get("min").getAsInt());
             assertEquals(2, clamp.get("max").getAsInt());
             assertEquals("minecraft:add", clamp.getAsJsonObject("input").get("type").getAsString());
+        }
+    }
+
+    @Test
+    void riverIceUsesForge1201SnowyBiomeTagAndConfigPredicate() throws IOException {
+        try (Reader reader = Files.newBufferedReader(RIVER_ICE_MODIFIER, StandardCharsets.UTF_8)) {
+            JsonObject modifier = JsonParser.parseReader(reader).getAsJsonObject();
+
+            assertEquals("#forge:is_snowy", modifier.get("biomes").getAsString());
+            assertEquals("river_ice", modifier.getAsJsonObject("predicate").get("key").getAsString());
+            assertEquals("tectonic:underground_river/ice", modifier.get("features").getAsString());
         }
     }
 }

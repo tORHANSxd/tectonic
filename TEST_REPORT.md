@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 238 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 223 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 244 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -163,6 +163,12 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`，并与 `34241bdb35acda67b5367d49f354c66c05e098e2` 的最终资源一致。`tectonic:noise/raw_continents` 在原有 ocean offset 与大陆 spline 相加后统一钳制到 `[-1, 2]`，避免低于 `-1` 的配置把 Mushroom Fields 选择区间异常扩散；配置滑块仍保留 `[-2, 0]`，没有限制用户表达能力。
 
 自动测试验证 clamp 类型、边界和内部 add 表达式，并增加全部 JSON 资源的严格语法扫描。实际海洋/Mushroom Fields 占比仍需固定种子世界生成统计，当前不冒充为已完成黑盒验收。
+
+### P3A-RIVER-ICE-001：River Ice
+
+上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`。回移内容包括旧 `ConfigState`/不可变 `ConfigSnapshot`/GUI 中默认关闭的 `continents.river_ice`，以及 1.20.1 可解析的 configured feature、placed feature 和 Lithostitched 1.4 modifier。高版本通用标签 `#c:is_snowy` 已按 Forge 1.20.1 实际资源转换为 `#forge:is_snowy`；未复制 Fabric/NeoForge 高版本加载条件。
+
+自动测试覆盖旧配置缺少新字段时默认关闭、快照隔离、modifier 配置键/资源 ID/雪地标签，以及全部 JSON 的严格解析。真实专服测试分别以 `river_ice=false` 和 `river_ice=true` 启动并载入同一世界；开启后额外强制生成 `[32,32]..[47,47]` 共 256 个新区块，再移除强加载、保存并正常停服。`run/logs/latest.log` 未命中发布阻断错误模式；批量生成期间出现一次 `Can't keep up`（落后 18.021 秒），保留为后续统一性能基准的观察项，不据此宣称性能达标。
 
 ### 尚未完成的 Phase 2 项
 
