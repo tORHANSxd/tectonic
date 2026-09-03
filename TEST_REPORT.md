@@ -9,7 +9,7 @@
 - Gradle 主进程、Tectonic Java/Kotlin 编译器、开发客户端和开发专服使用指定的 Temurin 21；
 - Tectonic 发布 JAR 内全部项目类必须为 class major 65；
 - Minecraft-Codev 内部补丁任务可以使用其按 Minecraft 元数据申请的 Java 17 工具链，因为该步骤不编译 Tectonic 源码；
-- Java 17 玩家将无法加载本社区版，这属于有意兼容边界，不能标记为原计划定义的 Stable。
+- Java 17 玩家将无法加载本社区版；这是计划现已明确采用的兼容边界，不再单独阻断 Stable。
 
 ## 环境
 
@@ -265,8 +265,47 @@ Temurin 21 下执行 `clean forge1201UnitTest forge1201RemapJar` 通过，共 27
 
 Forge 1.20.1 的 3.0.17 基线提交 `5373b208...` 与当前分支都已经是 `0.65`，说明 3.0.23 引入的回归从未进入本回移线。本项不修改生产资源，否则反而会把修复倒着移植；新增资源契约测试锁定嵌套 spline 控制点为 `0.65`。指定 Temurin 21 下 `forge1201UnitTest` 通过，共 272 个测试实例、0 failure、0 error、0 skipped。由于“回移前”和“回移后”生产资源完全相同，不存在可归因于本项的高度图差异，计划中的坡度/起伏/峰值 A/B 在本项判定为不适用，而不是伪造一组重复跑数。
 
+## Phase 2 补充验收：生产专服、Mixin 与问题复现
+
+### P2-SERVER-PRODUCTION-001：Forge 47.4.10 / 47.4.22 真专服
+
+当前 Java 21 重映射 JAR（SHA-256 `187e6284b3845b0869f0c9facfd43f845abfcacdaa7cd3ca0a998d67d188bb23`）分别放入 Forge `47.4.10` 和 `47.4.22` 的正式服务端安装，与 Lithostitched 1.4.11 一同启动。两次运行都直接使用：
+
+```text
+C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot\bin\java.exe
+```
+
+并开启 `mixin.debug.verbose`、`mixin.debug.countInjections`、`mixin.debug.verify`、`mixin.debug.strict`、`mixin.checks.interfaces`、`mixin.checks.interfaces.strict`、`mixin.dumpTargetOnFailure` 和字节码导出。结果：
+
+| Forge | ASM | 启动 | 新区块 | 保存/停服 | 阻断日志 | Tectonic 客户端类 |
+|---|---|---|---:|---|---:|---:|
+| 47.4.10 | 9.8 | `Done (3.100s)` | 1 个逐区块 FULL 屏障 | 通过 | 0 | 0 |
+| 47.4.22 | 9.9.1 | `Done (18.868s)` | 225 个 | 通过 | 0 | 0 |
+
+两版均选择 `tectonic.mixins.json` 与 `tectonic_1.20.1.mixins.json`，实际加载 14 个服务端 Tectonic mixin；所有已加载注入点通过 strict/verify，未出现 `InvalidInjectionException`、`InjectionError` 或 `Mixin apply failed`。`BlendingDataMixin` 需要旧版区块与新区块交界才会加载，本轮普通新世界没有触发，因此完整 Mixin audit 仍保留这一项，不拿“没跑到”冒充“已通过”。
+
+Forge 1.20.1 固定携带 Mixin 0.8.5，其最高兼容级别低于 Java 21。每次启动会为 14 个已加载的 major 65 mixin 各输出一次 `JAVA_17 supports class version 61` 警告；Forge 自带的 ASM 9.8/9.9.1 仍成功解析和变换这些类。警告只发生在启动变换阶段，没有按区块刷屏。本社区版按用户要求继续发布 Java 21 / major 65，不通过降低字节码掩盖这条工具链边界。
+
+完整命令、制品来源、日志 SHA-256 与判定规则记录在 `benchmarks/forge_server/2026-09-03/README.md`。
+
+### P2-ISSUE-520-001：Tectonic Tweak 1.1.0 不兼容
+
+在已经通过的 Forge 47.4.22 组合中只增加官方 `tectonic_tweak-1.1.0.jar`，服务端即在 `Done` 前稳定失败，精确复现 issue #520 的五个未绑定 density function：
+
+```text
+tectonic:overworld/caves
+tectonic:overworld/depth
+tectonic:overworld/legacy/cliffs
+tectonic:overworld/sloped_cheese
+tectonic:overworld/underground_river/total
+```
+
+该附加模组的发布页只声明兼容 Tectonic 2.3.4，但 `mods.toml` 错把依赖范围写成 `[2.1,)`，因而也接受语义不兼容的 Tectonic 3.x。其 `final_density.json` 直接引用上述五个 v2 路径；Tectonic v3 的资源布局已经变化。移除 Tectonic Tweak 后，同一 Forge 47.4.22 世界立即再次达到 `Done (3.169s)` 并正常保存停服，阻断日志为 0。
+
+结论：#520 是第三方 Tectonic Tweak 1.1.0 的错误版本范围和 v2 数据包导致，不是本回移缺少 v3 资源。项目不添加语义不明的旧 ID 占位符；用户侧解决方式是移除该附加模组，详见 `KNOWN_ISSUES.md`。
+
 ### 尚未完成的 Phase 2 项
 
-- #473、#520 的长时间新区块压力复现；
-- Mixin audit、纯专服客户端类隔离复测及同类警告刷屏统计；
+- #473 仍需不少于 20,000 个新区块的 Java 21 长时间压力测试；
+- `BlendingDataMixin` 仍需旧/新区块交界触发；其余已加载 Mixin 的 strict/verify、真专服客户端类隔离和启动期警告计数已经完成；
 - 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。
