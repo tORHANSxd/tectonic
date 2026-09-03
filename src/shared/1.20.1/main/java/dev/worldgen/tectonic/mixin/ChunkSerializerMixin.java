@@ -41,7 +41,7 @@ public class ChunkSerializerMixin {
     }
 
     @Unique
-    static CompoundTag tectonic$createBlendingData(ListTag sections) {
+    private static CompoundTag tectonic$createBlendingData(ListTag sections) {
         int minSection = 0;
         int maxSection = 0;
         for (int index = 0; index < sections.size(); index++) {
