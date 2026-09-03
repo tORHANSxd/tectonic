@@ -73,6 +73,19 @@ class ConfigStateTest {
     }
 
     @Test
+    void oreFixDefaultsOffAndIsCopiedIntoRuntimeSnapshot() {
+        ConfigState state = ConfigState.defaults();
+        assertFalse(state.caves.oreFix);
+
+        state.caves.oreFix = true;
+        ConfigSnapshot snapshot = ConfigSnapshot.from(state);
+
+        state.caves.oreFix = false;
+        assertTrue(snapshot.caves.oreFix);
+        assertTrue(snapshot.test("ore_fix"));
+    }
+
+    @Test
     void frozenWastelandMatchesUpstreamValues() {
         AtomicReference<ConfigState> preset = new AtomicReference<>();
         ConfigPresets.acceptPresets((name, state, color) -> {

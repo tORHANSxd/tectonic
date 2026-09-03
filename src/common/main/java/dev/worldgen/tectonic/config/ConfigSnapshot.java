@@ -78,6 +78,7 @@ public final class ConfigSnapshot {
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
             case "river_ice" -> this.continents.riverIce;
+            case "ore_fix" -> this.caves.oreFix;
             case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
@@ -178,6 +179,7 @@ public final class ConfigSnapshot {
         public final double noodleAdditive;
         public final boolean spaghettiEnabled;
         public final boolean carversEnabled;
+        public final boolean oreFix;
 
         private Caves(ConfigState.Caves state) {
             this.depthCutoffStart = state.depthCutoffStart;
@@ -188,6 +190,7 @@ public final class ConfigSnapshot {
             this.noodleAdditive = state.noodleAdditive;
             this.spaghettiEnabled = state.spaghettiEnabled;
             this.carversEnabled = state.carversEnabled;
+            this.oreFix = state.oreFix;
         }
     }
 

@@ -9,6 +9,7 @@ import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigNoise;
 import dev.worldgen.tectonic.worldgen.densityfunction.Invert;
+import dev.worldgen.tectonic.worldgen.placementmodifier.HeightStabilizedCount;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
@@ -47,11 +48,13 @@ public class TectonicLexforge {
             boolean terralith = ModList.get().isLoaded("terralith");
             boolean ultrasmooth = ConfigHandler.getState().globalTerrain.ultrasmooth;
             boolean noCarvers = !ConfigHandler.getState().caves.carversEnabled;
+            boolean oreFix = ConfigHandler.getState().caves.oreFix;
             addPack("tectonic");
             addPack("tectonic/overlay.mod");
             if (terralith) addPack("tectonic/overlay.terratonic");
             if (ultrasmooth) addPack("tectonic/overlay.ultrasmooth");
             if (noCarvers) addPack("tectonic/overlay.no_carvers");
+            if (oreFix) addPack("tectonic/overlay.ore_fix");
         }
     }
 
@@ -61,6 +64,9 @@ public class TectonicLexforge {
             helper.register(id("config_constant"), ConfigConstant.CODEC_HOLDER.codec());
             helper.register(id("config_noise"), ConfigNoise.CODEC_HOLDER.codec());
             helper.register(id("invert"), Invert.CODEC_HOLDER.codec());
+        });
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, helper -> {
+            helper.register(id("height_stabilized_count"), HeightStabilizedCount.TYPE);
         });
         event.register(LithostitchedRegistryKeys.MODIFIER_TYPE, helper -> {
             helper.register(id("set_height_limits"), SetHeightLimitsModifier.CODEC);

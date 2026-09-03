@@ -15,9 +15,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WorldgenResourceTest {
     private static final Path RESOURCE_ROOT = Path.of("src/common/main/resources");
@@ -37,6 +39,9 @@ class WorldgenResourceTest {
     private static final Path REGION_ROOT = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/data/tectonic/worldgen/density_function/region"
     );
+    private static final Path ORE_FIX_ROOT = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/overlay.ore_fix"
+    );
     private static final List<String> HORIZONTAL_CACHE_REGIONS = List.of(
         "club.json",
         "club_weak.json",
@@ -44,6 +49,19 @@ class WorldgenResourceTest {
         "spade.json",
         "spade_weak.json",
         "diamond.json"
+    );
+    private static final Map<String, OreFixExpectation> ORE_FIX_FEATURES = Map.ofEntries(
+        Map.entry("ore_diamond.json", new OreFixExpectation("minecraft:ore_diamond_small", "absolute", 16, 1.4, true)),
+        Map.entry("ore_diamond_buried.json", new OreFixExpectation("minecraft:ore_diamond_buried", "absolute", 16, 0.8, true)),
+        Map.entry("ore_diamond_large.json", new OreFixExpectation("minecraft:ore_diamond_large", "absolute", 16, 0.02, true)),
+        Map.entry("ore_gold.json", new OreFixExpectation("minecraft:ore_gold_buried", "absolute", 32, 0.66, false)),
+        Map.entry("ore_gold_extra.json", new OreFixExpectation("minecraft:ore_gold_buried", "absolute", -48, 0.5, false)),
+        Map.entry("ore_gravel.json", new OreFixExpectation("minecraft:ore_gravel", "below_top", 0, 0.7, false)),
+        Map.entry("ore_lapis.json", new OreFixExpectation("minecraft:ore_lapis", "absolute", 32, 0.5, true)),
+        Map.entry("ore_lapis_buried.json", new OreFixExpectation("minecraft:ore_lapis_buried", "absolute", 64, 0.5, false)),
+        Map.entry("ore_redstone.json", new OreFixExpectation("minecraft:ore_redstone", "absolute", 16, 0.66, false)),
+        Map.entry("ore_redstone_lower.json", new OreFixExpectation("minecraft:ore_redstone", "absolute", -32, 4, false)),
+        Map.entry("ore_tuff.json", new OreFixExpectation("minecraft:ore_tuff", "absolute", 0, 0.5, false))
     );
 
     static List<Path> jsonResources() throws IOException {
@@ -128,5 +146,60 @@ class WorldgenResourceTest {
                 language.get("preset.tectonic.overkill").getAsString()
             );
         }
+    }
+
+    @Test
+    void oreFixOverlayMatchesTheCompatibleUpstreamFeatureSet() throws IOException {
+        Path placedFeatures = ORE_FIX_ROOT.resolve("data/minecraft/worldgen/placed_feature");
+        try (var paths = Files.list(placedFeatures)) {
+            assertEquals(
+                ORE_FIX_FEATURES.keySet().stream().sorted().toList(),
+                paths.filter(Files::isRegularFile).map(path -> path.getFileName().toString()).sorted().toList()
+            );
+        }
+
+        for (Map.Entry<String, OreFixExpectation> entry : ORE_FIX_FEATURES.entrySet()) {
+            try (Reader reader = Files.newBufferedReader(placedFeatures.resolve(entry.getKey()), StandardCharsets.UTF_8)) {
+                JsonObject feature = JsonParser.parseReader(reader).getAsJsonObject();
+                OreFixExpectation expected = entry.getValue();
+                JsonObject count = feature.getAsJsonArray("placement").get(0).getAsJsonObject();
+                JsonObject maxY = count.getAsJsonObject("max_y");
+
+                assertEquals(expected.feature(), feature.get("feature").getAsString(), entry.getKey());
+                assertEquals("tectonic:height_stabilized_count", count.get("type").getAsString(), entry.getKey());
+                assertEquals(1, maxY.size(), entry.getKey());
+                assertEquals(expected.maxY(), maxY.get(expected.anchor()).getAsInt(), entry.getKey());
+                assertEquals(expected.countPerSection(), count.get("count_per_section").getAsDouble(), 0.000_001, entry.getKey());
+                assertEquals(expected.biasedToBottom(), count.get("biased_to_bottom").getAsBoolean(), entry.getKey());
+                assertEquals("minecraft:in_square", feature.getAsJsonArray("placement").get(1).getAsJsonObject().get("type").getAsString(), entry.getKey());
+                assertEquals("minecraft:biome", feature.getAsJsonArray("placement").get(2).getAsJsonObject().get("type").getAsString(), entry.getKey());
+            }
+        }
+    }
+
+    @Test
+    void oreFixOverlayUsesTheForge1201PackFormat() throws IOException {
+        try (Reader reader = Files.newBufferedReader(ORE_FIX_ROOT.resolve("pack.mcmeta"), StandardCharsets.UTF_8)) {
+            JsonObject metadata = JsonParser.parseReader(reader).getAsJsonObject();
+            assertEquals(15, metadata.getAsJsonObject("pack").get("pack_format").getAsInt());
+        }
+    }
+
+    @Test
+    void oreFixHasVisibleRestartAwareTranslations() throws IOException {
+        try (Reader reader = Files.newBufferedReader(EN_US, StandardCharsets.UTF_8)) {
+            JsonObject language = JsonParser.parseReader(reader).getAsJsonObject();
+            assertEquals("Ore Fix", language.get("config.tectonic.option.ore_fix").getAsString());
+            assertTrue(language.get("config.tectonic.option.ore_fix.tooltip").getAsString().contains("restart"));
+        }
+    }
+
+    private record OreFixExpectation(
+        String feature,
+        String anchor,
+        int maxY,
+        double countPerSection,
+        boolean biasedToBottom
+    ) {
     }
 }

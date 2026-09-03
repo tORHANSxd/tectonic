@@ -117,6 +117,7 @@ public class ConfigState {
             case "remove_frozen_ocean_ice" -> this.oceans.removeFrozenOceanIce;
             case "river_lanterns" -> this.continents.riverLanterns;
             case "river_ice" -> this.continents.riverIce;
+            case "ore_fix" -> this.caves.oreFix;
             case "no_carvers" -> !this.caves.carversEnabled;
             default -> false;
         };
@@ -319,8 +320,9 @@ public class ConfigState {
         public static final double NOODLE_ADDITIVE = -0.075;
         public static final boolean SPAGHETTI_ENABLED = true;
         public static final boolean CARVERS_ENABLED = true;
+        public static final boolean ORE_FIX = false;
 
-        public static final Caves DEFAULT = new Caves(DEPTH_CUTOFF_START, DEPTH_CUTOFF_SIZE, CHEESE_ENABLED, CHEESE_ADDITIVE, NOODLE_ENABLED, NOODLE_ADDITIVE, SPAGHETTI_ENABLED, CARVERS_ENABLED);
+        public static final Caves DEFAULT = new Caves(DEPTH_CUTOFF_START, DEPTH_CUTOFF_SIZE, CHEESE_ENABLED, CHEESE_ADDITIVE, NOODLE_ENABLED, NOODLE_ADDITIVE, SPAGHETTI_ENABLED, CARVERS_ENABLED, ORE_FIX);
         public static final Codec<Caves> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.DOUBLE.fieldOf("depth_cutoff_start").orElse(DEPTH_CUTOFF_START).forGetter(caves -> caves.depthCutoffStart),
             Codec.DOUBLE.fieldOf("depth_cutoff_size").orElse(DEPTH_CUTOFF_SIZE).forGetter(caves -> caves.depthCutoffSize),
@@ -329,7 +331,8 @@ public class ConfigState {
             Codec.BOOL.fieldOf("noodle_enabled").orElse(NOODLE_ENABLED).forGetter(caves -> caves.noodleEnabled),
             Codec.DOUBLE.fieldOf("noodle_additive").orElse(NOODLE_ADDITIVE).forGetter(caves -> caves.noodleAdditive),
             Codec.BOOL.fieldOf("spaghetti_enabled").orElse(SPAGHETTI_ENABLED).forGetter(caves -> caves.spaghettiEnabled),
-            Codec.BOOL.fieldOf("carvers_enabled").orElse(CARVERS_ENABLED).forGetter(caves -> caves.carversEnabled)
+            Codec.BOOL.fieldOf("carvers_enabled").orElse(CARVERS_ENABLED).forGetter(caves -> caves.carversEnabled),
+            Codec.BOOL.fieldOf("ore_fix").orElse(ORE_FIX).forGetter(caves -> caves.oreFix)
         ).apply(instance, Caves::new));
 
         public double depthCutoffStart;
@@ -340,8 +343,9 @@ public class ConfigState {
         public double noodleAdditive;
         public boolean spaghettiEnabled;
         public boolean carversEnabled;
+        public boolean oreFix;
 
-        public Caves(double depthCutoffStart, double depthCutoffSize, boolean cheeseEnabled, double cheeseAdditive, boolean noodleEnabled, double noodleAdditive, boolean spaghettiEnabled, boolean carversEnabled) {
+        public Caves(double depthCutoffStart, double depthCutoffSize, boolean cheeseEnabled, double cheeseAdditive, boolean noodleEnabled, double noodleAdditive, boolean spaghettiEnabled, boolean carversEnabled, boolean oreFix) {
             this.depthCutoffStart = depthCutoffStart;
             this.depthCutoffSize = depthCutoffSize;
             this.cheeseEnabled = cheeseEnabled;
@@ -350,10 +354,11 @@ public class ConfigState {
             this.noodleAdditive = noodleAdditive;
             this.spaghettiEnabled = spaghettiEnabled;
             this.carversEnabled = carversEnabled;
+            this.oreFix = oreFix;
         }
 
         public Caves copy() {
-            return new Caves(this.depthCutoffStart, this.depthCutoffSize, this.cheeseEnabled, this.cheeseAdditive, this.noodleEnabled, this.noodleAdditive, this.spaghettiEnabled, this.carversEnabled);
+            return new Caves(this.depthCutoffStart, this.depthCutoffSize, this.cheeseEnabled, this.cheeseAdditive, this.noodleEnabled, this.noodleAdditive, this.spaghettiEnabled, this.carversEnabled, this.oreFix);
         }
     }
 }

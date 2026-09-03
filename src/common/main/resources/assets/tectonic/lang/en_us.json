@@ -99,6 +99,8 @@
   "config.tectonic.option.carvers_enabled.tooltip": "Whether old caves/ravines should generate.\n§cGame restart required!",
   "config.tectonic.option.lava_tunnels": "Lava Tunnels",
   "config.tectonic.option.lava_tunnels.tooltip": "Rare, deep underground tunnels of lava sometimes generate at the bottom of the world.",
+  "config.tectonic.option.ore_fix": "Ore Fix",
+  "config.tectonic.option.ore_fix.tooltip": "Extends supported vanilla ore distributions when the minimum world height is lowered. Requires a game restart.",
 
   "preset.tectonic.title": "Presets",
 

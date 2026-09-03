@@ -69,6 +69,7 @@ public interface ConfigListBuilder {
         this.addBoolean("spaghetti_enabled", bool -> state.caves.spaghettiEnabled = bool, state.caves.spaghettiEnabled, SPAGHETTI_ENABLED);
         this.addBoolean("carvers_enabled", bool -> state.caves.carversEnabled = bool, state.caves.carversEnabled, CARVERS_ENABLED);
         this.addBoolean("lava_tunnels", bool -> state.globalTerrain.lavaTunnels = bool, state.globalTerrain.lavaTunnels, LAVA_TUNNELS);
+        this.addBoolean("ore_fix", bool -> state.caves.oreFix = bool, state.caves.oreFix, ORE_FIX);
 
     }
 }

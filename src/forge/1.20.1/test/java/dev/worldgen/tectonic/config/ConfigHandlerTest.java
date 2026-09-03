@@ -109,6 +109,26 @@ class ConfigHandlerTest {
     }
 
     @Test
+    void configFromBeforeOreFixDefaultsOffAndEnabledValueSurvivesReload() throws IOException {
+        Path path = tempDirectory.resolve("tectonic.json");
+        ConfigHandler.load(path);
+        String oldConfig = Files.readString(path, StandardCharsets.UTF_8)
+            .replace(",\n    \"ore_fix\": false", "");
+        assertFalse(oldConfig.contains("\"ore_fix\""));
+        Files.writeString(path, oldConfig, StandardCharsets.UTF_8);
+
+        ConfigHandler.load(path);
+        assertFalse(ConfigHandler.getState().caves.oreFix);
+
+        ConfigState draft = ConfigHandler.copyConfig();
+        draft.caves.oreFix = true;
+        ConfigHandler.save(draft, true);
+        ConfigHandler.load(path);
+
+        assertTrue(ConfigHandler.getState().caves.oreFix);
+    }
+
+    @Test
     void overkillLimitsSurviveSaveAndReload() throws IOException {
         Path path = tempDirectory.resolve("tectonic.json");
         ConfigHandler.load(path);
