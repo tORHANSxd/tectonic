@@ -2,9 +2,7 @@ package dev.worldgen.tectonic.mixin;
 
 import dev.worldgen.tectonic.Tectonic;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.level.ChunkPos;
@@ -36,22 +34,26 @@ public class ChunkSerializerMixin {
 
         if (STATUSES_TO_SKIP_BLENDING.contains(ChunkStatus.byName(nbt.getString("Status")).toString())) return;
         if (nbt.getInt(Tectonic.BLENDING_KEY) != Tectonic.BLENDING_VERSION) {
-            int min = 0, max = 0;
-            ListTag sections = nbt.getList("sections", ListTag.TAG_COMPOUND);
-            for (Tag section : sections) {
-                int y = section instanceof IntTag tag ? tag.getAsInt() : 0;
-                min = Math.min(y, min);
-                max = Math.max(y, max);
-            }
-            min = Math.min(min, -4);
-            max = Math.max(max, 20);
-            CompoundTag blendingData = new CompoundTag();
-            blendingData.putInt("min_section", min);
-            blendingData.putInt("max_section", max);
-            nbt.put("blending_data", blendingData);
+            nbt.put("blending_data", tectonic$createBlendingData(nbt.getList("sections", ListTag.TAG_COMPOUND)));
             nbt.remove("Heightmaps");
             nbt.remove("isLightOn");
         }
+    }
+
+    @Unique
+    static CompoundTag tectonic$createBlendingData(ListTag sections) {
+        int minSection = 0;
+        int maxSection = 0;
+        for (int index = 0; index < sections.size(); index++) {
+            int sectionY = sections.getCompound(index).getInt("Y");
+            minSection = Math.min(sectionY, minSection);
+            maxSection = Math.max(sectionY + 1, maxSection);
+        }
+
+        CompoundTag blendingData = new CompoundTag();
+        blendingData.putInt("min_section", Math.min(minSection, -4));
+        blendingData.putInt("max_section", Math.max(maxSection, 20));
+        return blendingData;
     }
 
     @Inject(method = "write", at = @At("RETURN"), cancellable = true)
