@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class WorldgenResourceTest {
     private static final Path RESOURCE_ROOT = Path.of("src/common/main/resources");
@@ -25,6 +26,12 @@ class WorldgenResourceTest {
     );
     private static final Path RIVER_ICE_MODIFIER = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/ice.json"
+    );
+    private static final Path RIVER_LANTERN_NOISE = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/data/tectonic/worldgen/noise/river_lanterns.json"
+    );
+    private static final Path RIVER_LANTERN_MODIFIER = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/river_lanterns.json"
     );
 
     static List<Path> jsonResources() throws IOException {
@@ -67,6 +74,21 @@ class WorldgenResourceTest {
             assertEquals("#forge:is_snowy", modifier.get("biomes").getAsString());
             assertEquals("river_ice", modifier.getAsJsonObject("predicate").get("key").getAsString());
             assertEquals("tectonic:underground_river/ice", modifier.get("features").getAsString());
+        }
+    }
+
+    @Test
+    void riverLanternFrequencyAndLoadPredicateMatchUpstreamFixes() throws IOException {
+        try (Reader noiseReader = Files.newBufferedReader(RIVER_LANTERN_NOISE, StandardCharsets.UTF_8);
+             Reader modifierReader = Files.newBufferedReader(RIVER_LANTERN_MODIFIER, StandardCharsets.UTF_8)) {
+            JsonObject noise = JsonParser.parseReader(noiseReader).getAsJsonObject();
+            JsonObject modifier = JsonParser.parseReader(modifierReader).getAsJsonObject();
+
+            assertEquals(1, noise.getAsJsonArray("amplitudes").size());
+            assertEquals(2, noise.getAsJsonArray("amplitudes").get(0).getAsInt());
+            assertEquals("river_lanterns", modifier.getAsJsonObject("predicate").get("key").getAsString());
+            assertFalse(modifier.has("fabric:load_conditions"));
+            assertFalse(modifier.has("neoforge:conditions"));
         }
     }
 }

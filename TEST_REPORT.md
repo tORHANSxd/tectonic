@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 245 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 246 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -175,6 +175,14 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`，并逐字段对照至 `34241bdb35acda67b5367d49f354c66c05e098e2`。预设使用 `vertical_scale=1.2`、`elevation_boost=0.5`、高度 `-64..448`，启用 Underground Rivers、River Lanterns 和 River Ice，禁用 Jungle Pillars，并使用上游寒冷/植被噪声参数。预设入口继续向 GUI 提供深复制，不共享可变全局对象。
 
 回归测试逐项断言关键数值、开关与高度；翻译键 `preset.tectonic.frozen_wasteland` 已加入。GUI 仍通过统一 `acceptPresets` 路径展示和应用，无新增客户端依赖进入专服路径。
+
+### P3A-RIVER-LANTERNS-001：频率与加载条件修复
+
+频率调整来源为上游提交 `cebbe095209a46051190deff7b247a0dd7e80b9e`：`tectonic:river_lanterns` 噪声振幅由 `[1, 2]` 收敛为 `[2]`。加载崩溃修复来源为 `d023a88`：Lithostitched modifier 仅保留其通用 `predicate`，删除同一文件中重复的 `fabric:load_conditions` 与 `neoforge:conditions`，避免不属于当前加载器的条件类型参与解码。
+
+本回移有意保留 Forge 1.20.1 已发布的 `tectonic:river_lanterns` 资源 ID 和路径，没有跟随高版本重命名为 `underground_river`，以免无必要地破坏现有数据包引用。自动测试断言振幅、配置键和两个加载器专用字段的缺失，并继续严格解析全部 JSON 资源。
+
+真实专服以默认开启的 `river_lanterns=true` 启动，在 Temurin 21 上于 `Done (3.971s)` 后强制生成 `[64,64]..[79,79]` 共 256 个新区块，随后解除强加载、保存并正常停服。`run/logs/latest.log` 未命中 ERROR、FATAL、Mixin 应用失败、链接错误、注册表映射失败、资源解析失败或非重叠 MIN 输入等阻断模式；生成期间出现一次 `Can't keep up`（落后 13.078 秒），仅记录为后续统一压力测试的性能观察。
 
 ### 尚未完成的 Phase 2 项
 
