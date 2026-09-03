@@ -71,4 +71,24 @@ class ConfigStateTest {
         state.continents.riverIce = false;
         assertTrue(snapshot.test("river_ice"));
     }
+
+    @Test
+    void frozenWastelandMatchesUpstreamValues() {
+        AtomicReference<ConfigState> preset = new AtomicReference<>();
+        ConfigPresets.acceptPresets((name, state, color) -> {
+            if (name.equals("frozen_wasteland")) preset.set(state);
+        });
+
+        ConfigState state = preset.get();
+        assertEquals(1.2, state.globalTerrain.verticalScale);
+        assertEquals(0.5, state.globalTerrain.elevationBoost);
+        assertEquals(448, state.globalTerrain.heightLimits.maxY);
+        assertTrue(state.continents.undergroundRivers);
+        assertTrue(state.continents.riverLanterns);
+        assertTrue(state.continents.riverIce);
+        assertEquals(0, state.continents.flatTerrainSkew);
+        assertFalse(state.continents.junglePillars);
+        assertEquals(-0.69, state.biomes.temperature.offset);
+        assertEquals(0.15, state.biomes.vegetation.scale);
+    }
 }

@@ -105,6 +105,7 @@
   "preset.tectonic.default": "Default",
   "preset.tectonic.large_biomes": "Large Biomes",
   "preset.tectonic.deserted": "Deserted",
+  "preset.tectonic.frozen_wasteland": "Frozen Wasteland",
 
   "pack_name.tectonic.tectonic/overlay.mod": "Tectonic mod-reliant data",
   "pack_name.tectonic.tectonic/overlay.terratonic": "Terralith-Tectonic compat data",

@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 244 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 245 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 226 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -169,6 +169,12 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`。回移内容包括旧 `ConfigState`/不可变 `ConfigSnapshot`/GUI 中默认关闭的 `continents.river_ice`，以及 1.20.1 可解析的 configured feature、placed feature 和 Lithostitched 1.4 modifier。高版本通用标签 `#c:is_snowy` 已按 Forge 1.20.1 实际资源转换为 `#forge:is_snowy`；未复制 Fabric/NeoForge 高版本加载条件。
 
 自动测试覆盖旧配置缺少新字段时默认关闭、快照隔离、modifier 配置键/资源 ID/雪地标签，以及全部 JSON 的严格解析。真实专服测试分别以 `river_ice=false` 和 `river_ice=true` 启动并载入同一世界；开启后额外强制生成 `[32,32]..[47,47]` 共 256 个新区块，再移除强加载、保存并正常停服。`run/logs/latest.log` 未命中发布阻断错误模式；批量生成期间出现一次 `Can't keep up`（落后 18.021 秒），保留为后续统一性能基准的观察项，不据此宣称性能达标。
+
+### P3A-PRESET-001：Frozen Wasteland
+
+上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`，并逐字段对照至 `34241bdb35acda67b5367d49f354c66c05e098e2`。预设使用 `vertical_scale=1.2`、`elevation_boost=0.5`、高度 `-64..448`，启用 Underground Rivers、River Lanterns 和 River Ice，禁用 Jungle Pillars，并使用上游寒冷/植被噪声参数。预设入口继续向 GUI 提供深复制，不共享可变全局对象。
+
+回归测试逐项断言关键数值、开关与高度；翻译键 `preset.tectonic.frozen_wasteland` 已加入。GUI 仍通过统一 `acceptPresets` 路径展示和应用，无新增客户端依赖进入专服路径。
 
 ### 尚未完成的 Phase 2 项
 
