@@ -1,0 +1,59 @@
+{
+  "source_csv_files": [
+    {
+      "case_id": "20260903-default-noop-check-community-on-postfix-miny-m64-seed-0",
+      "sha256": "5cbe9a6b9e08fc3d832265abca3572e5818e01eb76bec3e5eda5928afb2c1430"
+    },
+    {
+      "case_id": "20260903-default-noop-repeat-community-on-postfix-miny-m64-seed-0",
+      "sha256": "cdc5dcd1dfcc176429fa22cfa230c6b1aa3c1cde715b3b81f65dd0bf459a3b3a"
+    },
+    {
+      "case_id": "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-0",
+      "sha256": "035f8146794e8a3a0a727079463315cfed95caf55b3fcb8d22b0180870762776"
+    },
+    {
+      "case_id": "20260903-vanilla-repeat-vanilla-reference-miny-m64-seed-0",
+      "sha256": "6dfcc341e1cf2f4b0ff0d1a2383a34cf0125e3c30097575de756aae7de259f7e"
+    }
+  ],
+  "case_count": 4,
+  "scenarios": [
+    "community-on-postfix",
+    "vanilla-reference"
+  ],
+  "seeds": [
+    "0"
+  ],
+  "min_y_values": [
+    -64
+  ],
+  "determinism_checks": [
+    {
+      "scenario": "community-on-postfix",
+      "seed": "0",
+      "min_y": -64,
+      "mod_enabled": "true",
+      "ore_fix": "true",
+      "case_ids": [
+        "20260903-default-noop-check-community-on-postfix-miny-m64-seed-0",
+        "20260903-default-noop-repeat-community-on-postfix-miny-m64-seed-0"
+      ],
+      "equal": false
+    },
+    {
+      "scenario": "vanilla-reference",
+      "seed": "0",
+      "min_y": -64,
+      "mod_enabled": "false",
+      "ore_fix": "false",
+      "case_ids": [
+        "20260903-vanilla-reference-vanilla-reference-miny-m64-seed-0",
+        "20260903-vanilla-repeat-vanilla-reference-miny-m64-seed-0"
+      ],
+      "equal": false
+    }
+  ],
+  "determinism_pass": false,
+  "note": "\u6570\u91cf\u7ea7\u81a8\u80c0\u3001-64 \u4ee5\u4e0b\u8fde\u7eed\u96f6\u6876\u4e0e #438 \u7ed3\u8bba\u9700\u7ed3\u5408\u914d\u5bf9\u573a\u666f\u5728 TEST_REPORT.md \u4e2d\u89e3\u91ca\u3002"
+}

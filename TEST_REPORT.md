@@ -214,13 +214,41 @@ Forge 1.20.1 继续使用经实际加载验证的 `maven.modrinth:lithostitched:
 
 ### P3B-ORE-FIX-001：扩展深度矿物放置
 
-上游来源为 `aab71be61aa11c7c5175d71ffa15e42d01b91da8`，资源与算法又对照至 `34241bdb35acda67b5367d49f354c66c05e098e2`。新增的 `HeightStabilizedCount` 使用 Forge 1.20.1 所需的 `Codec`（不是高版本 `MapCodec`），按 `(maxY - minGenY) / 16 × count_per_section` 向上取整计算每区块尝试数，并保留上游的均匀/偏底采样。`caves.ore_fix` 默认关闭，可经旧配置补默认值、深复制、不可变运行快照和 GUI 正常保存；Forge 只在开关开启时挂载独立的 `overlay.ore_fix` 数据包。
+上游来源为 `aab71be61aa11c7c5175d71ffa15e42d01b91da8`，资源与算法又对照至 `34241bdb35acda67b5367d49f354c66c05e098e2`。新增的 `HeightStabilizedCount` 使用 Forge 1.20.1 所需的 `Codec`（不是高版本 `MapCodec`），按 `(maxY - minGenY) / 16 × count_per_section` 向上取整计算每区块尝试数，并保留上游的均匀/偏底采样。`caves.ore_fix` 默认关闭，可经旧配置补默认值、深复制、不可变运行快照和 GUI 正常保存；Forge 仅在开关开启且 `minY < -64` 时挂载独立的 `overlay.ore_fix` 数据包，避免默认高度下改变原版分布。
 
 资源精确覆盖 1.20.1 存在的 11 个原版 placed feature。上游第 12 个 `ore_diamond_medium` 在 Minecraft 1.20.1 的 configured/placed feature 注册表中均不存在，因此明确排除，避免用一个不存在的 ID 把整个数据包炸掉。严格资源测试锁定文件全集、configured feature、锚点、密度、偏底标志和 placement 顺序；算法测试额外锁定 `ceil` 语义，包括 `count_per_section=0.02` 在默认跨度下仍为一次尝试。
 
 Temurin 21 下执行 `clean forge1201UnitTest forge1201RemapJar` 通过，共 270 个测试，0 failures、0 errors、0 skipped；最终 JAR 中 `HeightStabilizedCount` 同样是 class major 65（Java 21）。根 `build` 会连带解析本分支不支持的 Fabric/NeoForge 目标，仍会触发 `docs/BUILD_TASKS.md` 已记录的 Cloche 跨目标中间文件问题，因此不作为 Forge 1.20.1 验收入口。
 
-真实专服使用固定种子 `4382026`、高度 `-128..320` 和 `ore_fix=true` 创建独立 `world-ore-fix-smoke`。服务端自动发现 `tectonic/tectonic/overlay.ore_fix`，注册表与全部 Codec 解码成功，于 `Done (16.443s)` 后强制生成 `[64,64]..[79,79]` 共 256 个新区块，解除强加载、刷新保存并正常停服。生成期间一次 `Can't keep up` 落后 `8.321s`；结束前总体为 `2.528ms / 20 TPS`。日志未出现 ERROR、FATAL、异常、未知注册表或资源解析失败；首次世界创建时 Forge 补齐自身 server config 的警告仍属预期。完整五种子、三档 minY 矿物 CSV/图表尚未完成，本项当前只算实现与烟测通过，不能冒充统计验收完成。
+真实专服使用固定种子 `4382026`、高度 `-128..320` 和 `ore_fix=true` 创建独立 `world-ore-fix-smoke`。服务端自动发现 `tectonic/tectonic/overlay.ore_fix`，注册表与全部 Codec 解码成功，于 `Done (16.443s)` 后强制生成 `[64,64]..[79,79]` 共 256 个新区块，解除强加载、刷新保存并正常停服。生成期间一次 `Can't keep up` 落后 `8.321s`；结束前总体为 `2.528ms / 20 TPS`。日志未出现 ERROR、FATAL、异常、未知注册表或资源解析失败；首次世界创建时 Forge 补齐自身 server config 的警告仍属预期。
+
+#### P3B-ORE-STATS-001：五种子、三高度统计
+
+统计使用固定种子 `0`、`1`、`-1`、`123456789`、`-987654321987654321`，每个 case 只计 `[64,64]..[79,79]` 的 256 个完整区块，并严格要求 DataVersion `3465`。矩阵共 50 个世界、12,800 个受控区块：官方 3.0.17、社区版关闭组、社区版开启组各覆盖三个 minY 和五个种子；原版参考覆盖 `minY=-64` 与五个种子。全部运行使用指定 Temurin 21，原始逐桶 CSV、均值 CSV、汇总 CSV、SHA-256 输入清单和 30 张 SVG 位于 `benchmarks/ore_fix/2026-09-03/`。
+
+数据来源提交分别为：官方组 `5373b208...`，社区关闭组与原版参考 `01cbec5...`，最终开启组 `d005132...`。`d005132` 只新增默认高度激活保护，因此不会改变关闭组或禁用模组的结果。四组的 50 份 `latest.log` 均为 0 个 ERROR、0 个 FATAL、0 个异常、0 个 Codec/注册表错误；每个批量强加载 case 各出现一次 `Can't keep up`，因此这些数据只用于功能分布，不能兼作性能达标证据。
+
+每区块四种目标矿物的五种子均值如下：
+
+| minY | 场景 | diamond | gold | lapis | redstone |
+|---:|---|---:|---:|---:|---:|
+| -64 | 官方 3.0.17 | 14.74 | 25.52 | 21.48 | 34.74 |
+| -64 | 社区关闭 | 14.75 | 25.54 | 21.48 | 34.74 |
+| -64 | 社区开启 | 14.75 | 25.51 | 21.48 | 34.73 |
+| -64 | 原版参考 | 14.70 | 25.46 | 24.09 | 35.31 |
+| -128 | 社区关闭 | 15.12 | 26.59 | 22.90 | 35.91 |
+| -128 | 社区开启 | 69.84 | 42.73 | 43.00 | 147.03 |
+| -320 | 社区关闭 | 15.39 | 27.18 | 24.85 | 37.05 |
+| -320 | 社区开启 | 146.02 | 91.94 | 96.60 | 437.73 |
+
+结论分项如下：
+
+- 默认高度 no-op 通过：`ore_fix=true` 与关闭组四种目标矿物的比值均为 `0.999..1.000`，说明激活保护没有偷偷改掉原版高度行为。
+- #438 覆盖通过：`minY=-320` 时关闭组 diamond/gold 分别有 `10/16`、`15/16` 个深层 16 格均值桶为零；开启后 diamond/gold/lapis/redstone 均为 `0/16` 个零桶。`minY=-128` 的 gold 也从 `3/4` 个零桶降为 `0/4`。
+- 数量门槛暂不判通过：`minY=-320` 开启/关闭总量倍率为 diamond `9.485×`、gold `3.383×`、lapis `3.888×`、redstone `11.815×`。红石深层 16 桶均值为每区块 `23.79`、CV `4.0%`，表明它是上游按垂直 section 线性扩展造成的稳定高密度，不是 placed-feature 循环；但 diamond/redstone 的富集仍与上游 issue #498 的现象一致。在完成密度校准前，`ore_fix` 继续默认关闭，也不声称满足 Stable 的“无失衡”门槛。
+- 严格确定性暂不判通过：同配置、同种子、同 256 区块的重复运行逐桶向量不相等；社区默认高度控制组目标矿总量差异为 `0..0.131%`，原版控制组为 `0..0.138%`。原版控制也复现同类差异，说明当前一次性强加载 256 区块的并发/顺序噪声不能归因于 Tectonic；但计划要求的是一致而非“差不多”，后续必须用确定顺序生成器复验。
+
+因此本项当前状态是：实现、默认 no-op、#438 深层覆盖和注册表安全通过；矿物密度与严格确定性仍阻断 Stable。详细方法、输入来源与复现说明见 `benchmarks/ore_fix/2026-09-03/README.md`。
 
 ### 尚未完成的 Phase 2 项
 

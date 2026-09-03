@@ -27,7 +27,7 @@
 | 3.0.20：Overkill | `REQUIRED` | 用旧 Schema 可表达字段实现，放宽校验与 GUI 范围并显示性能警告；不夹带仍有接线错误的 experimental scaling |
 | 3.0.20：alternate noise scaling | `DEFERRED` | 上游字段接线有误且首版无必要，不为实验功能扩大配置模型 |
 | 3.0.21：lantern 开启崩溃 | `REQUIRED` | 与 lantern 频率作为同一原子变更 |
-| 3.0.22：ore_fix | `REQUIRED` | 已将 `HeightStabilizedCount` 适配到 1.20.1 Codec/Forge 注册并完成开启烟测；仅覆盖该版本存在的 11 个原版 placed feature，排除 1.21 才有的 `ore_diamond_medium`；五种子统计待完成 |
+| 3.0.22：ore_fix | `REQUIRED` | 已将 `HeightStabilizedCount` 适配到 1.20.1 Codec/Forge 注册，且仅在 `minY < -64` 时激活；覆盖该版本存在的 11 个上游目标 feature，排除 1.21 才有的 `ore_diamond_medium`。五种子/三高度统计证明默认 no-op、#438 深层零矿带消失且无注册错误；diamond/redstone 富集与批量生成严格确定性仍未过门槛，保持默认关闭并阻断 Stable |
 | 3.0.22：地图模组区块查询 | `NOT_APPLICABLE`（源码 hunk） | 上游修复位于 26.x `SerializableChunkDataMixin`；基线 1.20.1 参数本来就是 `ServerLevel`，继续做黑盒兼容测试 |
 | 3.0.22：Lithostitched 依赖 | `REQUIRED` | 保留 Forge 1.20.1 已验证的最低 1.4.11；最终 JAR 回归检查加载元数据，上传器同步声明 Modrinth/CurseForge 必需关系，禁止误取 1.21/26.x 制品 |
 | 3.0.23：配置清理/JSON5 | `DEFERRED` | 保留稳定 JSON；不引入没有必要的 Apollib/JSON5 依赖 |

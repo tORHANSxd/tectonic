@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="480.0" y="28" text-anchor="middle" font-family="sans-serif" font-size="18">lapis distribution, minY=-320</text>
+<line x1="78" y1="474.00" x2="936" y2="474.00" stroke="#e5e7eb"/>
+<text x="70" y="478.00" text-anchor="end" font-family="sans-serif" font-size="11">0.00</text>
+<line x1="78" y1="389.60" x2="936" y2="389.60" stroke="#e5e7eb"/>
+<text x="70" y="393.60" text-anchor="end" font-family="sans-serif" font-size="11">1.07</text>
+<line x1="78" y1="305.20" x2="936" y2="305.20" stroke="#e5e7eb"/>
+<text x="70" y="309.20" text-anchor="end" font-family="sans-serif" font-size="11">2.15</text>
+<line x1="78" y1="220.80" x2="936" y2="220.80" stroke="#e5e7eb"/>
+<text x="70" y="224.80" text-anchor="end" font-family="sans-serif" font-size="11">3.22</text>
+<line x1="78" y1="136.40" x2="936" y2="136.40" stroke="#e5e7eb"/>
+<text x="70" y="140.40" text-anchor="end" font-family="sans-serif" font-size="11">4.29</text>
+<line x1="78" y1="52.00" x2="936" y2="52.00" stroke="#e5e7eb"/>
+<text x="70" y="56.00" text-anchor="end" font-family="sans-serif" font-size="11">5.37</text>
+<line x1="78.00" y1="52" x2="78.00" y2="474" stroke="#f3f4f6"/>
+<text x="78.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">-320</text>
+<line x1="188.00" y1="52" x2="188.00" y2="474" stroke="#f3f4f6"/>
+<text x="188.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">-240</text>
+<line x1="298.00" y1="52" x2="298.00" y2="474" stroke="#f3f4f6"/>
+<text x="298.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">-160</text>
+<line x1="408.00" y1="52" x2="408.00" y2="474" stroke="#f3f4f6"/>
+<text x="408.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">-80</text>
+<line x1="518.00" y1="52" x2="518.00" y2="474" stroke="#f3f4f6"/>
+<text x="518.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">0</text>
+<line x1="628.00" y1="52" x2="628.00" y2="474" stroke="#f3f4f6"/>
+<text x="628.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">80</text>
+<line x1="738.00" y1="52" x2="738.00" y2="474" stroke="#f3f4f6"/>
+<text x="738.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">160</text>
+<line x1="848.00" y1="52" x2="848.00" y2="474" stroke="#f3f4f6"/>
+<text x="848.00" y="494" text-anchor="middle" font-family="sans-serif" font-size="11">240</text>
+<line x1="78" y1="474" x2="936" y2="474" stroke="#111827"/>
+<line x1="78" y1="52" x2="78" y2="474" stroke="#111827"/>
+<text x="507.0" y="522" text-anchor="middle" font-family="sans-serif" font-size="12">Y bucket minimum</text>
+<text x="18" y="263.0" text-anchor="middle" transform="rotate(-90 18 263.0)" font-family="sans-serif" font-size="12">mean blocks per chunk</text>
+<polyline points="78.00,433.29 100.00,409.52 122.00,410.99 144.00,419.28 166.00,416.64 188.00,423.46 210.00,418.43 232.00,419.22 254.00,418.61 276.00,410.01 298.00,419.04 320.00,413.27 342.00,412.41 364.00,415.42 386.00,413.76 408.00,409.28 430.00,416.40 452.00,419.35 474.00,313.36 496.00,140.67 518.00,197.72 540.00,363.77 562.00,445.87 584.00,463.31 606.00,474.00 628.00,474.00 650.00,474.00 672.00,474.00 694.00,474.00 716.00,474.00 738.00,474.00 760.00,474.00 782.00,474.00 804.00,474.00 826.00,474.00 848.00,474.00 870.00,474.00 892.00,474.00 914.00,474.00 936.00,474.00" fill="none" stroke="#2563eb" stroke-width="2"/>
+<line x1="90" y1="68" x2="114" y2="68" stroke="#2563eb" stroke-width="3"/>
+<text x="120" y="72" font-family="sans-serif" font-size="11">community-off</text>
+<polyline points="78.00,130.17 100.00,80.43 122.00,52.00 144.00,65.45 166.00,71.90 188.00,84.06 210.00,83.69 232.00,63.30 254.00,73.25 276.00,52.37 298.00,62.26 320.00,74.05 342.00,87.62 364.00,133.86 386.00,148.41 408.00,181.08 430.00,191.83 452.00,204.91 474.00,230.64 496.00,251.21 518.00,301.56 540.00,337.30 562.00,377.83 584.00,443.85 606.00,474.00 628.00,474.00 650.00,474.00 672.00,474.00 694.00,474.00 716.00,474.00 738.00,474.00 760.00,474.00 782.00,474.00 804.00,474.00 826.00,474.00 848.00,474.00 870.00,474.00 892.00,474.00 914.00,474.00 936.00,474.00" fill="none" stroke="#dc2626" stroke-width="2"/>
+<line x1="90" y1="86" x2="114" y2="86" stroke="#dc2626" stroke-width="3"/>
+<text x="120" y="90" font-family="sans-serif" font-size="11">community-on</text>
+<polyline points="78.00,433.22 100.00,409.34 122.00,410.99 144.00,419.35 166.00,416.58 188.00,423.28 210.00,418.43 232.00,419.16 254.00,418.61 276.00,409.89 298.00,419.04 320.00,413.39 342.00,412.41 364.00,415.48 386.00,413.82 408.00,409.28 430.00,416.40 452.00,419.35 474.00,313.36 496.00,141.10 518.00,197.72 540.00,363.89 562.00,445.87 584.00,463.31 606.00,474.00 628.00,474.00 650.00,474.00 672.00,474.00 694.00,474.00 716.00,474.00 738.00,474.00 760.00,474.00 782.00,474.00 804.00,474.00 826.00,474.00 848.00,474.00 870.00,474.00 892.00,474.00 914.00,474.00 936.00,474.00" fill="none" stroke="#16a34a" stroke-width="2"/>
+<line x1="90" y1="104" x2="114" y2="104" stroke="#16a34a" stroke-width="3"/>
+<text x="120" y="108" font-family="sans-serif" font-size="11">official-3.0.17</text>
+</svg>

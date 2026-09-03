@@ -650,7 +650,11 @@ def aggregate(args: argparse.Namespace) -> int:
         "seeds": sorted({row["seed"] for row in family_rows}, key=int),
         "min_y_values": sorted({int(row["min_y"]) for row in family_rows}),
         "determinism_checks": deterministic_checks,
-        "determinism_pass": bool(deterministic_checks) and all(check["equal"] for check in deterministic_checks),
+        "determinism_pass": (
+            all(check["equal"] for check in deterministic_checks)
+            if deterministic_checks
+            else None
+        ),
         "note": "数量级膨胀、-64 以下连续零桶与 #438 结论需结合配对场景在 TEST_REPORT.md 中解释。",
     }
     (output / "acceptance.json").write_text(json.dumps(acceptance, indent=2) + "\n", encoding="utf-8")
