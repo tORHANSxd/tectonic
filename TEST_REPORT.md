@@ -334,7 +334,147 @@ Python 验证通过，共 18 个测试；固定 golden chunk SHA-256 为 `95bf96
 
 ### 尚未完成的 Phase 2 项
 
-- #473 的确定顺序 Java 21 压力通道已经完成并通过短程真实专服验证，但仍需实际跑完不少于 20,000 个新区块；
 - 固定顺序生产专服的规范化地形快照仍有 15/16 个区块不一致；严格确定性继续阻断发布，当前优先隔离 halo/decorator 与 `ForkJoinPool` 补偿 worker 路径；
-- `BlendingDataMixin` 仍需旧/新区块交界触发；其余已加载 Mixin 的 strict/verify、真专服客户端类隔离和启动期警告计数已经完成；
-- 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。
+- `BlendingDataMixin` 已在官方 3.0.17 默认高度世界，以及官方 3.0.17 + Terralith 2.5.4 世界副本的旧/新区块交界真实触发；扩展高度仍需黑盒覆盖，其余已加载 Mixin 的 strict/verify、真专服客户端类隔离和启动期警告计数已经完成；
+- 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；`docs/CONFIG_MIGRATION.md` 已明确这一限制，未知/错类型/权限分支仍缺自动化测试。
+
+### P2-ISSUE-473-LONG-001：20,736 区块长期压力测试
+
+Forge 47.4.10 正式专服、指定 Temurin 21、seed `0`、默认 `-64..320`、`ore_fix=false`，按固定顺序实际生成 `[64,64]..[207,207]` 共 20,736 个新区块。范围拆成 81 个 tile，经历 11 次服务端会话/重启、21 次保存和 81 次解除强加载；20,736 个 `chunk_full` 回执全部出现，每次会话退出码均为 0。总运行时间 1,628.827 秒，包含命令屏障、保存和重启。
+
+完整日志扫描未命中 OOME、异常、ERROR、死锁、watchdog、崩溃、Mixin 应用/注入失败、保存失败或超时。`hash_test_world.py` 随后离线扫描全部 20,736 个区块，确认均为 `minecraft:full`、DataVersion 3465、完整 `-64..320`，terrain SHA-256 为：
+
+```text
+3931aa963f7b443a9bf74b709af503eb7c341425ad330de8155edd309445e4b2
+```
+
+manifest 位于：
+
+```text
+run/production-forge-47.4.10/batch-results/20260903-issue473-long-20736-forge47410/20260903-issue473-long-20736-forge47410-issue473-long-miny-m64-seed-0/manifest.json
+```
+
+该结果满足计划的 20,000+ 新区块长期运行门槛并关闭 #473 的对应压力项，但只覆盖 manifest 绑定的测试 JAR（提交 `80cdc600...`，SHA-256 `187e6284...8bb23`）、Lithostitched 1.4.11 与默认配置。它不使后续候选 JAR自动继承运行证据，也不覆盖严格确定性失败。
+
+### P2-BLENDING-RANGE-001：扩展高度 section 范围
+
+`ChunkSerializerMixin` 原实现把 `sections` 列表声明为 compound 后，又只在元素是 `IntTag` 时取 Y，导致真实 section 的 Y 全被忽略并退回 `-4..20`。现已从每个 section compound 读取 `Y`，并将最大 section 转成 exclusive 上界 `maxY + 1`。两项回归测试覆盖真实 compound 列表与空列表回退；指定 Temurin 21 下 Forge 1.20.1 全量测试通过。
+
+首次官方 3.0.17 存档副本测试还发现，为方便包内测试而把 `tectonic$createBlendingData` 留成 package-private 会被 Mixin 0.8.5 拒绝：旧区块首次加载时报 `InvalidMixinException: contains non-private static method`。辅助方法已恢复为 `private static`，测试通过反射调用并新增修饰符契约断言。该失败副本被丢弃，随后从只读基线重新复制测试。
+
+### P2-WORLD-UPGRADE-DEFAULT-001：官方 3.0.17 默认世界升级
+
+输入为官方 3.0.17、Lithostitched 1.4.11、seed `0`、默认 `-64..320` 生成的 256 个 full chunk 世界，DataVersion 3465，既有区块闭区间 `[64,64]..[79,79]`。原件保持只读；测试只操作独立副本。修复后的候选 JAR 在 Forge 47.4.22、指定 Temurin 21 和 Mixin strict/verify 下：
+
+- 第一次启动于 `Done (5.897s)` 可用，旧 `ChunkSerializerMixin` 成功应用；
+- 强加载相邻新区块 `[80,64]` 时真实触发 `BlendingDataMixin`，未出现 Mixin/Codec/注册表异常；
+- 两次 `save-all flush` 均报告全部维度保存完成，正常停服退出码 0；
+- 同一升级副本第二次启动于 `Done (5.974s)` 可用，再次保存并正常停服，退出码 0；
+- 旧 `[79,64]` 与新 `[80,64]` 都通过 full chunk、DataVersion 3465 和完整高度扫描，terrain SHA-256 分别为 `5861ca11...746357` 与 `3ff08b7a...09cf3`；两者均写入 `tectonic:blending_version=1`；
+- 旧配置被补齐 `river_ice=false`、`ore_fix=false`，原件保留为 `tectonic.json.bak`；第二次加载不再改变两份配置哈希。
+
+这证明默认高度无玩家基线世界的升级、相邻新区块、保存和重启路径。它不覆盖 Increased Height、自定义 minY/maxY、真实玩家/实体/POI/地图数据、大量既有区块或 Terralith/Terratonic，因此完整世界升级门槛仍为 PARTIAL。
+
+### P3C-TERRALITH-001：Terralith 2.5.4 默认高度组合
+
+测试固定使用以下真实制品：
+
+- Forge 47.4.22；
+- 指定 Temurin 21；
+- `lithostitched-1.4.11-forge-1.20.jar`，SHA-256 `c19a5a36c0e6cb3782cf7ca5b9648fb1bce5fc41fd737bed423a1f4971bccf75`；
+- `Terralith_1.20.x_v2.5.4.jar`（Modrinth 版本 `WeYhEb5d`），SHA-256 `8f65f309d8f2723754bf4b60c7b5763d3ab6ed04b01c172109ba6564e981b95f`；
+- 社区候选测试 JAR，SHA-256 `6727d0f4eaf0e5799058fd8247aecb90ae7f58fd0e9807571573999c8b63a915`。
+
+seed `0`、默认 `-64..320`、`ore_fix=false` 下，确定顺序通道生成 `[64,64]..[79,79]` 共 256 个新区块。Tectonic 检测到 Terralith 模组并注册内置 `tectonic/overlay.terratonic`；服务端于 `Done (126.905s)` 可用，一次 backlog 为 `5.685s`，随后解除强加载、保存并以退出码 0 停服。离线扫描确认 256/256 个区块均为 `minecraft:full`、DataVersion 3465、完整高度，terrain SHA-256 为：
+
+```text
+ed31a51e27c403599ea35ba8413b09cc227c6178452cc61a2fd2809192bff4d7
+```
+
+扫描到 `terralith:cave/fungal_caves` 与 `terralith:cave/mantle_caves`，证明 Terralith 生物群系数据实际进入生成结果。完整 manifest 位于：
+
+```text
+run/compat-terralith-2.5.4-forge-47.4.22/batch-results/20260903-terralith-2.5.4/20260903-terralith-2.5.4-terralith-2.5.4-miny-m64-seed-0/manifest.json
+```
+
+为给升级测试建立同输入基线，官方 `tectonic-3.0.17-forge-1.20.1.jar`（SHA-256 `c6de479b27cf090510de3f029918afc9fe17226981bd703e0002f7a25f4d8969`）与相同 Terralith/Lithostitched 另行生成 256 个区块。该运行耗时 226.789 秒、退出码 0，离线 terrain SHA-256 为 `e154a913362f202a8429db0e9dc379f349bec886e6d011cefd075bc78ef5977c`。
+
+本项还在相同升级副本中执行 `locate biome terralith:rocky_mountains`，定位到 `[736,77,2496]`，随后生成周围 3×3 区块。离线按列寻找最高非空气方块，在 736 个表面 biome 为 `terralith:rocky_mountains` 的列中，去掉薄雪层后的基底主要是 tuff 270、snow block 194、cobbled deepslate 101、cobblestone 87，grass block 仅 8 列；没有复现 issue #375 所述“大面积被草方块替换”。`terralith:volcanic_crater` 在该世界默认搜索半径内未找到，因此本项仍是 PARTIAL，不把一个 biome 的结果外推成全部特殊地表通过。
+
+### P3C-TERRATONIC-001：Terratonic 3.1.2 数据包组合
+
+在上节社区候选、Terralith 2.5.4 与 Lithostitched 1.4.11 组合中加入 Modrinth 版本 `vmMShagY`：
+
+```text
+terratonic-datapack-v3.1.2.zip
+SHA-256 ad93979bb2d20c142dc2c31250dd2f4d09aeaf22260569dc89130540422fe217
+```
+
+数据包预先放入全新 `world/datapacks`；首次启动日志明确自动加载 `file/terratonic-datapack-v3.1.2.zip`、`tectonic/tectonic`、`tectonic/tectonic/overlay.mod` 与 `tectonic/tectonic/overlay.terratonic`。Forge 47.4.22 在指定 Temurin 21 下于 `Done (54.673s)` 可用，随后强制生成 `[64,64]..[79,79]` 共 256 个新区块，解除强加载、两次保存并正常停服。离线扫描确认 256/256 个区块均为 full、DataVersion 3465、完整 `-64..320`，terrain SHA-256 为：
+
+```text
+6e2647ea72bc6def03393c916ee27490812c9de084072cbf9ba3a68373ffd233
+```
+
+同一世界第二次启动于 `Done (8.819s)` 可用，再次保存停服后 256 区块 terrain SHA-256 保持不变。两次运行都未出现 Mixin 注入、Codec、注册表、ERROR 或 FATAL 阻断，并扫描到 Terralith 的 `fungal_caves` 与 `mantle_caves`。证据位于未提交测试目录 `run/compat-terratonic-3.1.2-forge-47.4.22`。
+
+该项证明默认高度新世界的数据包组合能加载、生成、保存和重进，不覆盖 Terratonic 老世界边界、扩展高度或 `volcanic_crater` 特殊表面定点断言。
+
+### P2-WORLD-UPGRADE-TERRALITH-001：官方 3.0.17 + Terralith 世界升级
+
+上节官方基线世界原件保持不变，只把完整目录复制到独立升级根目录。候选 JAR 在 Forge 47.4.22、指定 Temurin 21 和 Mixin strict/verify 下：
+
+- 第一次启动于 `Done (8.716s)` 可用；强加载相邻新区块 `[80,64]` 时真实触发 `BlendingDataMixin`，保存并正常停服，退出码 0；
+- 同一副本第二次启动于 `Done (6.926s)` 可用，再次保存并正常停服，退出码 0；
+- 旧 `[79,64]` 与新 `[80,64]` 均为 `minecraft:full`、DataVersion 3465、完整 `-64..320`，都写入 `tectonic:blending_version=1`，并保留 `terralith:cave/mantle_caves` biome；
+- 第一次停服后两区块 terrain SHA-256 分别为 `5a1e213513a41d3cc02b56263d4b609bea7faa5776561f86880885c6f383623f` 与 `f22c3fca2cef2f767c552d53fc589cb4bea516637993cc4d2039b465de3f50ca`，第二次重启保存后逐字一致；
+- 两次运行未命中 `InvalidInjectionException`、`InjectionError`、`Mixin apply failed`、ERROR 或 FATAL。
+
+该证据位于未提交的测试目录 `run/upgrade-terralith-2.5.4-forge-47.4.22-20260903`。它关闭默认高度 Terralith 旧/新区块边界缺口，但仍不覆盖扩展高度、真实玩家/实体/POI/地图数据、特殊地表定点断言或 Terratonic。
+
+### P3B-MAP-STRUCTURE-001：地图查询修复适用性
+
+Minecraft 1.20.1 的 `ChunkSerializer.read` 四参方法首参是 `ServerLevel`，本分支 `ChunkSerializerMixin` 同样使用 `ServerLevel`；上游 26.x 的 `SerializableChunkDataMixin`/`ClientLevel` hunk 因 API 不同判定为 `NOT_APPLICABLE`。自动测试同时确认最终 JAR 只包含适用的 `ChunkSerializerMixin`，mixin JSON 不引用高版本类。
+
+### P3B-MAP-CLIENT-001：生产客户端地图模组黑盒
+
+使用 Eclipse Adoptium JDK `21.0.12.1` 启动隔离安装的 Forge 47.4.22 生产客户端，社区候选包与 `lithostitched-1.4.11-forge-1.20.jar` 固定不变，地图模组逐个单独加载，并通过 `--quickPlaySingleplayer map-compat-test` 进入同一默认高度单人世界。测试制品与 SHA-256 见 `COMPATIBILITY_REPORT.md`。
+
+- JourneyMap 6.0.4：完成初始化、集成服务端启动、玩家登录和世界绑定；实际生成 overworld 的 day、night、topo、biome 四类 PNG 瓦片及四个 chunk cache 文件。
+- Xaero's Minimap 26.4.2：完成 Stage 1/2、Stage 2/2、XaeroLib shader reload；玩家登录后创建新的 HUD session，并将 minimap level id 绑定到 `minecraft:overworld`，世界内写出 `xaeromap.txt`。
+- 两次运行均未出现 FATAL、`InvalidMixinException`、`Mixin apply failed`、Tectonic 区块反序列化异常或客户端崩溃；唯一 ERROR 是离线测试身份无法获取 profile key，和模组兼容无关。
+- 为保留无人值守证据，看到世界自动保存后从测试终端中断客户端；该退出码不用于兼容性判定。日志和地图输出保存在忽略目录 `run/production-client-47.4.22/game`。
+
+同样制品在 Forge userdev 环境中会分别命中 JourneyMap/Xaero 自己的生产 refmap shadow 名称错误，发生点早于 Tectonic；这说明 userdev 不是第三方生产 JAR 的有效黑盒环境，最终结论只采用上述生产客户端结果。Distant Horizons 尚未完成，地图兼容矩阵仍非全覆盖。
+
+## Phase 4：社区候选构建与发布身份
+
+### P4-CANDIDATE-001：Java 21 候选包
+
+候选任务为：
+
+```powershell
+.\gradlew.bat --no-daemon --no-build-cache clean assembleForge1201CommunityCandidate --stacktrace --warning-mode all --console=plain
+```
+
+指定 Temurin 21 的修复后完整运行通过，共 280 个 JUnit 5 测试实例、11 个测试套件，0 failure、0 error、0 skipped。最终 `forge1201IncludeJar` 的自动门禁确认：
+
+- 社区版本 `3.0.17-backport.1`、非官方显示名与 tORHANS 源码/问题地址；
+- Minecraft `[1.20.1,1.20.2)` 与 required Lithostitched `[1.4.11,)`；
+- `META-INF/LICENSE`、`META-INF/NOTICE.md` 与 Manifest Git/baseline/community 字段；
+- JAR 内 68 个 Tectonic class 全部为 major 65（Java 21）；
+- 包含 `ChunkSerializerMixin`，不包含 26.x `SerializableChunkDataMixin`。
+
+社区候选输出为 `build/libs/tectonic-community-backport-1.20.1-forge-3.0.17-backport.1.jar` 及同目录 `.jar.sha256`。`uploader.py` 已改为无条件 fail-closed；直接运行会以退出码 1 明确说明外部发布被禁用，不读取 token、不联网、不使用上游官方项目 ID。
+
+CI 在 Linux/Windows 都只运行同一个 Java 21 candidate task 并保留短期检查制品，不包含 Modrinth/CurseForge 发布步骤。
+
+### P4-REPRODUCIBILITY-001：重复构建哈希未通过
+
+ZIP 条目时间戳均已归一化为固定值，顺序稳定，仓库文本换行也由 `.gitattributes` 固定；但同一工作树连续 `--no-build-cache clean` 构建的整包 SHA-256 仍不同。逐条目比较把差异缩小到少数 class：业务指令长度一致，变化集中在 Minecraft-Codev 0.6.7 / TinyRemapper `renameInvalidLocals(true)` 对 SRG 局部变量名的非确定选择，例如 `p_208228_` 与 `p_209267_`。
+
+移除 `MethodParameters` 或缩减调试属性不能解决问题，因此没有保留无效改动，也没有为过一个哈希门禁添加高风险 classfile 归一化器。按计划要求，此原因被明确记录；可重复构建仍为 Stable 阻断，候选 sidecar 只描述当次实际产物。
+
+## 当前发布结论
+
+当前产物是 Candidate，不满足 Beta/Stable。已经完成 20,736 区块长测和 Java 21/major 65 构建门禁；仍阻断的核心项是严格地形确定性、`ore_fix` 深层富集、主要可选模组黑盒、完整老世界升级、matched A/B 性能与内存/线程生命周期矩阵。

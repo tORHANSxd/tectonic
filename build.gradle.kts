@@ -1,10 +1,14 @@
 import net.msrandom.minecraftcodev.remapper.task.LoadMappings
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.security.MessageDigest
 
 plugins {
     kotlin("jvm") version "2.1.21"
@@ -21,14 +25,14 @@ repositories {
         librariesMinecraft()
         main()
     }
-    mavenLocal()
     mavenCentral()
     maven("https://api.modrinth.com/maven")
     maven("https://maven.terraformersmc.com/")
 }
 
 group = "dev.worldgen.tectonic"
-version = "3.0.17"
+val communityVersion = "3.0.17-backport.1"
+version = communityVersion
 
 cloche {
     mappings {
@@ -37,19 +41,20 @@ cloche {
 
     metadata {
         modId = "tectonic"
-        name = "Tectonic"
-        description = "Terrain shaping brought to new heights, grander and more varied than ever before!"
+        name = "Tectonic 1.20.1 Forge - Unofficial Community Backport"
+        description = "Unofficial community backport of Tectonic for Minecraft 1.20.1 Forge."
         license = "MIT"
         icon = "pack.png"
 
-        url = "https://modrinth.com/project/tectonic"
-        issues = "https://github.com/Apollounknowndev/tectonic/issues"
-        sources = "https://github.com/Apollounknowndev/tectonic"
+        url = "https://github.com/tORHANSxd/tectonic"
+        issues = "https://github.com/tORHANSxd/tectonic/issues"
+        sources = "https://github.com/tORHANSxd/tectonic"
 
         author("Apollo")
         contributor("HB Stratos")
         contributor("DawnKiro")
         contributor("Uni")
+        contributor("tORHANS (community backport maintainer)")
     }
 
     common {
@@ -174,6 +179,19 @@ cloche {
             modImplementation("maven.modrinth:lithostitched:1.4.11-forge-1.20")
         }
 
+        metadata {
+            dependency {
+                modId = "minecraft"
+                required = true
+                version {
+                    start = "1.20.1"
+                    end = "1.20.2"
+                    startInclusive = true
+                    endExclusive = true
+                }
+            }
+        }
+
         runs {
             client()
             server()
@@ -214,6 +232,7 @@ cloche {
 }
 
 val forge1201Main = sourceSets.named("forge1201")
+val forge1201FinalJar = tasks.named<Jar>("forge1201IncludeJar")
 val forge1201UnitTest = sourceSets.create("forge1201UnitTest") {
     java.srcDir("src/forge/1.20.1/test/java")
     resources.srcDir("src/forge/1.20.1/test/resources")
@@ -258,19 +277,108 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+listOf("forge1201Jar", "forge1201RemapJar", "forge1201IncludeJar").forEach { taskName ->
+    tasks.named<AbstractArchiveTask>(taskName) {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
+}
+
+val upstreamBaseline = "5373b2084e461f83bd6e0b5f2fe943e81bd59700"
+val gitCommit = providers.exec {
+    commandLine("git", "rev-parse", "--verify", "HEAD")
+}.standardOutput.asText.map { output ->
+    output.trim().also { commit ->
+        check(commit.matches(Regex("[0-9a-f]{40}"))) { "Invalid Git commit: $commit" }
+    }
+}
+val gitDirty = providers.exec {
+    commandLine("git", "status", "--porcelain=v1", "--untracked-files=all")
+}.standardOutput.asText.map { it.isNotBlank() }
+
+forge1201FinalJar.configure {
+    inputs.property("gitCommit", gitCommit)
+    inputs.property("gitDirty", gitDirty)
+    inputs.property("upstreamBaseline", upstreamBaseline)
+
+    from(layout.projectDirectory.file("LICENSE")) {
+        into("META-INF")
+    }
+    from(layout.projectDirectory.file("NOTICE.md")) {
+        into("META-INF")
+    }
+
+    doFirst {
+        manifest.attributes(
+            "Implementation-Title" to "Tectonic 1.20.1 Forge - Unofficial Community Backport",
+            "Implementation-Version" to communityVersion,
+            "Community-Build" to "true",
+            "Official-Build" to "false",
+            "Git-Commit" to gitCommit.get(),
+            "Git-Dirty" to gitDirty.get().toString(),
+            "Upstream-Baseline" to upstreamBaseline,
+            "Java-Class-Major" to "65",
+        )
+    }
+}
+
 tasks.register<Test>("forge1201UnitTest") {
     description = "Runs Forge 1.20.1 backport unit tests."
     group = "verification"
-    dependsOn("forge1201RemapJar")
+    dependsOn(forge1201FinalJar)
     testClassesDirs = forge1201UnitTest.output.classesDirs
     classpath = forge1201UnitTest.runtimeClasspath
     doFirst {
         systemProperty(
             "tectonic.forge1201.jar",
-            layout.buildDirectory.file("libs/intermediates/tectonic-${project.version}-forge-1.20.1.jar")
-                .get().asFile.absolutePath
+            forge1201FinalJar.get().archiveFile.get().asFile.absolutePath
         )
     }
+}
+
+val communityJarName = "tectonic-community-backport-1.20.1-forge-$communityVersion.jar"
+val communityJar = layout.buildDirectory.file("libs/$communityJarName")
+val communityChecksum = layout.buildDirectory.file("libs/$communityJarName.sha256")
+
+val copyForge1201CommunityJar = tasks.register<Copy>("copyForge1201CommunityJar") {
+    description = "Copies the verified Forge 1.20.1 JAR to the explicit community-backport name."
+    group = "build"
+    dependsOn(forge1201FinalJar)
+    from(forge1201FinalJar.flatMap { it.archiveFile })
+    into(layout.buildDirectory.dir("libs"))
+    rename { communityJarName }
+    outputs.file(communityJar)
+}
+
+val checksumForge1201CommunityJar = tasks.register("checksumForge1201CommunityJar") {
+    description = "Writes the SHA-256 sidecar for the community Forge 1.20.1 candidate."
+    group = "verification"
+    dependsOn(copyForge1201CommunityJar)
+    inputs.file(communityJar)
+    outputs.file(communityChecksum)
+
+    doLast {
+        val jar = communityJar.get().asFile
+        val digest = MessageDigest.getInstance("SHA-256")
+        jar.inputStream().buffered().use { input ->
+            val buffer = ByteArray(8192)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                digest.update(buffer, 0, count)
+            }
+        }
+        val checksum = digest.digest().joinToString("") { byte ->
+            "%02x".format(byte.toInt() and 0xff)
+        }
+        communityChecksum.get().asFile.writeText("$checksum  ${jar.name}\n", Charsets.UTF_8)
+    }
+}
+
+tasks.register("assembleForge1201CommunityCandidate") {
+    description = "Builds, tests, names, and checksums the local Forge 1.20.1 community candidate."
+    group = "build"
+    dependsOn("check", checksumForge1201CommunityJar)
 }
 
 tasks.named("check") {

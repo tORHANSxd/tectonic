@@ -31,7 +31,7 @@
 | 3.0.21：lantern 开启崩溃 | `REQUIRED` | 与 lantern 频率作为同一原子变更 |
 | 3.0.22：ore_fix | `REQUIRED` | 已将 `HeightStabilizedCount` 适配到 1.20.1 Codec/Forge 注册，且仅在 `minY < -64` 时激活；覆盖该版本存在的 11 个上游目标 feature，排除 1.21 才有的 `ore_diamond_medium`。五种子/三高度统计证明默认 no-op、#438 深层零矿带消失且无注册错误；diamond/redstone 富集与批量生成严格确定性仍未过门槛，保持默认关闭并阻断 Stable |
 | 3.0.22：地图模组区块查询 | `NOT_APPLICABLE`（源码 hunk） | 上游修复位于 26.x `SerializableChunkDataMixin`；基线 1.20.1 参数本来就是 `ServerLevel`，继续做黑盒兼容测试 |
-| 3.0.22：Lithostitched 依赖 | `REQUIRED` | 保留 Forge 1.20.1 已验证的最低 1.4.11；最终 JAR 回归检查加载元数据，上传器同步声明 Modrinth/CurseForge 必需关系，禁止误取 1.21/26.x 制品 |
+| 3.0.22：Lithostitched 依赖 | `REQUIRED` | 保留 Forge 1.20.1 已验证的最低 1.4.11；最终 JAR 回归检查 required 元数据。社区候选阶段禁用所有外部上传，禁止误取 1.21/26.x 制品或误发上游官方项目 |
 | 3.0.23：配置清理/JSON5 | `DEFERRED` | 保留稳定 JSON；不引入没有必要的 Apollib/JSON5 依赖 |
 | 3.0.23/3.0.25：Back 与深复制 | `REQUIRED` | 在旧 GUI 中实现取消不保存，并吸收 3.0.25 深复制/空值保护 |
 | 3.0.24：Sulfur Caves | `NOT_APPLICABLE` | 提交历史无独立 3.0.24，1.20.1 基线也无对应注册内容 |
@@ -44,3 +44,9 @@
 - 3.0.23 起的 Apollib/JSON5 与新 GUI 涉及高版本依赖，不能为一个取消按钮把整套配置栈拖回 1.20.1。
 - 3.0.25 当前树仍有损坏的高版本源码和已删除 `ConfigHandler` 的遗留引用，只摘明确的小修复。
 - 新版 `WorldgenModifier`、`MapCodec`、`Identifier`、NBT `get*Or` 等 API 均需转换或标记不适用，禁止原样复制。
+
+## 1.20.1 本地修正
+
+- `ChunkSerializerMixin` 必须按 1.20.1 的 `ListTag<CompoundTag>` 读取每个 section 的 `Y`，并把最大 section 转为 exclusive 上界。这个实现修正来自本地审计，不冒充某个高版本 hunk。
+- 上游 3.0.22 的地图查询修复位于 26.x `SerializableChunkDataMixin`，而 Minecraft 1.20.1 的 `ChunkSerializer.read` 本来就接收 `ServerLevel`。因此只保留结构回归测试，不复制 `ClientLevel` 代码。
+- 发行身份、MIT/NOTICE、Java 21 major 65 门禁和 fail-closed 上传器属于社区维护层，不改变世界生成算法。
