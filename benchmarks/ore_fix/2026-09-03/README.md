@@ -92,4 +92,4 @@ python scripts/analyze_ore_distribution.py aggregate `
   --output benchmarks/ore_fix/2026-09-03
 ```
 
-生成新世界使用 `scripts/benchmark_worldgen.ps1`。脚本会拒绝覆盖已有世界，并在 `finally` 中逐字节恢复 `tectonic.json`、`.bak`、`.invalid` 与 `server.properties`。
+生成新世界使用 `scripts/benchmark_worldgen.ps1`。脚本会拒绝覆盖已有世界，并在 `finally` 中逐字节恢复 `tectonic.json`、`.bak`、`.invalid` 与 `server.properties`。本页的原始数据由旧版“一次强加载整个 256 区块窗口”流程生成；当前脚本已改为固定 tile/区块顺序、逐区块 FULL 回执、单后台 worker 和可选周期保存/重启。新流程用于后续严格重复性复验，不应与本页旧流程的数据混作同一生成协议。

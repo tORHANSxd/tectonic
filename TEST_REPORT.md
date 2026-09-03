@@ -304,8 +304,26 @@ tectonic:overworld/underground_river/total
 
 结论：#520 是第三方 Tectonic Tweak 1.1.0 的错误版本范围和 v2 数据包导致，不是本回移缺少 v3 资源。项目不添加语义不明的旧 ID 占位符；用户侧解决方式是移除该附加模组，详见 `KNOWN_ISSUES.md`。
 
+### P2-HARNESS-001：确定顺序的 Java 21 压力测试通道
+
+`scripts/benchmark_worldgen.ps1` 现在可把任意闭区间拆成每块不超过 256 个区块的 tile，并按 `tile Z→X、tile 内 chunk Z→X` 的固定顺序逐区块发送 `forceload add`。每条命令必须收到该坐标的单区块 `Marked chunk [...]` 回执后才继续；tile 全部达到 FULL 后才解除强加载，周期保存只在解除后进行，周期重启只在 `save-all flush` 返回 `Saved the game` 后进行。服务端错误行、EOF、阶段超时、非零退出码都会立即判定 case 失败，并写入流式 `events.ndjson`，不再依赖 Forge 可能误导性的进程退出码。
+
+该通道直接支持正式 Forge 安装目录，并固定使用指定 Temurin 21；Gradle userdev 模式也关闭工具链自动探测/下载，只允许传入的 JDK 路径。服务进程追加唯一的 `-Dmax.bg.threads=1`；`JAVA_TOOL_OPTIONS`、`JDK_JAVA_OPTIONS`、`_JAVA_OPTIONS`、Gradle/Java wrapper 变量或生产服参数文件中已有同名参数时一律拒绝运行，避免后置参数悄悄覆盖。脚本读取 `java -version` 后只接受 Java 21，使用本机 Java 17 工具链的负向测试已在启动前按预期失败。每个生产 case 的 manifest 同时记录实际 `mods/*.jar` 的绝对路径、大小和 SHA-256，以及 Git HEAD 和受跟踪文件状态，避免把旧 JAR 的运行结果错算给当前源码。
+
+验证结果：
+
+- 20,736 区块规划 dry-run：范围 `[64,64]..[207,207]` 被稳定拆成 81 个 `16×16` tile，无重复、无遗漏、无 tile 超过 256；
+- Forge 47.4.22 生产专服真实运行：范围 `[300,300]..[303,300]` 分成两个 tile，`SaveEveryTiles=1`、`RestartEveryTiles=1`，共两次 Java 21 会话；4 个 `chunk_full`、2 个 `tile_removed`、2 个 `world_saved` 按序完成，两份会话日志均有且仅有一个 `Done`，退出码均为 0；
+- 故障注入：临时加入已知不兼容的 Tectonic Tweak 1.1.0 后，脚本在 `waiting-ready` 捕获 `Registry loading errors` 并立即写入 `case_failed`，证明即使 Forge 最终返回退出码 0 也不会误判成功；测试后已移除附加模组；
+- 生产制品溯源回归：单区块运行的 manifest 记录 Tectonic JAR SHA-256 `187e6284b3845b0869f0c9facfd43f845abfcacdaa7cd3ca0a998d67d188bb23` 和 Lithostitched SHA-256 `c19a5a36c0e6cb3782cf7ca5b9648fb1bce5fc41fd737bed423a1f4971bccf75`，控制台确认唯一的 `-Dmax.bg.threads=1`，进程退出后无残留且配置逐字节恢复；
+- Gradle userdev 回归：单区块会话达到 `Done`、FULL 回执、保存和正常退出；同一组 `-Porg.gradle.java.installations.*` 参数下，`javaToolchains` 报告自动探测/下载均为 `Disabled`，唯一候选为 `C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot`；
+- 分析器回归：单区块生产专服运行完成，`ore_analysis.enabled=true`、`status=passed`，生成逐桶 CSV 与 JSON 汇总；`SkipOreAnalysis` 模式以及其与 `IncludeMaterials` 的冲突校验也分别通过；
+- 参数负向校验：`32×9=288` 的 tile 在启动前被拒绝，Java 17 路径在启动前被拒绝。
+
+这只证明目标区块请求顺序、逐目标 FULL 屏障和主要后台 worker 约束已经固定；Vanilla 仍可能为目标周边 halo 区块安排内部工作。因此它是严格重复性测试的可靠输入通道，不是世界内容已经位级确定的结论。下一门槛仍是对独立重复世界执行规范化区块哈希并要求完全一致。
+
 ### 尚未完成的 Phase 2 项
 
-- #473 仍需不少于 20,000 个新区块的 Java 21 长时间压力测试；
+- #473 的确定顺序 Java 21 压力通道已经完成并通过短程真实专服验证，但仍需实际跑完不少于 20,000 个新区块；
 - `BlendingDataMixin` 仍需旧/新区块交界触发；其余已加载 Mixin 的 strict/verify、真专服客户端类隔离和启动期警告计数已经完成；
 - 未知 JSON 字段当前由 `.bak` 保留原件，但规范化主文件不会原样保留未知字段；最终迁移说明必须继续明确这一限制。
