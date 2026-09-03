@@ -121,7 +121,7 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 .\gradlew.bat --no-daemon check --console=plain
 ```
 
-结果：通过。共 14 个 JUnit 5 测试，0 failure、0 error、0 skipped；干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
+结果：通过。共 238 个 JUnit 5 测试实例，0 failure、0 error、0 skipped；其中资源参数化测试逐个验证 223 个 JSON 文件的严格语法。干净构建及 Forge 1.20.1 重映射 JAR 同时通过。报告位于未提交的 `build/test-results/forge1201UnitTest` 与 `build/reports/tests/forge1201UnitTest`。
 
 覆盖行为：
 
@@ -157,6 +157,12 @@ Gradle 还自动配置了 Eclipse Temurin 17.0.20.1+1，位置为
 上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`。当 Tectonic 配置仍为原版 Overworld 高度 `-64..320` 时，`SetHeightLimitsModifier` 不再覆盖外部数据包提供的维度和噪声高度；只有用户显式选择非原版高度时才写入。现有 modifier 资源只绑定 `minecraft:overworld`，Nether、End 与模组维度不在修改目标中。
 
 回归测试覆盖原版、扩展上限和扩展下限的识别；Forge 1.20.1 干净构建、单元测试、重映射 JAR 与 Java 21 class major 65 复核均作为提交阻断检查。
+
+### P3A-OCEAN-001：低 Ocean Offset 大陆密度钳制
+
+上游来源为 `cebbe095209a46051190deff7b247a0dd7e80b9e`，并与 `34241bdb35acda67b5367d49f354c66c05e098e2` 的最终资源一致。`tectonic:noise/raw_continents` 在原有 ocean offset 与大陆 spline 相加后统一钳制到 `[-1, 2]`，避免低于 `-1` 的配置把 Mushroom Fields 选择区间异常扩散；配置滑块仍保留 `[-2, 0]`，没有限制用户表达能力。
+
+自动测试验证 clamp 类型、边界和内部 add 表达式，并增加全部 JSON 资源的严格语法扫描。实际海洋/Mushroom Fields 占比仍需固定种子世界生成统计，当前不冒充为已完成黑盒验收。
 
 ### 尚未完成的 Phase 2 项
 
