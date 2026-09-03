@@ -10,6 +10,8 @@
 | 3.0.21 lantern 修复 | `d023a88d38b443de24979803f273f3cb739fcb7d`；仅摘干净 hunk，不 cherry-pick 整提交 |
 | 3.0.22 汇合参考 | `46cc1eb2d5a8764722ed8e91224ab87564953ec7` |
 | 当前可审计源码终点 | `34241bdb35acda67b5367d49f354c66c05e098e2`（3.0.25） |
+| 3.0.25 官方制品 | Modrinth `6LzTWkMf`，SHA-256 `ffdb164952cda5956d76276375f7695e3d380117671e7ff6733fb847db2aaad7` |
+| 3.0.26 官方制品 | Modrinth `80oiGLPz`，SHA-256 `15406184e8b9141e9d58225e0b0afc182542ccd3ee020e96c48789f4c1421d52` |
 
 每项回移同时比较 3.0.17、首次引入提交和当前干净形态。高版本 Minecraft、NeoForge、Apollib 与 Lithostitched 1.6 API 不进入 Forge 1.20.1 壳体。
 
@@ -33,7 +35,7 @@
 | 3.0.23：配置清理/JSON5 | `DEFERRED` | 保留稳定 JSON；不引入没有必要的 Apollib/JSON5 依赖 |
 | 3.0.23/3.0.25：Back 与深复制 | `REQUIRED` | 在旧 GUI 中实现取消不保存，并吸收 3.0.25 深复制/空值保护 |
 | 3.0.24：Sulfur Caves | `NOT_APPLICABLE` | 提交历史无独立 3.0.24，1.20.1 基线也无对应注册内容 |
-| 3.0.26：jaggedness | `REQUIRED_IF_APPLICABLE` | 使用资源级差异；通用 spline 控制点从 `0.65` 恢复为 `0.2` |
+| 3.0.26：jaggedness | `ALREADY_PRESENT` | 官方制品差异证明实际修复方向是通用 spline 控制点从 `0.2` 恢复为 `0.65`；Forge 1.20.1 的 3.0.17 基线本来就是 `0.65`，不改生产资源，只加契约测试防止倒退 |
 | 3.0.27：NeoForge 26.x 修复 | `NOT_APPLICABLE` | 加载器和 Minecraft API 均不属于 Forge 1.20.1 |
 
 ## 已确认不能整提交摘取的上游点

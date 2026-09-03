@@ -27,6 +27,9 @@ class WorldgenResourceTest {
     private static final Path RAW_CONTINENTS = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/data/tectonic/worldgen/density_function/noise/raw_continents.json"
     );
+    private static final Path JAGGEDNESS_CONTINENTS = RESOURCE_ROOT.resolve(
+        "resourcepacks/tectonic/data/tectonic/worldgen/density_function/terrain_spline/jaggedness/continents.json"
+    );
     private static final Path RIVER_ICE_MODIFIER = RESOURCE_ROOT.resolve(
         "resourcepacks/tectonic/overlay.mod/data/tectonic/lithostitched/worldgen_modifier/underground_river/ice.json"
     );
@@ -93,6 +96,23 @@ class WorldgenResourceTest {
             assertEquals(-1, clamp.get("min").getAsInt());
             assertEquals(2, clamp.get("max").getAsInt());
             assertEquals("minecraft:add", clamp.getAsJsonObject("input").get("type").getAsString());
+        }
+    }
+
+    @Test
+    void mountainJaggednessKeepsTheValueRestoredByUpstream3026() throws IOException {
+        try (Reader reader = Files.newBufferedReader(JAGGEDNESS_CONTINENTS, StandardCharsets.UTF_8)) {
+            JsonObject spline = JsonParser.parseReader(reader).getAsJsonObject()
+                .getAsJsonObject("argument")
+                .getAsJsonObject("argument")
+                .getAsJsonObject("spline");
+            JsonObject erosionSpline = spline.getAsJsonArray("points").get(1).getAsJsonObject()
+                .getAsJsonObject("value");
+
+            assertEquals(
+                0.65,
+                erosionSpline.getAsJsonArray("points").get(0).getAsJsonObject().get("value").getAsDouble()
+            );
         }
     }
 

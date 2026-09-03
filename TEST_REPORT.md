@@ -250,6 +250,21 @@ Temurin 21 下执行 `clean forge1201UnitTest forge1201RemapJar` 通过，共 27
 
 因此本项当前状态是：实现、默认 no-op、#438 深层覆盖和注册表安全通过；矿物密度与严格确定性仍阻断 Stable。详细方法、输入来源与复现说明见 `benchmarks/ore_fix/2026-09-03/README.md`。
 
+## Phase 3C：3.0.26 资源审计
+
+### P3C-JAGGEDNESS-001：山地 jaggedness
+
+按计划直接比较 Modrinth 官方 `3.0.25-neoforge-26.2` 与 `3.0.26-neoforge-26.2` 制品，而不是依据版本说明猜改动方向：
+
+| 制品 | Modrinth version ID | SHA-1 | SHA-256 |
+|---|---|---|---|
+| `tectonic-3.0.25-neoforge-26.2.jar` | `6LzTWkMf` | `20c9c9b9adc9a676d33d1b0bf0dd45f2cd259a42` | `ffdb164952cda5956d76276375f7695e3d380117671e7ff6733fb847db2aaad7` |
+| `tectonic-3.0.26-neoforge-26.2.jar` | `80oiGLPz` | `3c9bd0154ee20a26e86a82c98f451a54c3d616b2` | `15406184e8b9141e9d58225e0b0afc182542ccd3ee020e96c48789f4c1421d52` |
+
+两份制品分别含 243/256 个 JSON，公共路径 240 个，其中只有 3 个字节不同；排除加载器元数据后，唯一变化的世界生成资源是 `terrain_spline/jaggedness/continents.json`。实际方向是 3.0.25 的 `0.2` 在 3.0.26 恢复为 `0.65`，并非先前差异表写的 `0.65 → 0.2`。
+
+Forge 1.20.1 的 3.0.17 基线提交 `5373b208...` 与当前分支都已经是 `0.65`，说明 3.0.23 引入的回归从未进入本回移线。本项不修改生产资源，否则反而会把修复倒着移植；新增资源契约测试锁定嵌套 spline 控制点为 `0.65`。指定 Temurin 21 下 `forge1201UnitTest` 通过，共 272 个测试实例、0 failure、0 error、0 skipped。由于“回移前”和“回移后”生产资源完全相同，不存在可归因于本项的高度图差异，计划中的坡度/起伏/峰值 A/B 在本项判定为不适用，而不是伪造一组重复跑数。
+
 ### 尚未完成的 Phase 2 项
 
 - #473、#520 的长时间新区块压力复现；
