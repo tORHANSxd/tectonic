@@ -4,6 +4,7 @@ import dev.worldgen.lithostitched.registry.LithostitchedRegistryKeys;
 import dev.worldgen.tectonic.client.gui.ConfigScreen;
 import dev.worldgen.tectonic.command.TectonicCommand;
 import dev.worldgen.tectonic.config.ConfigHandler;
+import dev.worldgen.tectonic.config.state.object.HeightLimits;
 import dev.worldgen.tectonic.lithostitched.SetHeightLimitsModifier;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigClamp;
 import dev.worldgen.tectonic.worldgen.densityfunction.ConfigConstant;
@@ -48,7 +49,10 @@ public class TectonicLexforge {
             boolean terralith = ModList.get().isLoaded("terralith");
             boolean ultrasmooth = ConfigHandler.getState().globalTerrain.ultrasmooth;
             boolean noCarvers = !ConfigHandler.getState().caves.carversEnabled;
-            boolean oreFix = ConfigHandler.getState().caves.oreFix;
+            boolean oreFix = shouldEnableOreFix(
+                ConfigHandler.getState().caves.oreFix,
+                ConfigHandler.getState().globalTerrain.heightLimits.minY
+            );
             addPack("tectonic");
             addPack("tectonic/overlay.mod");
             if (terralith) addPack("tectonic/overlay.terratonic");
@@ -56,6 +60,10 @@ public class TectonicLexforge {
             if (noCarvers) addPack("tectonic/overlay.no_carvers");
             if (oreFix) addPack("tectonic/overlay.ore_fix");
         }
+    }
+
+    static boolean shouldEnableOreFix(boolean configured, int minY) {
+        return configured && minY < HeightLimits.DEFAULT.minY;
     }
 
     private void handleRegistries(final RegisterEvent event) {
